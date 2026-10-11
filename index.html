@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/ by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:19 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Funthing Pages 欢迎回到Ninety-one/Funthing导航网址</title>
+    <style>
+        /* ===== 全局重置 & 基础 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: -webkit-fill-available;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #0a0e1a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            margin: 0;
+            padding: 0;
+            display: block;
+        }
+
+        /* ===== Canvas 粒子背景 ===== */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== 左上角模块 ===== */
+        .top-modules {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 100;
+            display: flex;
+            gap: 8px;
+        }
+        .top-module-btn {
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: rgba(0, 212, 255, 0.9);
+            background: rgba(10, 14, 26, 0.85);
+            border: 1px solid rgba(0, 212, 255, 0.35);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .top-module-btn:hover {
+            color: #fff;
+            background: rgba(0, 212, 255, 0.15);
+            border-color: #00d4ff;
+            box-shadow: 0 0 16px rgba(0, 212, 255, 0.4);
+        }
+        @media (max-width: 640px) {
+            .top-modules { top: 10px; left: 10px; gap: 6px; }
+            .top-module-btn { padding: 5px 10px; font-size: 0.68rem; }
+        }
+
+        /* ===== 主容器 ===== */
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem 1.5rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            animation: fadeIn 0.7s ease-out;
+        }
+
+        /* ===== 标题区域 ===== */
+        .title-wrap {
+            margin-bottom: 3.5rem;
+            margin-top: 3rem;
+        }
+
+        .main-title {
+            font-size: clamp(2.8rem, 8vw, 5.2rem);
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            background: linear-gradient(135deg, #00d4ff 0%, #7b2ffc 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+            line-height: 1.2;
+        }
+
+        /* 标题下划线改为静态渐变（去掉无限动画） */
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00d4ff, #7b2ffc, transparent);
+            border-radius: 2px;
+            opacity: 0.8;
+        }
+
+        .sub-title {
+            font-size: clamp(1rem, 2.2vw, 1.6rem);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.3em;
+            margin-top: 0.8rem;
+        }
+
+        .sub-title span {
+            color: rgba(0, 212, 255, 0.9);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+        }
+
+        /* ===== 装饰性分隔 ===== */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 0.5rem 0 2.5rem 0;
+        }
+
+        .divider .line {
+            flex: 0 0 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), transparent);
+        }
+
+        /* 钻石改为静态 */
+        .divider .diamond {
+            width: 8px;
+            height: 8px;
+            background: #00d4ff;
+            transform: rotate(45deg);
+            box-shadow: 0 0 16px rgba(0, 212, 255, 0.5);
+            opacity: 0.9;
+        }
+
+        /* ===== 导航卡片容器 ===== */
+        .nav-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch;
+            gap: 1.8rem;
+            margin: 2rem 0 3.5rem 0;
+        }
+
+        /* ===== 单个卡片（去 backdrop-filter，加 contain） ===== */
+        .nav-card {
+            flex: 0 1 180px;
+            min-height: 190px;
+            /* 用半深色背景替代 backdrop-filter，视觉几乎一致，性能好很多 */
+            background: rgba(20, 26, 42, 0.72);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 24px;
+            padding: 1.8rem 1.2rem;
+            text-decoration: none;
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease,
+                        background 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            user-select: none;
+            /* 关键：每张卡片独立绘制，hover 时不影响其他卡片 */
+            contain: layout style paint;
+        }
+
+        /* 卡片静态光晕 */
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(circle at 30% 20%, rgba(0, 212, 255, 0.04), transparent 55%),
+                        radial-gradient(circle at 70% 80%, rgba(123, 47, 252, 0.04), transparent 55%);
+            pointer-events: none;
+        }
+
+        .nav-card .card-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .card-icon {
+            font-size: 2.6rem;
+            line-height: 1;
+            margin-bottom: 0.1rem;
+            transition: transform 0.4s ease;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            background: linear-gradient(135deg, #f0f9ff, #bae6fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .card-tag {
+            font-size: 0.6rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* ===== 卡片悬停效果 ===== */
+        .nav-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(0, 212, 255, 0.6);
+            box-shadow: 0 16px 60px rgba(0, 212, 255, 0.15), 0 0 80px rgba(123, 47, 252, 0.08);
+            background: rgba(28, 36, 56, 0.78);
+        }
+
+        .nav-card:hover .card-icon {
+            transform: scale(1.15) rotate(-6deg);
+        }
+
+        .nav-card:hover .card-title {
+            background: linear-gradient(135deg, #00d4ff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-card.card-dance { border-color: rgba(0, 212, 255, 0.2); }
+        .nav-card.card-dance:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 16px 60px rgba(0, 212, 255, 0.2), 0 0 80px rgba(0, 212, 255, 0.06);
+        }
+        .nav-card.card-trade { border-color: rgba(123, 47, 252, 0.2); }
+        .nav-card.card-trade:hover {
+            border-color: #a855f7;
+            box-shadow: 0 16px 60px rgba(123, 47, 252, 0.2), 0 0 80px rgba(123, 47, 252, 0.06);
+        }
+        .nav-card.card-cloud { border-color: rgba(251, 191, 36, 0.2); }
+        .nav-card.card-cloud:hover {
+            border-color: #fbbf24;
+            box-shadow: 0 16px 60px rgba(251, 191, 36, 0.2), 0 0 80px rgba(251, 191, 36, 0.06);
+        }
+        .nav-card.card-register { border-color: rgba(239, 68, 68, 0.25); }
+        .nav-card.card-register:hover {
+            border-color: #ef4444;
+            box-shadow: 0 16px 60px rgba(239, 68, 68, 0.2), 0 0 80px rgba(239, 68, 68, 0.06);
+        }
+        .nav-card.card-exam { border-color: rgba(52, 211, 153, 0.25); }
+        .nav-card.card-exam:hover {
+            border-color: #34d399;
+            box-shadow: 0 16px 60px rgba(52, 211, 153, 0.2), 0 0 80px rgba(52, 211, 153, 0.06);
+        }
+        .nav-card.card-login { border-color: rgba(236, 72, 153, 0.25); }
+        .nav-card.card-login:hover {
+            border-color: #ec4899;
+            box-shadow: 0 16px 60px rgba(236, 72, 153, 0.2), 0 0 80px rgba(236, 72, 153, 0.06);
+        }
+        .nav-card.card-ai { border-color: rgba(0, 212, 255, 0.25); }
+        .nav-card.card-ai:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 16px 60px rgba(0, 212, 255, 0.25), 0 0 80px rgba(0, 212, 255, 0.1);
+        }
+
+        /* ===== 底部 ===== */
+        .footer {
+            margin-top: 1.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer p {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.15em;
+            margin-top: 6px;
+        }
+
+        .footer .power-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.2rem 2.5rem;
+        }
+
+        .footer .power-item {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.1em;
+            transition: color 0.3s ease;
+        }
+
+        .footer .power-item:hover { color: rgba(0, 212, 255, 0.8); }
+
+        .footer .power-item .highlight {
+            color: rgba(0, 212, 255, 0.6);
+            font-weight: 600;
+        }
+
+        .footer .power-item .highlight:hover { color: #00d4ff; }
+
+        .footer-extra {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .footer-credit {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.08em;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .footer-link {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            letter-spacing: 0.08em;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 0;
+            border-bottom: 1px solid transparent;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: rgba(0, 212, 255, 0.9);
+            border-bottom-color: rgba(0, 212, 255, 0.3);
+        }
+
+        /* ===== 动画定义 ===== */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 1024px) {
+            .nav-card {
+                flex: 0 1 170px;
+                min-height: 170px;
+                padding: 1.5rem 1rem;
+            }
+            .card-title { font-size: 0.9rem; }
+        }
+
+        @media (max-width: 820px) {
+            .nav-card { flex: 0 1 200px; min-height: 160px; }
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 1.5rem 1rem 2.5rem; }
+            .title-wrap { margin-top: 3.5rem; }
+            .nav-grid { gap: 1.2rem; margin: 1.5rem 0 2.5rem; }
+            .nav-card {
+                flex: 0 1 100%;
+                min-height: 130px;
+                padding: 1.2rem 1rem;
+                border-radius: 18px;
+            }
+            .card-icon { font-size: 2rem; }
+            .card-title { font-size: 1rem; }
+            .main-title::after { width: 60%; left: 20%; }
+            .footer .power-wrap { gap: 0.8rem 1.8rem; }
+            .footer .power-item { font-size: 1rem; }
+            .footer-credit { font-size: 0.75rem; }
+            .footer-link { font-size: 0.85rem; }
+
+            body {
+                overflow-y: auto !important;
+                height: auto !important;
+                min-height: 100vh;
+                min-height: 100dvh;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container { padding: 1rem 0.8rem 2rem; }
+            .title-wrap { margin-bottom: 2rem; }
+            .nav-card {
+                min-height: 110px;
+                padding: 1rem 0.8rem;
+                border-radius: 14px;
+            }
+            .card-icon { font-size: 1.6rem; }
+            .card-title { font-size: 0.85rem; }
+        }
+
+        /* ===== 鼠标跟随光晕（translate3d + 触摸设备隐藏） ===== */
+        .glow-follow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 600px;
+            height: 600px;
+            margin: -300px 0 0 -300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.05), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            transform: translate3d(-9999px, -9999px, 0);
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        @media (pointer: coarse) {
+            .glow-follow { display: none; }
+        }
+
+        /* ===== 卡片角落装饰 ===== */
+        .nav-card .corner-deco {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: rgba(0, 212, 255, 0.08);
+            border-style: solid;
+            border-width: 0;
+            pointer-events: none;
+            transition: border-color 0.4s ease;
+        }
+        .nav-card .corner-deco.tl { top: 10px; left: 10px; border-top-width: 2px; border-left-width: 2px; border-radius: 4px 0 0 0; }
+        .nav-card .corner-deco.tr { top: 10px; right: 10px; border-top-width: 2px; border-right-width: 2px; border-radius: 0 4px 0 0; }
+        .nav-card .corner-deco.bl { bottom: 10px; left: 10px; border-bottom-width: 2px; border-left-width: 2px; border-radius: 0 0 0 4px; }
+        .nav-card .corner-deco.br { bottom: 10px; right: 10px; border-bottom-width: 2px; border-right-width: 2px; border-radius: 0 0 4px 0; }
+
+        .nav-card:hover .corner-deco { border-color: rgba(0, 212, 255, 0.35); }
+        .nav-card.card-trade:hover .corner-deco { border-color: rgba(168, 85, 247, 0.35); }
+        .nav-card.card-cloud:hover .corner-deco { border-color: rgba(251, 191, 36, 0.35); }
+        .nav-card.card-register:hover .corner-deco { border-color: rgba(239, 68, 68, 0.4); }
+        .nav-card.card-exam:hover .corner-deco { border-color: rgba(52, 211, 153, 0.4); }
+        .nav-card.card-login:hover .corner-deco { border-color: rgba(236, 72, 153, 0.4); }
+        .nav-card.card-ai:hover .corner-deco { border-color: rgba(0, 212, 255, 0.5); }
+
+        /* ===== 自定义模态框（弹窗） ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.75);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.25s ease;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: #1a1e2a;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 28px;
+            padding: 32px 28px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            position: relative;
+            max-height: 88vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .modal-sub {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+        }
+        .modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .modal-option-btn {
+            padding: 14px 20px;
+            border-radius: 16px;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.04);
+            color: #e2e8f0;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+        .modal-option-btn:hover {
+            background: rgba(0, 212, 255, 0.12);
+            border-color: #00d4ff;
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.15);
+        }
+        .modal-option-btn .icon { font-size: 1.3rem; }
+
+        .modal-close-btn {
+            margin-top: 18px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 6px 14px;
+            font-family: inherit;
+        }
+        .modal-close-btn:hover { color: #fff; }
+
+        .modal-option-btn.primary {
+            background: linear-gradient(135deg, #7b2ffc, #4f46e5);
+            border-color: transparent;
+            color: #fff;
+        }
+        .modal-option-btn.primary:hover {
+            box-shadow: 0 8px 30px rgba(123, 47, 252, 0.4);
+        }
+        .modal-option-btn.secondary { border-color: rgba(255, 255, 255, 0.2); }
+        .modal-option-btn.secondary:hover { border-color: #a855f7; }
+
+        /* ===== 证书 / 日志 弹窗专用 ===== */
+        .cert-img-wrap {
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+        .cert-img-wrap img {
+            width: 100%;
+            max-height: 62vh;
+            object-fit: contain;
+            border-radius: 12px;
+            display: block;
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            box-shadow: 0 0 24px rgba(0, 212, 255, 0.18);
+        }
+        .log-content-wrap {
+            text-align: left;
+            margin-top: 12px;
+            max-height: 58vh;
+            overflow-y: auto;
+            padding: 4px 8px 4px 4px;
+        }
+        .log-content-wrap pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', monospace;
+            color: #c8d8f0;
+            line-height: 1.85;
+            margin: 0;
+            font-size: 0.92rem;
+        }
+        .modal-hint {
+            color: #7f93b5;
+            text-align: center;
+            padding: 40px 0;
+            font-size: 0.9rem;
+        }
+        .modal-hint.error { color: #b88a8a; }
+
+        /* 注册与登录组合标识 */
+        .combo-badge {
+            display: inline-block;
+            font-size: 0.5rem;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0.1rem 0.5rem;
+            border-radius: 10px;
+            margin-top: 0.1rem;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .combo-badge.highlight {
+            border-color: rgba(239, 68, 68, 0.2);
+            color: rgba(239, 68, 68, 0.5);
+        }
+        .combo-badge.highlight2 {
+            border-color: rgba(236, 72, 153, 0.2);
+            color: rgba(236, 72, 153, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 左上角模块 ===== -->
+    <div class="top-modules">
+        <button class="top-module-btn" onclick="showCertModal()">📜 网站证书</button>
+        <button class="top-module-btn" onclick="showLogModal()">📝 更新日志</button>
+    </div>
+
+    <!-- ===== 鼠标跟随光晕 ===== -->
+    <div class="glow-follow" id="glowFollow"></div>
+
+    <!-- ===== 粒子画布 ===== -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- ===== 主内容 ===== -->
+    <div class="container">
+
+        <!-- 标题 -->
+        <div class="title-wrap">
+            <h1 class="main-title">✦ Funthing Pages ✦</h1>
+            <p class="sub-title">欢迎回到 <span>Funthing Pages</span> 导航网址</p>
+        </div>
+
+        <!-- 装饰分隔 -->
+        <div class="divider">
+            <span class="line"></span>
+            <span class="diamond"></span>
+            <span class="line"></span>
+        </div>
+
+        <!-- 导航卡片 -->
+        <div class="nav-grid">
+
+            <!-- 卡片 1：棍涛舞团 -->
+            <a href="https://guntaodance.cc.cd/" target="_blank" rel="noopener noreferrer" class="nav-card card-dance">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🕺</div>
+                    <div class="card-title">棍涛舞团</div>
+                    <span class="card-tag">✦ 律动 · 艺术 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 2：国际卤蛋贸易有限公司 -->
+            <div class="nav-card card-trade" onclick="showTradeModal()">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🌐</div>
+                    <div class="card-title">国际卤蛋贸易有限公司</div>
+                    <span class="card-tag">✦ 全球 · 商道 ✦</span>
+                </div>
+            </div>
+
+            <!-- 卡片 3：Ninety-One 网盘 -->
+            <a href="%e7%bd%91%e7%9b%98.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">☁️</div>
+                    <div class="card-title">Ninety-One 网盘</div>
+                    <span class="card-tag">✦ 5G时代 · 享受2G速度 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 4：反人类注册 -->
+            <a href="%e6%b3%a8%e5%86%8c.html" target="_blank" rel="noopener noreferrer" class="nav-card card-register">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🤯</div>
+                    <div class="card-title">来一场酣畅淋漓的注册吧</div>
+                    <span class="card-tag">倾尽全力打造反人类注册网站</span>
+                    <span class="combo-badge highlight">✦ 注册 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 5：猎奇登录2.0 -->
+            <a href="%e7%8c%8e%e5%a5%87%e7%99%bb%e5%bd%952.0.html" target="_blank" rel="noopener noreferrer" class="nav-card card-login">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🔥</div>
+                    <div class="card-title">比上一个更刺激的登录全新升级震撼来袭</div>
+                    <span class="card-tag">✦ 逆天验证 · 猎奇体验 ✦</span>
+                    <span class="combo-badge highlight2">✦ 登录 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 6：预测你的中考成绩 -->
+            <a href="%e4%b8%ad%e8%80%83%e6%88%90%e7%bb%a9%e6%9f%a5%e8%af%a2.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">预测你的中考成绩</div>
+                    <span class="card-tag">✦ 金榜题名 · 一键查询 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 8：从政模拟器 -->
+            <a href="%e4%bb%8e%e6%94%bf%e6%a8%a1%e6%8b%9f%e5%99%a8/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-dance">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🏛️</div>
+                    <div class="card-title">从政模拟器</div>
+                    <span class="card-tag">✦ 权谋 · 升迁 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 9：股市离线 -->
+            <a href="%e8%82%a1%e5%b8%82%e7%a6%bb%e7%ba%bf/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">📉</div>
+                    <div class="card-title">股市离线</div>
+                    <span class="card-tag">✦ 单机 · 操盘 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 10：扣帽子模拟器 -->
+            <a href="%e6%89%a3%e5%b8%bd%e5%ad%90/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-register">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🧢</div>
+                    <div class="card-title">扣帽子模拟器</div>
+                    <span class="card-tag">✦ 嘴炮 · 甩锅 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 11：猎奇复杂登录 -->
+            <a href="%e7%8c%8e%e5%a5%87%e5%a4%8d%e6%9d%82%e7%99%bb%e5%bd%95/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-login">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🔐</div>
+                    <div class="card-title">猎奇复杂登录</div>
+                    <span class="card-tag">✦ 反人类 · 验证 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 12：牛来模拟器 -->
+            <a href="%e6%89%ad%e6%9d%a5/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🌀</div>
+                    <div class="card-title">牛来模拟器</div>
+                    <span class="card-tag">✦ 魔性 · 上头 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 13：起早贪黑模拟器 -->
+            <a href="%e8%b5%b7%e6%97%a9%e8%b4%aa%e9%bb%91/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🌅</div>
+                    <div class="card-title">起早贪黑模拟器</div>
+                    <span class="card-tag">✦ 打工 · 人生 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 14：双人游戏 -->
+            <a href="%e5%8f%8c%e4%ba%ba%e6%b8%b8%e6%88%8f/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-ai">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">👥</div>
+                    <div class="card-title">双人游戏</div>
+                    <span class="card-tag">✦ 对战 · 欢乐 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 15：外卖员模拟器 -->
+            <a href="%e5%a4%96%e5%8d%96%e5%91%98/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">🛵</div>
+                    <div class="card-title">外卖员模拟器</div>
+                    <span class="card-tag">✦ 五星 · 评测 ✦</span>
+                </div>
+            </a>
+
+            <!-- 卡片 16：股市在线 -->
+            <a href="%e8%82%a1%e5%b8%82%e5%9c%a8%e7%ba%bf/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-dance">
+                <span class="corner-deco tl"></span>
+                <span class="corner-deco tr"></span>
+                <span class="corner-deco bl"></span>
+                <span class="corner-deco br"></span>
+                <div class="card-content">
+                    <div class="card-icon">📈</div>
+                    <div class="card-title">股市在线</div>
+                    <span class="card-tag">✦ 联网 · 博弈 ✦</span>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- ===== 底部 ===== -->
+        <div class="footer">
+            <div class="power-wrap">
+                <span class="power-item">
+                    <span class="highlight">⚡</span> Power by <span class="highlight">Deepseek</span>
+                </span>
+                <span class="power-item">
+                    <span class="highlight">☁</span> Power by <span class="highlight">Cloudflare</span>
+                </span>
+            </div>
+
+            <div class="footer-extra">
+                <span class="footer-credit">
+                    Some of the original files of these webpages come from Bilibili UP: Lingbudao Bilibili homepage
+                </span>
+                <a href="https://space.bilibili.com/1636825937?spm_id_from=333.337.0.0" target="_blank" class="footer-link">
+                    🎬 Ling不道的主页
+                </a>
+            </div>
+
+            <p>© 2026 Wonderful Pages/Funthing Pages · Ninety-one Navigation</p>
+        </div>
+
+    </div>
+
+    <!-- ===== 自定义弹窗：国际卤蛋 ===== -->
+    <div class="modal-overlay" id="tradeModal">
+        <div class="modal-box">
+            <div class="modal-title">🌐 国际卤蛋贸易有限公司</div>
+            <div class="modal-sub">请选择您希望的访问方式</div>
+            <div class="modal-options">
+                <button class="modal-option-btn primary" onclick="goTradeExternal()">
+                    <span class="icon">🚀</span> 前往 ZHFLD.DPDNS.ORG 查看
+                </button>
+                <button class="modal-option-btn secondary" onclick="goTradeLocal()">
+                    <span class="icon">📄</span> 无需跳转查看（适合微信内）
+                </button>
+            </div>
+            <button class="modal-close-btn" onclick="closeTradeModal()">取消</button>
+        </div>
+    </div>
+
+    <!-- ===== 网站证书弹窗 ===== -->
+    <div class="modal-overlay" id="certModal">
+        <div class="modal-box" style="max-width:720px;">
+            <div class="modal-title">📜 网站证书</div>
+            <div class="cert-img-wrap" id="certContent"></div>
+            <button class="modal-close-btn" onclick="closeCertModal()">关闭</button>
+        </div>
+    </div>
+
+    <!-- ===== 更新日志弹窗 ===== -->
+    <div class="modal-overlay" id="logModal">
+        <div class="modal-box" style="max-width:640px;">
+            <div class="modal-title">📝 更新日志</div>
+            <div class="log-content-wrap" id="logContent"></div>
+            <button class="modal-close-btn" onclick="closeLogModal()">关闭</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  1. 粒子系统（性能优化：减量 + 距离平方判断 + 后台暂停）
+        // ============================================================
+        (function initParticles() {
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const PARTICLE_COUNT = isMobile ? 15 : 35;   // 原 90
+            const CONNECT_DIST = 140;
+            const CONNECT_DIST_SQ = CONNECT_DIST * CONNECT_DIST;
+            const MAX_SPEED = 0.5;
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            const particles = [];
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const hue = Math.random() > 0.5 ? 190 + Math.random() * 20 : 260 + Math.random() * 30;
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * MAX_SPEED * 2,
+                    vy: (Math.random() - 0.5) * MAX_SPEED * 2,
+                    r: Math.random() * 2 + 1.2,
+                    color: `hsla(${hue}, 85%, 65%, 0.7)`
+                });
+            }
+
+            let running = true;
+            let rafId = null;
+
+            function step() {
+                if (!running) { rafId = null; return; }
+                ctx.clearRect(0, 0, width, height);
+
+                // 更新 + 绘制
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x < 0 || p.x > width) { p.vx *= -1; p.x = Math.max(0, Math.min(width, p.x)); }
+                    if (p.y < 0 || p.y > height) { p.vy *= -1; p.y = Math.max(0, Math.min(height, p.y)); }
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                }
+
+                // 连线：用距离平方比较，避免每次开方
+                for (let i = 0; i < particles.length; i++) {
+                    const pi = particles[i];
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const pj = particles[j];
+                        const dx = pi.x - pj.x;
+                        const dy = pi.y - pj.y;
+                        const d2 = dx * dx + dy * dy;
+                        if (d2 < CONNECT_DIST_SQ) {
+                            const alpha = 0.12 * (1 - Math.sqrt(d2) / CONNECT_DIST);
+                            ctx.beginPath();
+                            ctx.moveTo(pi.x, pi.y);
+                            ctx.lineTo(pj.x, pj.y);
+                            ctx.strokeStyle = `rgba(150, 200, 255, ${alpha})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                rafId = requestAnimationFrame(step);
+            }
+            rafId = requestAnimationFrame(step);
+
+            // 切到后台 / 不可见时暂停，回来时恢复
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    running = false;
+                    if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+                } else {
+                    if (!running) {
+                        running = true;
+                        if (rafId === null) rafId = requestAnimationFrame(step);
+                    }
+                }
+            });
+
+            // 窗口 resize 时只改 canvas 尺寸，粒子保留，避免重排
+            window.addEventListener('resize', () => {
+                resize();
+            }, { passive: true });
+        })();
+
+
+        // ============================================================
+        //  2. 鼠标跟随光晕（translate3d + 触摸设备禁用 + 后台暂停）
+        // ============================================================
+        (function glowFollow() {
+            // 触摸设备、减少动态效果 直接跳过
+            if (window.matchMedia('(pointer: coarse)').matches) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            const glow = document.getElementById('glowFollow');
+            if (!glow) return;
+
+            let mouseX = -9999, mouseY = -9999;
+            let currentX = -9999, currentY = -9999;
+            let isActive = false;
+            let rafId = null;
+
+            function smoothFollow() {
+                if (!isActive) { rafId = null; return; }
+                currentX += (mouseX - currentX) * 0.14;
+                currentY += (mouseY - currentY) * 0.14;
+                glow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+
+                if (Math.abs(mouseX - currentX) > 0.5 || Math.abs(mouseY - currentY) > 0.5) {
+                    rafId = requestAnimationFrame(smoothFollow);
+                } else {
+                    currentX = mouseX;
+                    currentY = mouseY;
+                    glow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+                    rafId = null;
+                }
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if (!isActive) {
+                    isActive = true;
+                    currentX = mouseX;
+                    currentY = mouseY;
+                    glow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+                }
+                if (rafId === null) rafId = requestAnimationFrame(smoothFollow);
+            }, { passive: true });
+
+            document.addEventListener('mouseleave', () => {
+                isActive = false;
+                glow.style.transform = 'translate3d(-9999px, -9999px, 0)';
+            });
+        })();
+
+
+        // ============================================================
+        //  3. 国际卤蛋弹窗逻辑
+        // ============================================================
+        const tradeModal = document.getElementById('tradeModal');
+
+        function showTradeModal() {
+            tradeModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTradeModal() {
+            tradeModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function goTradeExternal() {
+            window.open('https://zhfld.dpdns.org/', '_blank');
+            closeTradeModal();
+        }
+
+        function goTradeLocal() {
+            window.open('zhf.html', '_blank');
+            closeTradeModal();
+        }
+
+        tradeModal.addEventListener('click', function(e) {
+            if (e.target === tradeModal) closeTradeModal();
+        });
+
+
+        // ============================================================
+        //  4. 网站证书弹窗
+        // ============================================================
+        const certModal = document.getElementById('certModal');
+
+        function showCertModal() {
+            const wrap = document.getElementById('certContent');
+            wrap.innerHTML = '<p class="modal-hint">⏳ 加载中…</p>';
+            certModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            const img = new Image();
+            img.onload = () => {
+                wrap.innerHTML = '';
+                wrap.appendChild(img);
+            };
+            img.onerror = () => {
+                wrap.innerHTML = '<p class="modal-hint error">未找到 <b>4.jpg</b>。<br>请把证书图片命名为 1.jpg 放到网站根目录。</p>';
+            };
+            img.alt = '网站证书';
+            img.src = '4.jpg';
+        }
+
+        function closeCertModal() {
+            certModal.classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('certContent').innerHTML = '';
+        }
+
+        certModal.addEventListener('click', function(e) {
+            if (e.target === certModal) closeCertModal();
+        });
+
+
+        // ============================================================
+        //  5. 更新日志弹窗
+        // ============================================================
+        const logModal = document.getElementById('logModal');
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, function (ch) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+            });
+        }
+
+        function showLogModal() {
+            const wrap = document.getElementById('logContent');
+            wrap.innerHTML = '<p class="modal-hint">⏳ 加载中…</p>';
+            logModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            fetch('updatalog.txt')
+                .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
+                .then(text => {
+                    wrap.innerHTML = '<pre>' + escapeHtml(text) + '</pre>';
+                })
+                .catch(() => {
+                    wrap.innerHTML =
+                        '<p class="modal-hint error">未找到 <b>updatalog.txt</b>。' +
+                        '<br><br>如果你现在是用 <code>file://</code> 直接双击打开网页，' +
+                        '浏览器会禁止读取本地 txt，建议用本地服务器打开（如 python -m http.server）。' +
+                        '</p>';
+                });
+        }
+
+        function closeLogModal() {
+            logModal.classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('logContent').innerHTML = '';
+        }
+
+        logModal.addEventListener('click', function(e) {
+            if (e.target === logModal) closeLogModal();
+        });
+
+
+        // ============================================================
+        //  6. 全局 ESC 关闭弹窗
+        // ============================================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key !== 'Escape') return;
+            if (tradeModal.classList.contains('active')) closeTradeModal();
+            if (certModal.classList.contains('active')) closeCertModal();
+            if (logModal.classList.contains('active')) closeLogModal();
+        });
+    </script>
+
+</body>
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/ by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:23 GMT -->
+</html>

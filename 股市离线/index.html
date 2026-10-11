@@ -1,0 +1,3654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>海洛易-海特洛第二证券交易所</title>
+    <style>
+        :root {
+            --red: #e2233e;
+            --red-light: #fdedef;
+            --red-hover: #c01c30;
+            --green: #00a800;
+            --green-light: #e5f6e5;
+            --green-hover: #008800;
+            --yellow: #e6a23c;
+            --blue: #1177e1;
+            --bg-white: #ffffff;
+            --bg-gray: #f5f5f5;
+            --bg-panel: #fafafa;
+            --bg-hover: #f9f9f9;
+            --bg-active: #fff0f0;
+            --text-main: #333333;
+            --text-gray: #888888;
+            --text-light: #cccccc;
+            --text-dark: #111111;
+            --border: #e8e8e8;
+            --border-dark: #dddddd;
+            --header-bg: #e2233e;
+            --nav-bg: #222222;
+            --font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --font-mono: "Consolas", "Monaco", monospace;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-family);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background-color: var(--bg-gray);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-size: 14px;
+        }
+        input,
+        button,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #splash-screen img {
+            max-width: 60%;
+            max-height: 60%;
+            animation: pulseSplash 1.5s infinite;
+        }
+        #splash-screen .splash-disclaimer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            line-height: 1.8;
+            max-width: 85%;
+            letter-spacing: 0.5px;
+        }
+        @keyframes pulseSplash {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cccccc;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .up {
+            color: var(--red) !important;
+        }
+        .down {
+            color: var(--green) !important;
+        }
+        .flat {
+            color: var(--text-gray) !important;
+        }
+        .bg-up {
+            background-color: var(--red) !important;
+            color: white !important;
+        }
+        .bg-down {
+            background-color: var(--green) !important;
+            color: white !important;
+        }
+        .hidden {
+            display: none !important;
+        }
+        header {
+            background-color: var(--header-bg);
+            color: #fff;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            flex-shrink: 0;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .h-left {
+            width: 100px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+        .h-center {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .h-name-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .h-name {
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 1.2;
+            letter-spacing: 1px;
+        }
+        .fav-star {
+            color: var(--yellow);
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .h-code-row {
+            font-size: 12px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 2px;
+            font-family: var(--font-mono);
+        }
+        .tag-badge {
+            background: #ff9800;
+            color: #fff;
+            padding: 0 4px;
+            border-radius: 2px;
+            font-size: 10px;
+        }
+        .h-right {
+            width: 100px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            font-size: 14px;
+        }
+        .btn-text {
+            cursor: pointer;
+            opacity: 0.9;
+            transition: 0.2s;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .btn-text:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            background: var(--bg-white);
+        }
+        .sidebar {
+            width: 240px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-white);
+            flex-shrink: 0;
+            transition: 0.3s;
+        }
+        .side-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-panel);
+        }
+        .side-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--text-gray);
+            border-bottom: 2px solid transparent;
+            transition: 0.2s;
+        }
+        .side-tab.active {
+            color: var(--red);
+            font-weight: bold;
+            border-bottom-color: var(--red);
+            background: var(--bg-white);
+        }
+        .side-head {
+            padding: 8px 15px;
+            font-size: 12px;
+            color: var(--text-gray);
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-white);
+            display: flex;
+            justify-content: space-between;
+        }
+        .stock-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .stock-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--bg-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .stock-item:hover {
+            background: var(--bg-hover);
+        }
+        .stock-item.active {
+            background: var(--bg-active);
+            border-left: 4px solid var(--red);
+            padding-left: 11px;
+        }
+        .st-name-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .st-name {
+            font-size: 15px;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+        .st-code {
+            font-size: 12px;
+            color: var(--text-gray);
+            font-family: var(--font-mono);
+        }
+        .st-price-box {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .st-pct {
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .st-price {
+            font-size: 13px;
+            font-family: var(--font-mono);
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            min-width: 400px;
+        }
+        .quote-panel {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            z-index: 2;
+        }
+        .price-huge-box {
+            width: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid var(--border);
+            padding-right: 15px;
+            margin-right: 15px;
+        }
+        .price-huge {
+            font-size: 40px;
+            font-weight: bold;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            font-family: var(--font-mono);
+            letter-spacing: -1px;
+        }
+        .price-sub {
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+        }
+        .quote-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px 25px;
+            font-size: 13px;
+            align-content: center;
+        }
+        .q-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed var(--bg-gray);
+            padding-bottom: 2px;
+        }
+        .q-label {
+            color: var(--text-gray);
+        }
+        .q-val {
+            font-weight: 500;
+            font-family: var(--font-mono);
+        }
+        .chart-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chart-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            background: var(--bg-panel);
+        }
+        .c-tab {
+            padding: 10px 25px;
+            cursor: pointer;
+            color: var(--text-main);
+            border-bottom: 2px solid transparent;
+            transition: 0.2s;
+        }
+        .c-tab.active {
+            color: var(--red);
+            border-bottom-color: var(--red);
+            font-weight: bold;
+            background: var(--bg-white);
+        }
+        .chart-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: crosshair;
+            background: var(--bg-white);
+        }
+        .canvas-hud {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 6px 12px;
+            font-size: 12px;
+            display: flex;
+            gap: 15px;
+            pointer-events: none;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        canvas {
+            display: block;
+            width: 100%;
+        }
+        #mainCanvas {
+            flex: 7;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+        #volCanvas {
+            flex: 2;
+            border-right: 1px solid var(--border);
+        }
+        .crosshair-line {
+            position: absolute;
+            background: var(--text-gray);
+            pointer-events: none;
+            display: none;
+            z-index: 5;
+            opacity: 0.5;
+        }
+        .crosshair-x {
+            width: 1px;
+            height: 100%;
+            top: 0;
+        }
+        .crosshair-y {
+            height: 1px;
+            width: 100%;
+            left: 0;
+        }
+        .crosshair-label {
+            position: absolute;
+            background: var(--text-dark);
+            color: white;
+            font-size: 11px;
+            padding: 3px 6px;
+            pointer-events: none;
+            display: none;
+            z-index: 10;
+            border-radius: 2px;
+            font-family: var(--font-mono);
+            white-space: nowrap;
+        }
+        .order-book {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+            background: var(--bg-white);
+            flex-shrink: 0;
+            border-left: 1px solid var(--border);
+        }
+        .ob-header {
+            padding: 8px 15px;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+        .ob-half {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 5px 0;
+            justify-content: space-evenly;
+        }
+        .ob-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 15px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        .ob-label {
+            color: var(--text-gray);
+            width: 35px;
+        }
+        .ob-price {
+            flex: 1;
+            text-align: right;
+            padding-right: 15px;
+            font-weight: bold;
+            font-family: var(--font-mono);
+        }
+        .ob-vol {
+            width: 50px;
+            text-align: right;
+            font-family: var(--font-mono);
+            color: var(--text-gray);
+        }
+        .ob-divider {
+            border-bottom: 1px dashed var(--border);
+            margin: 0;
+        }
+        .info-panel {
+            height: 180px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-white);
+            display: flex;
+            flex-direction: column;
+        }
+        .info-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-panel);
+        }
+        .i-tab {
+            padding: 8px 20px;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--text-gray);
+            border-top: 2px solid transparent;
+        }
+        .i-tab.active {
+            color: var(--text-main);
+            font-weight: bold;
+            background: var(--bg-white);
+            border-top: 2px solid var(--red);
+        }
+        .info-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 15px;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+        .news-item {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px dashed var(--bg-gray);
+            padding-bottom: 8px;
+        }
+        .news-time {
+            color: var(--text-gray);
+            width: 50px;
+            flex-shrink: 0;
+            font-family: var(--font-mono);
+        }
+        .f10-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .f10-table td {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+        }
+        .f10-table td:nth-child(odd) {
+            background: var(--bg-panel);
+            color: var(--text-gray);
+            width: 15%;
+            text-align: right;
+        }
+        .f10-table td:nth-child(even) {
+            width: 35%;
+            font-weight: 500;
+        }
+        .trade-panel {
+            width: 340px;
+            border-left: 1px solid var(--border);
+            background: var(--bg-white);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 5;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.02);
+        }
+        .tp-header {
+            background: var(--red);
+            color: white;
+            padding: 12px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .tp-asset-box {
+            padding: 15px;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .tp-asset-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .tp-asset-label {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 4px;
+        }
+        .tp-asset-val {
+            font-size: 16px;
+            font-weight: bold;
+            font-family: var(--font-mono);
+        }
+        .tp-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+        }
+        .tp-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--text-main);
+            border-bottom: 2px solid transparent;
+            transition: 0.2s;
+        }
+        .tp-tab.active {
+            color: var(--red);
+            font-weight: bold;
+            border-bottom-color: var(--red);
+        }
+        .tp-tab[data-type="sell"].active {
+            color: var(--green);
+            border-bottom-color: var(--green);
+        }
+        .tp-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        .tp-form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--bg-white);
+        }
+        .tp-form-row:focus-within {
+            border-color: var(--red);
+            box-shadow: 0 0 0 2px rgba(226, 35, 62, 0.1);
+        }
+        .tp-label {
+            width: 70px;
+            background: var(--bg-panel);
+            padding: 10px 0;
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 13px;
+            border-right: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .tp-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            font-weight: bold;
+            font-family: var(--font-mono);
+            width: 100%;
+            background: var(--bg-white);
+        }
+        .tp-input[readonly] {
+            background: var(--bg-gray);
+            color: var(--red);
+            cursor: not-allowed;
+        }
+        .tp-limit-info {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .tp-limit-num {
+            font-weight: bold;
+            font-family: var(--font-mono);
+            font-size: 14px;
+        }
+        .tp-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tp-btn-quick {
+            flex: 1;
+            padding: 8px 0;
+            border: 1px solid var(--border);
+            background: var(--bg-white);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+        .tp-btn-quick:hover {
+            border-color: var(--red);
+            color: var(--red);
+        }
+        .tp-submit {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+            letter-spacing: 5px;
+            text-align: center;
+        }
+        .tp-submit:active {
+            opacity: 0.8;
+            transform: scale(0.98);
+        }
+        .tp-table-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            margin-top: -15px;
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+        .tp-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            font-size: 12px;
+        }
+        .tp-table th,
+        .tp-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .tp-table th {
+            color: var(--text-gray);
+            font-weight: normal;
+            background: var(--bg-panel);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        .tp-table th:first-child,
+        .tp-table td:first-child {
+            text-align: left;
+        }
+        .margin-btn-entry {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border: 2px dashed var(--yellow);
+            border-radius: 6px;
+            background: #fffdf5;
+            color: #b8860b;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .margin-btn-entry:hover {
+            background: #fff8e1;
+            border-color: #e6a23c;
+            color: #e6a23c;
+        }
+        .margin-btn-entry.active-margin {
+            border-color: #4caf50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .bottom-nav {
+            background: var(--nav-bg);
+            color: #fff;
+            height: 55px;
+            display: flex;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: #aaa;
+            cursor: pointer;
+            border-right: 1px solid #333;
+            transition: 0.2s;
+        }
+        .nav-item:hover {
+            background: #333;
+            color: white;
+        }
+        .nav-item.highlight {
+            border-bottom: 3px solid var(--green);
+        }
+        .nav-item.trade-btn {
+            background: var(--red);
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            letter-spacing: 2px;
+        }
+        .nav-item.margin-nav-btn {
+            background: #b8860b;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            letter-spacing: 1px;
+        }
+        .disclaimer-bar {
+            background: #1a1a1a;
+            color: #777;
+            text-align: center;
+            padding: 6px 12px;
+            font-size: 11px;
+            flex-shrink: 0;
+            z-index: 9;
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+            border-top: 1px solid #333;
+        }
+        .disclaimer-bar a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .disclaimer-bar a:hover {
+            color: #ccc;
+        }
+        @media (max-width: 1200px) {
+            .quote-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .order-book {
+                width: 160px;
+            }
+            .trade-panel {
+                width: 280px;
+            }
+        }
+        @media (max-width: 900px) {
+            .quote-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: 260px;
+                flex-shrink: 0;
+                border-right: none;
+                border-bottom: 3px solid var(--bg-gray);
+            }
+            .main-content {
+                min-width: 100%;
+                overflow: visible;
+                flex-shrink: 0;
+            }
+            .quote-panel {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .price-huge-box {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: baseline;
+                border-right: none;
+                margin-bottom: 10px;
+                border-bottom: 1px solid var(--border);
+                padding-bottom: 10px;
+                padding-right: 0;
+            }
+            .quote-grid {
+                padding-left: 0;
+                width: 100%;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .chart-section {
+                height: 450px;
+                flex-shrink: 0;
+            }
+            .chart-body {
+                flex-direction: column;
+            }
+            .order-book {
+                width: 100%;
+                flex-direction: row;
+                border-top: 1px solid var(--border);
+                border-left: none;
+                height: 160px;
+                flex-shrink: 0;
+            }
+            .ob-header {
+                display: none;
+            }
+            .ob-half {
+                flex: 1;
+                padding: 0;
+            }
+            .ob-half:first-child {
+                border-right: 1px solid var(--border);
+            }
+            .info-panel {
+                height: auto;
+                min-height: 200px;
+                flex-shrink: 0;
+            }
+            .trade-panel {
+                width: 100%;
+                border-left: none;
+                border-top: 5px solid var(--bg-gray);
+                flex-shrink: 0;
+                min-height: 600px;
+            }
+            .disclaimer-bar {
+                font-size: 10px;
+                padding: 5px 8px;
+            }
+        }
+        #toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 6px;
+            z-index: 9999;
+            font-size: 16px;
+            display: none;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            animation: fadeInOut 0.3s ease-in-out;
+        }
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: var(--bg-white);
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+        }
+        .modal-header {
+            background: var(--bg-panel);
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .modal-close {
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text-gray);
+        }
+        .modal-close:hover {
+            color: var(--red);
+        }
+        .modal-body {
+            padding: 20px;
+            font-size: 14px;
+            line-height: 2;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .margin-modal-wide {
+            width: 520px;
+            max-width: 95vw;
+        }
+        .margin-sub-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 15px;
+        }
+        .margin-sub-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-gray);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .margin-sub-tab.active {
+            color: var(--red);
+            border-bottom-color: var(--red);
+            font-weight: bold;
+        }
+        .margin-sub-tab[data-mtype="short"].active {
+            color: var(--green);
+            border-bottom-color: var(--green);
+        }
+        .margin-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bg-panel);
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+        .margin-summary .ms-label {
+            color: var(--text-gray);
+        }
+        .margin-summary .ms-val {
+            font-weight: bold;
+            font-family: var(--font-mono);
+            font-size: 15px;
+        }
+        .margin-risk-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: #e0e0e0;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+        .margin-risk-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s, background 0.5s;
+        }
+        .margin-risk-fill.safe {
+            background: #4caf50;
+        }
+        .margin-risk-fill.warn {
+            background: #e6a23c;
+        }
+        .margin-risk-fill.danger {
+            background: #e2233e;
+        }
+        .margin-leverage-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        .margin-leverage-row select {
+            padding: 5px 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            background: var(--bg-white);
+        }
+        .ob-row.filled-highlight {
+            background: rgba(255, 200, 0, 0.25);
+            transition: background 0.3s;
+        }
+        .ai-section-title {
+            color: var(--red);
+            font-size: 16px;
+            margin: 20px 0 10px;
+            padding-top: 15px;
+            border-top: 2px solid var(--red);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-config-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .ai-form-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-form-row label {
+            width: 75px;
+            font-size: 13px;
+            color: var(--text-gray);
+            flex-shrink: 0;
+            text-align: right;
+        }
+        .ai-form-row input,
+        .ai-form-row select {
+            flex: 1;
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: var(--font-mono);
+            outline: none;
+            background: var(--bg-white);
+        }
+        .ai-preset-btns {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-left: 83px;
+            margin-bottom: 4px;
+        }
+        .ai-preset-btn {
+            padding: 3px 10px;
+            font-size: 11px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-white);
+            cursor: pointer;
+            transition: 0.2s;
+            color: var(--text-gray);
+        }
+        .ai-preset-btn:hover {
+            border-color: var(--red);
+            color: var(--red);
+            background: var(--bg-active);
+        }
+        .ai-preset-btn.active-preset {
+            border-color: var(--red);
+            color: var(--red);
+            background: var(--bg-active);
+            font-weight: bold;
+        }
+        .ai-btn-row {
+            display: flex;
+            gap: 8px;
+            margin-left: 83px;
+            margin-top: 2px;
+        }
+        .ai-btn {
+            padding: 7px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .ai-btn-save {
+            background: var(--red);
+            color: white;
+        }
+        .ai-btn-test {
+            background: var(--bg-gray);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        .ai-config-note {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-left: 83px;
+            line-height: 1.5;
+            margin-top: 2px;
+        }
+        .ai-log-entry {
+            display: flex;
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--bg-gray);
+            font-size: 12px;
+            align-items: flex-start;
+        }
+        .ai-log-time {
+            color: var(--text-gray);
+            font-family: var(--font-mono);
+            width: 56px;
+            flex-shrink: 0;
+            font-size: 11px;
+        }
+        .ai-log-badge {
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            width: 40px;
+            text-align: center;
+            flex-shrink: 0;
+            color: white;
+            line-height: 1.6;
+        }
+        .ai-log-badge.maker {
+            background: #c0392b;
+        }
+        .ai-log-badge.pe {
+            background: #e67e22;
+        }
+        .ai-log-badge.retail {
+            background: #2980b9;
+        }
+        .ai-log-badge.noise {
+            background: #95a5a6;
+        }
+        .ai-log-detail {
+            flex: 1;
+            line-height: 1.6;
+        }
+        .ai-log-empty {
+            text-align: center;
+            color: var(--text-gray);
+            padding: 30px;
+            font-size: 13px;
+        }
+        @keyframes dotPulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+        .ai-status-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            font-size: 11px;
+            color: #aaa;
+        }
+        .ai-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .ai-dot.online {
+            background: #4caf50;
+            box-shadow: 0 0 5px #4caf50;
+            animation: dotPulse 2s infinite;
+        }
+        .ai-dot.offline {
+            background: #888;
+        }
+        .ai-dot.thinking {
+            background: var(--yellow);
+            animation: dotPulse 0.6s infinite;
+        }
+        .risk-warning-text {
+            color: var(--red);
+            font-size: 11px;
+            margin-top: 4px;
+            font-weight: bold;
+        }
+        .margin-badge-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background: #4caf50;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+            vertical-align: middle;
+        }
+        .margin-badge-icon::after {
+            content: '';
+            display: block;
+            width: 5px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            margin-top: -1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <img src="open.png" alt="终端启动中..." onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<h2 style=\'color:var(--red); letter-spacing: 2px;\'>海洛易终端 初始化中...</h2>');">
+        <div class="splash-disclaimer">
+            免责声明：本网站仅为游戏二次创作作品，是一个开源项目。<br>
+            所有内容仅供娱乐，不做真实投资指导，仅为本地模拟器。<br>
+            如有侵权请联系 553658156@qq.com
+        </div>
+    </div>
+
+    <header>
+        <div class="h-left" onclick="sys.toggleSettings()">
+            <span>☰</span>
+            <span>系统设置</span>
+        </div>
+        <div class="h-center">
+            <div class="h-name-box">
+                <div class="h-name" id="h-name">加载中...</div>
+                <div class="fav-star" id="h-fav" onclick="sys.toggleFavorite()">☆</div>
+            </div>
+            <div class="h-code-row">
+                <span id="h-code">------</span>
+                <span class="tag-badge" id="h-tag">--</span>
+            </div>
+        </div>
+        <div class="h-right">
+            <span class="btn-text" onclick="sys.reset()">清空数据</span>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="side-tabs">
+                <div class="side-tab active" id="tab-all" onclick="ui.switchListTab('all')">全部行情</div>
+                <div class="side-tab" id="tab-fav" onclick="ui.switchListTab('fav')">我的自选</div>
+            </div>
+            <div class="side-head">
+                <span>代码/名称</span>
+                <span>最新价/涨幅</span>
+            </div>
+            <div class="stock-list" id="dom-stock-list"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="quote-panel">
+                <div class="price-huge-box">
+                    <div class="price-huge" id="q-price">0.00</div>
+                    <div class="price-sub">
+                        <span id="q-chg">0.00</span>
+                        <span id="q-pct">0.00%</span>
+                    </div>
+                </div>
+                <div class="quote-grid">
+                    <div class="q-item"><span class="q-label">今开</span><span class="q-val" id="q-open">0.00</span></div>
+                    <div class="q-item"><span class="q-label">最高</span><span class="q-val" id="q-high">0.00</span></div>
+                    <div class="q-item"><span class="q-label">换手</span><span class="q-val" id="q-hs">0.00%</span></div>
+                    <div class="q-item"><span class="q-label">量比</span><span class="q-val up" id="q-lb">0.00</span></div>
+                    <div class="q-item"><span class="q-label">振幅</span><span class="q-val" id="q-zf">0.00%</span></div>
+                    <div class="q-item"><span class="q-label">昨收</span><span class="q-val" id="q-prev">0.00</span></div>
+                    <div class="q-item"><span class="q-label">最低</span><span class="q-val" id="q-low">0.00</span></div>
+                    <div class="q-item"><span class="q-label">成交量</span><span class="q-val" id="q-vol">0</span></div>
+                    <div class="q-item"><span class="q-label">成交额</span><span class="q-val" id="q-amt">0.00万</span></div>
+                    <div class="q-item"><span class="q-label">市盈率</span><span class="q-val" id="q-pe">0.00</span></div>
+                    <div class="q-item"><span class="q-label">总股本</span><span class="q-val" id="q-tshares">0.00亿</span></div>
+                    <div class="q-item"><span class="q-label">总市值</span><span class="q-val" id="q-mv">0.00亿</span></div>
+                    <div class="q-item"><span class="q-label">流通股</span><span class="q-val" id="q-fshares">0.00亿</span></div>
+                    <div class="q-item"><span class="q-label">流通值</span><span class="q-val" id="q-fmv">0.00亿</span></div>
+                    <div class="q-item"><span class="q-label">市净率</span><span class="q-val" id="q-pb">0.00</span></div>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <div class="chart-tabs">
+                    <div class="c-tab active" onclick="ui.switchChart('min')">分时</div>
+                    <div class="c-tab" onclick="ui.switchChart('day')">日K</div>
+                    <div class="c-tab" onclick="ui.switchChart('week')">周K</div>
+                    <div class="c-tab" onclick="ui.switchChart('month')">月K</div>
+                </div>
+                <div class="chart-body">
+                    <div class="canvas-container" id="canvasBox">
+                        <div class="canvas-hud" id="cHud">数据加载中...</div>
+                        <div class="crosshair-line crosshair-x" id="crossX"></div>
+                        <div class="crosshair-line crosshair-y" id="crossY"></div>
+                        <div class="crosshair-label" id="crossTip" style="display:none; flex-direction:column; gap:3px; background:rgba(0,0,0,0.8); left: 10px; top: 40px; border: 1px solid #555;"></div>
+                        <canvas id="mainCanvas"></canvas>
+                        <canvas id="volCanvas"></canvas>
+                    </div>
+                    <div class="order-book">
+                        <div class="ob-header">盘口数据</div>
+                        <div class="ob-half" id="dom-sell-book"></div>
+                        <div class="ob-divider"></div>
+                        <div class="ob-half" id="dom-buy-book"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-tabs">
+                    <div class="i-tab active" onclick="ui.switchInfoTab('news')">最新资讯</div>
+                    <div class="i-tab" onclick="ui.switchInfoTab('notice')">公司公告</div>
+                    <div class="i-tab" onclick="ui.switchInfoTab('f10')">简况 (F10)</div>
+                    <div class="i-tab" onclick="ui.switchInfoTab('ai')" id="i-tab-ai" style="display:none;">AI动态</div>
+                </div>
+                <div class="info-content" id="dom-info-content"></div>
+            </div>
+        </div>
+
+        <div class="trade-panel" id="tradePanel">
+            <div class="tp-header">
+                海洛交易终端
+                <span class="margin-badge-icon" id="margin-badge-header" style="display:none;" title="两融账户已认证"></span>
+            </div>
+            <div class="tp-asset-box">
+                <div class="tp-asset-item">
+                    <span class="tp-asset-label">可用资金 (方斯)</span>
+                    <span class="tp-asset-val up" id="tp-cash">0.00</span>
+                </div>
+                <div class="tp-asset-item">
+                    <span class="tp-asset-label">总资产 (方斯)</span>
+                    <span class="tp-asset-val" id="tp-total">0.00</span>
+                </div>
+                <div class="tp-asset-item">
+                    <span class="tp-asset-label">持仓市值</span>
+                    <span class="tp-asset-val" id="tp-mv">0.00</span>
+                </div>
+                <div class="tp-asset-item">
+                    <span class="tp-asset-label">浮动盈亏</span>
+                    <span class="tp-asset-val" id="tp-profit">0.00</span>
+                </div>
+                <div class="tp-asset-item" style="grid-column: 1 / -1;">
+                    <span class="tp-asset-label">两融状态</span>
+                    <span id="tp-margin-summary" style="font-size:12px;color:var(--text-gray);">未开通</span>
+                </div>
+                <button class="margin-btn-entry" id="margin-entry-btn" onclick="marginTrade.toggleModal()">
+                    开通/进入 两融账户
+                </button>
+            </div>
+
+            <div class="tp-tabs">
+                <div class="tp-tab active" data-type="buy" onclick="trade.switchTab('buy')">买入</div>
+                <div class="tp-tab" data-type="sell" onclick="trade.switchTab('sell')">卖出</div>
+                <div class="tp-tab" data-type="hold" onclick="trade.switchTab('hold')">持仓</div>
+                <div class="tp-tab" data-type="history" onclick="trade.switchTab('history')">记录</div>
+            </div>
+
+            <div class="tp-content">
+                <div id="tp-form-area">
+                    <div class="tp-form-row">
+                        <div class="tp-label">证券代码</div>
+                        <input type="text" class="tp-input" id="tp-code" readonly style="background: var(--bg-white);">
+                    </div>
+                    <div class="tp-form-row">
+                        <div class="tp-label">委托价格</div>
+                        <input type="text" class="tp-input" id="tp-price" readonly title="实际成交价由订单簿撮合决定">
+                    </div>
+                    <div class="tp-form-row">
+                        <div class="tp-label">委托数量</div>
+                        <input type="number" class="tp-input" id="tp-qty" placeholder="输入100的整数倍" step="100" inputmode="numeric">
+                    </div>
+                    <div class="tp-limit-info">
+                        <span id="tp-limit-text">最多可买: <span class="tp-limit-num up" id="tp-limit-num">0</span> 股</span>
+                        <span>[1手=100股]</span>
+                    </div>
+                    <div class="tp-btn-group">
+                        <button class="tp-btn-quick" onclick="trade.fillQty(0.25)">1/4 仓</button>
+                        <button class="tp-btn-quick" onclick="trade.fillQty(0.33)">1/3 仓</button>
+                        <button class="tp-btn-quick" onclick="trade.fillQty(0.5)">半仓</button>
+                        <button class="tp-btn-quick" onclick="trade.fillQty(1)">全仓</button>
+                    </div>
+                    <button class="tp-submit bg-up" id="tp-action-btn" onclick="trade.execute()">买 入</button>
+                    <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--text-gray);">以上为自有资金交易，融资融券请点击上方按钮</div>
+                </div>
+
+                <div class="tp-table-wrapper" id="tp-table-area" style="display:none;">
+                    <table class="tp-table">
+                        <thead id="tp-th"></thead>
+                        <tbody id="tp-tb"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item highlight">
+            <div style="color:var(--green); font-size:14px; font-weight:bold;" id="idx-price">2850.42</div>
+            <div>大盘指数</div>
+        </div>
+        <div class="nav-item trade-btn" onclick="sys.focusTrade()">一键下单</div>
+        <div class="nav-item margin-nav-btn" onclick="marginTrade.toggleModal()">两融交易</div>
+        <div class="nav-item" onclick="ui.switchListTab('fav')">查看自选</div>
+        <div class="nav-item" id="nav-ai-status" onclick="aiEngine.toggleModal()" style="cursor:pointer;" title="AI 市场引擎">
+            <div class="ai-status-bar">
+                <span class="ai-dot offline" id="aiGlobalDot"></span>
+                <span id="aiGlobalLabel">AI 离线</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="disclaimer-bar">
+        免责声明：本网站仅为游戏二次创作作品，是一个开源项目。所有内容仅供娱乐，不做真实投资指导，仅为本地模拟器。如有侵权请联系 <a href="mailto:553658156@qq.com">553658156@qq.com</a>
+    </div>
+
+    <div id="toast">系统提示</div>
+
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>系统功能与设置</span>
+                <span class="modal-close" onclick="sys.toggleSettings()">×</span>
+            </div>
+            <div class="modal-body">
+                <h3>关于海洛交易终端 v3.0</h3>
+                <p>本系统为高度仿真的本地沙盒股票交易终端。您的所有数据均保存在本地浏览器中。</p>
+                <p style="color:var(--text-gray);font-size:12px;margin-top:8px;">免责声明：本网站仅为游戏二次创作作品，是一个开源项目。所有内容仅供娱乐，不做真实投资指导，仅为本地模拟器。如有侵权请联系 553658156@qq.com</p>
+                <hr style="margin:15px 0; border:none; border-top:1px solid var(--border)">
+                <h3>v3.0 重大更新</h3>
+                <ul style="padding-left: 20px; color:var(--text-gray)">
+                    <li><strong>自有交易与两融完全分离：</strong>右侧面板为纯自有资金交易，融资融券在独立窗口操作。</li>
+                    <li><strong>两融额度严格基于保证金规则：</strong>融资与融券共享负债额度，杜绝无限融券。</li>
+                    <li><strong>真实订单簿撮合：</strong>成交价格由买卖盘口深度决定，大单产生滑点。</li>
+                    <li>两融账户开通门槛：总资产满60万方斯。</li>
+                </ul>
+                <div style="text-align:center; margin-top:20px;">
+                    <button style="padding:8px 20px; background:var(--red); color:white; border:none; border-radius:4px; cursor:pointer;" onclick="sys.reset()">清除所有本地数据重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="aiModal">
+        <div class="modal-content" style="width:480px;">
+            <div class="modal-header">
+                <span>AI 智能市场引擎</span>
+                <span class="modal-close" onclick="aiEngine.toggleModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="ai-config-form">
+                    <div class="ai-form-row">
+                        <label>引擎开关</label>
+                        <select id="ai-enabled" onchange="aiEngine.onConfigChange()">
+                            <option value="0">关闭（随机引擎）</option>
+                            <option value="1">开启 AI 多智能体市场</option>
+                        </select>
+                    </div>
+                    <div class="ai-form-row">
+                        <label>API 地址</label>
+                        <input type="text" id="ai-endpoint" placeholder="https://api.deepseek.com/v1/chat/completions" onchange="aiEngine.onConfigChange()">
+                    </div>
+                    <div class="ai-preset-btns" id="ai-presets">
+                        <span style="font-size:11px;color:var(--text-gray);margin-right:2px;">预设:</span>
+                        <button class="ai-preset-btn" data-preset="deepseek" onclick="aiEngine.applyPreset('deepseek')">DeepSeek</button>
+                        <button class="ai-preset-btn" data-preset="openai" onclick="aiEngine.applyPreset('openai')">OpenAI</button>
+                        <button class="ai-preset-btn" data-preset="qwen" onclick="aiEngine.applyPreset('qwen')">千问</button>
+                        <button class="ai-preset-btn" data-preset="claude" onclick="aiEngine.applyPreset('claude')">Claude</button>
+                    </div>
+                    <div class="ai-form-row">
+                        <label>API Key</label>
+                        <input type="password" id="ai-key" placeholder="sk-..." onchange="aiEngine.onConfigChange()">
+                    </div>
+                    <div class="ai-form-row">
+                        <label>模型名称</label>
+                        <input type="text" id="ai-model" placeholder="deepseek-chat" onchange="aiEngine.onConfigChange()">
+                    </div>
+                    <div class="ai-form-row">
+                        <label>决策间隔</label>
+                        <input type="range" id="ai-interval" min="5" max="60" value="15" step="5" oninput="document.getElementById('ai-interval-val').textContent=this.value+'s'; aiEngine.onConfigChange()">
+                        <span class="ai-val-display" id="ai-interval-val" style="color:var(--red);font-family:var(--font-mono);min-width:38px;text-align:center;font-weight:bold;">15s</span>
+                    </div>
+                    <div class="ai-form-row">
+                        <label>市场温度</label>
+                        <input type="range" id="ai-temperature" min="0" max="20" value="7" step="1" oninput="document.getElementById('ai-temp-val').textContent=(this.value/10).toFixed(1); aiEngine.onConfigChange()">
+                        <span class="ai-val-display" id="ai-temp-val" style="color:var(--red);font-family:var(--font-mono);min-width:38px;text-align:center;font-weight:bold;">0.7</span>
+                    </div>
+                    <div class="ai-form-row">
+                        <label>AI 账户数</label>
+                        <select id="ai-count" onchange="aiEngine.onConfigChange()">
+                            <option value="10">10 个（精简）</option>
+                            <option value="20" selected>20 个（标准）</option>
+                            <option value="30">30 个（完整）</option>
+                        </select>
+                    </div>
+                    <div class="ai-btn-row">
+                        <button class="ai-btn ai-btn-test" onclick="aiEngine.testConnection()">测试连接</button>
+                        <button class="ai-btn ai-btn-save" onclick="aiEngine.saveConfig()">保存并启用</button>
+                    </div>
+                    <div class="ai-config-note" id="ai-note">
+                        AI 引擎使用您的 API Key，费用由服务商收取。推荐 DeepSeek（约 1元/百万token）。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="marginModal">
+        <div class="modal-content margin-modal-wide">
+            <div class="modal-header">
+                <span>融资融券独立交易窗口</span>
+                <span class="modal-close" onclick="marginTrade.toggleModal()">×</span>
+            </div>
+            <div class="modal-body" id="margin-modal-body">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const utils = {
+            $: id => document.getElementById(id),
+            fmt: (num, dec = 2) => Number(num).toFixed(dec),
+            cls: val => val > 0 ? 'up' : (val < 0 ? 'down' : 'flat'),
+            bgCls: val => val > 0 ? 'bg-up' : (val < 0 ? 'bg-down' : ''),
+            toast: (msg, type = 'info') => {
+                let t = utils.$('toast');
+                t.innerText = msg;
+                if (type === 'error') t.style.background = 'rgba(226,35,62,0.9)';
+                else if (type === 'green') t.style.background = 'rgba(0,168,0,0.9)';
+                else t.style.background = 'rgba(0,0,0,0.85)';
+                t.style.display = 'block';
+                clearTimeout(t._timeout);
+                t._timeout = setTimeout(() => t.style.display = 'none', 3000);
+            },
+            genTime: idx => {
+                let m = 9 * 60 + 30 + idx;
+                if (m > 11 * 60 + 30) m += 90;
+                let hh = Math.floor(m / 60).toString().padStart(2, '0');
+                let mm = (m % 60).toString().padStart(2, '0');
+                return `${hh}:${mm}`;
+            },
+            random: (min, max) => Math.random() * (max - min) + min,
+            formatDate: (dateStr, daysOffset) => {
+                let d = new Date('2024-01-01');
+                d.setDate(d.getDate() + daysOffset);
+                return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
+            },
+            safeParseInt: (val) => {
+                if (val === null || val === undefined) return 0;
+                if (typeof val === 'number') return Math.floor(val);
+                let cleaned = String(val).replace(/[^\d.-]/g, '').trim();
+                let num = parseInt(cleaned, 10);
+                return isNaN(num) ? 0 : num;
+            }
+        };
+
+        const CONFIG = {
+            INIT_CASH: 5000000,
+            POINTS_MIN: 240,
+            POINTS_DAY: 200,
+            MARGIN_THRESHOLD: 600000,
+            ORDER_BOOK_DEPTH: 20,
+            ORDER_BOOK_DISPLAY: 10,
+            TRADE_LOCK_SECONDS: 30,
+            PRICE_IMPACT_DECAY: 0.88,
+            STOCKS: [
+                { id: "SH600001", name: "伊波恩古董", tag: "主", base: 42.50, vol: 80000, pe: 35.2, mv: 1500, pb: 2.1,
+                    ind: "零售" },
+                { id: "SZ300002", name: "喵呜拉面", tag: "创", base: 15.80, vol: 120000, pe: 42.1, mv: 800, pb: 4.5,
+                ind: "餐饮" },
+                { id: "SH600003", name: "白鲸港务", tag: "主", base: 11.20, vol: 250000, pe: 18.5, mv: 4500, pb: 1.2,
+                    ind: "交通设施" },
+                { id: "SZ300004", name: "蓝芳特传媒", tag: "创", base: 34.60, vol: 50000, pe: 65.4, mv: 1200, pb: 6.8,
+                    ind: "文化传媒" },
+                { id: "SH600005", name: "克莱因商会", tag: "融", base: 65.40, vol: 30000, pe: 28.9, mv: 3200, pb: 3.3,
+                    ind: "综合行业" },
+                { id: "SH600006", name: "洛斯兰银行", tag: "主", base: 8.30, vol: 800000, pe: 6.2, mv: 9800, pb: 0.8,
+                ind: "银行业" },
+                { id: "SH688007", name: "异常管理局", tag: "科", base: 110.00, vol: 15000, pe: 120.5, mv: 5600, pb: 12.1,
+                    ind: "特殊安保" },
+                { id: "SZ000008", name: "海特勒斯", tag: "融", base: 6.90, vol: 350000, pe: -15.2, mv: 420, pb: 1.5,
+                    ind: "房地产" },
+                { id: "SZ300009", name: "维尔纳机械", tag: "创", base: 45.60, vol: 60000, pe: 55.1, mv: 2100, pb: 5.2,
+                    ind: "机械制造" },
+                { id: "SH600010", name: "新月街区", tag: "主", base: 128.00, vol: 20000, pe: 48.3, mv: 6700, pb: 8.4,
+                    ind: "商业地产" },
+                { id: "SH600011", name: "量子重工", tag: "主", base: 22.40, vol: 150000, pe: 22.4, mv: 3100, pb: 2.8,
+                    ind: "国防军工" },
+                { id: "SZ300012", name: "深空通信", tag: "创", base: 56.70, vol: 40000, pe: 88.2, mv: 4500, pb: 9.1,
+                    ind: "通信设备" },
+                { id: "SH688013", name: "星环科技", tag: "科", base: 88.80, vol: 18000, pe: 150.0, mv: 8800, pb: 15.5,
+                    ind: "软件服务" },
+                { id: "SZ000014", name: "泰坦矿业", tag: "主", base: 14.50, vol: 400000, pe: 12.5, mv: 5200, pb: 1.8,
+                    ind: "有色金属" },
+                { id: "SH600015", name: "九头蛇制药", tag: "融", base: 45.20, vol: 80000, pe: 38.6, mv: 6500, pb: 6.2,
+                    ind: "医药生物" }
+            ],
+            NEWS: [
+                "海洛易大盘全天震荡走高，市场情绪回暖。", "异常管理局发布最新收容规范，相关概念股集体异动。",
+                "洛斯兰银行宣布降低方斯存款基准利率，利好市场流动性。", "白鲸港务年度吞吐量创历史新高，业绩有望爆发。",
+                "克莱因商会一季度财报超预期，营收同比大增45%。", "喵呜拉面推出全新海鲜口味，各地门店排起长龙。",
+                "蓝芳特传媒获巨额海外注资，将拓展虚拟现实新业务。", "维尔纳机械获重大专利突破，打破技术垄断。",
+                "星环科技发布新一代量子计算芯片，股价开盘涨停。", "九头蛇制药新药三期临床数据优异，即将递交上市申请。"
+            ],
+            NOTICES: [
+                "关于公司高级管理人员减持股份计划的预披露公告",
+                "2024年第一季度报告",
+                "关于全资子公司对外投资设立合资公司的提示性公告",
+                "关于控股股东部分股份解除质押的公告",
+                "关于筹划重大资产重组的停牌公告",
+                "2023年年度权益分派实施公告",
+                "关于使用闲置自有资金进行委托理财的进展公告"
+            ]
+        };
+
+        let state = {
+            cash: CONFIG.INIT_CASH,
+            holdings: {},
+            orders: [],
+            market: {},
+            favorites: ["SH600001", "SH688007", "SH688013"],
+            activeCode: "SH600001",
+            showFavOnly: false,
+            chartMode: 'min',
+            infoTab: 'news',
+            tick: 0,
+            crosshair: { x: -1, y: -1, active: false },
+            leverage: 2,
+            marginLoan: 0,
+            shortPositions: {},
+            marginAccountEnabled: false
+        };
+
+        const AI_PRESETS = {
+            deepseek: { endpoint: 'https://api.deepseek.com/v1/chat/completions', model: 'deepseek-chat', key: '' },
+            openai: { endpoint: 'https://api.openai.com/v1/chat/completions', model: 'gpt-4o', key: '' },
+            qwen: { endpoint: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-plus',
+                key: '' },
+            claude: { endpoint: 'https://api.anthropic.com/v1/messages', model: 'claude-sonnet-4-6', key: '' }
+        };
+
+        const AI_ACCOUNTS_DEF = [
+            { id: 'maker_A', name: '伊波恩资管', role: 'maker', cash: 80000000, style: '逆向价值',
+                personality: '沉稳老练，擅长在恐慌时买入、狂热时卖出。' },
+            { id: 'maker_B', name: '白鲸控股集团', role: 'maker', cash: 100000000, style: '趋势引导',
+                personality: '激进老练，善于制造假突破诱导跟风盘。' },
+            { id: 'pe_A', name: '蓝芳特成长基金', role: 'pe', cash: 15000000, style: '成长选股',
+            personality: '偏好高成长性的科技和传媒股。' },
+            { id: 'pe_B', name: '克莱因混合策略', role: 'pe', cash: 20000000, style: '均衡配置', personality: '注重估值性价比。' },
+            { id: 'pe_C', name: '泰坦矿业基金', role: 'pe', cash: 12000000, style: '行业轮动', personality: '擅长板块轮动。' },
+            { id: 'pe_D', name: '量子价值精选', role: 'pe', cash: 18000000, style: '深度价值', personality: '耐心等待低估机会。' },
+            { id: 'pe_E', name: '星环科技创新', role: 'pe', cash: 10000000, style: '主题投资', personality: '追逐热点主题。' },
+            { id: 'retail_A', name: '短线猎手·风', role: 'retail', cash: 2500000, style: '涨停敢死队', personality: '追涨停板。' },
+            { id: 'retail_B', name: '快刀手·林', role: 'retail', cash: 1800000, style: '超短线', personality: '持仓不超过3个周期。' },
+            { id: 'retail_C', name: '波段王·陈', role: 'retail', cash: 3000000, style: '波段操作', personality: '低位买入高位卖出。' },
+            { id: 'retail_D', name: '打板客·张', role: 'retail', cash: 1200000, style: '追高打板', personality: '运气型选手。' },
+            { id: 'retail_E', name: '割肉王·刘', role: 'retail', cash: 800000, style: '反向指标', personality: '经常在最低点割肉。' },
+            { id: 'retail_F', name: '消息灵通·吴', role: 'retail', cash: 2000000, style: '消息驱动', personality: '对市场异动极其敏感。' },
+            { id: 'retail_G', name: '量化先锋·孙', role: 'retail', cash: 2800000, style: '技术分析', personality: '严格按K线形态操作。' },
+            { id: 'retail_H', name: '趋势追随·赵', role: 'retail', cash: 1500000, style: '趋势交易', personality: '顺势而为。' },
+            { id: 'retail_I', name: '抄底圣手·周', role: 'retail', cash: 2200000, style: '抄底专业户',
+            personality: '专挑暴跌股抄底。' },
+            { id: 'retail_J', name: '日内之王·郑', role: 'retail', cash: 1600000, style: '日内回转', personality: '赚取微薄差价。' },
+            { id: 'noise_A', name: '散户·小张', role: 'noise', cash: 300000, style: '随机', personality: '' },
+            { id: 'noise_B', name: '散户·老李', role: 'noise', cash: 500000, style: '随机', personality: '' },
+            { id: 'noise_C', name: '散户·王阿姨', role: 'noise', cash: 200000, style: '随机', personality: '' },
+            { id: 'noise_D', name: '散户·小陈', role: 'noise', cash: 400000, style: '随机', personality: '' },
+            { id: 'noise_E', name: '散户·大妈', role: 'noise', cash: 150000, style: '随机', personality: '' },
+            { id: 'noise_F', name: '散户·刘叔', role: 'noise', cash: 350000, style: '随机', personality: '' },
+            { id: 'noise_G', name: '散户·阿强', role: 'noise', cash: 250000, style: '随机', personality: '' },
+            { id: 'noise_H', name: '散户·小美', role: 'noise', cash: 180000, style: '随机', personality: '' },
+        ];
+
+        const aiEngine = {
+            enabled: false,
+            cycleCount: 0,
+            aiLogs: [],
+            accounts: [],
+            pendingOrders: [],
+            cycleTimer: null,
+            isThinking: false,
+            lastError: '',
+
+            loadConfig() {
+                let saved = localStorage.getItem('helios_ai_config_v2');
+                let cfg = { enabled: false, endpoint: '', key: '', model: '', interval: 15, temperature: 0.7,
+                    accountCount: 20 };
+                if (saved) { try { let p = JSON.parse(saved);
+                        Object.assign(cfg, p); } catch (e) {} }
+                this.enabled = cfg.enabled && cfg.key && cfg.endpoint;
+                return cfg;
+            },
+            getConfig() {
+                return {
+                    enabled: this.enabled,
+                    endpoint: (utils.$('ai-endpoint')?.value || '').trim(),
+                    key: (utils.$('ai-key')?.value || '').trim(),
+                    model: (utils.$('ai-model')?.value || '').trim(),
+                    interval: parseInt(utils.$('ai-interval')?.value) || 15,
+                    temperature: (parseInt(utils.$('ai-temperature')?.value) || 7) / 10,
+                    accountCount: parseInt(utils.$('ai-count')?.value) || 20
+                };
+            },
+            applyPreset(name) {
+                let p = AI_PRESETS[name];
+                if (!p) return;
+                if (utils.$('ai-endpoint') && p.endpoint) utils.$('ai-endpoint').value = p.endpoint;
+                if (utils.$('ai-model') && p.model) utils.$('ai-model').value = p.model;
+                document.querySelectorAll('.ai-preset-btn').forEach(b => b.classList.remove('active-preset'));
+                let btn = document.querySelector(`.ai-preset-btn[data-preset="${name}"]`);
+                if (btn) btn.classList.add('active-preset');
+                utils.toast(`已加载 ${name} 预设，请填入API Key`, 'info');
+            },
+            onConfigChange() {
+                let intvEl = utils.$('ai-interval');
+                if (intvEl) { let span = document.getElementById('ai-interval-val'); if (span) span.textContent = intvEl
+                        .value + 's'; }
+                let tmpEl = utils.$('ai-temperature');
+                if (tmpEl) { let span = document.getElementById('ai-temp-val'); if (span) span.textContent = (tmpEl.value /
+                        10).toFixed(1); }
+            },
+            saveConfig() {
+                let cfg = this.getConfig();
+                if (!cfg.endpoint) return utils.toast('请填写 API 地址', 'error');
+                if (!cfg.key) return utils.toast('请填写 API Key', 'error');
+                if (!cfg.model) return utils.toast('请填写模型名称', 'error');
+                cfg.enabled = utils.$('ai-enabled')?.value === '1';
+                localStorage.setItem('helios_ai_config_v2', JSON.stringify(cfg));
+                if (cfg.enabled) {
+                    this.enabled = true;
+                    this.initAccounts();
+                    this.start();
+                    utils.toast('AI 智能市场已启用，' + this.accounts.length + '个AI账户已就绪', 'green');
+                } else {
+                    this.enabled = false;
+                    this.stop();
+                    utils.toast('AI 引擎已关闭，使用随机行情', 'info');
+                }
+                this.updateUIState();
+            },
+            testConnection() {
+                let cfg = this.getConfig();
+                if (!cfg.endpoint || !cfg.key || !cfg.model) return utils.toast('请先填写 API 地址、Key 和模型', 'error');
+                utils.toast('正在测试连接...', 'info');
+                let body = { model: cfg.model, messages: [{ role: 'user', content: '请回复"连接成功"两个字。' }], max_tokens: 10,
+                    temperature: 0 };
+                let headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key };
+                if (cfg.endpoint.includes('anthropic.com')) {
+                    body = { model: cfg.model, max_tokens: 10, messages: [{ role: 'user',
+                            content: '请回复"连接成功"两个字。' }] };
+                    headers = { 'Content-Type': 'application/json', 'x-api-key': cfg.key,
+                        'anthropic-version': '2023-06-01' };
+                }
+                this._apiCall(cfg.endpoint, headers, body, 8000).then(r => {
+                    if (r.ok) {
+                        r.json().then(d => { let txt = this._extractText(d);
+                            utils.toast('连接成功: ' + txt.substring(0, 50), 'green'); }).catch(() => utils.toast(
+                            '连接成功（无法解析响应）', 'green'));
+                    } else { utils.toast('连接失败 HTTP ' + r.status, 'error'); }
+                }).catch(e => { utils.toast('网络错误: ' + e.message, 'error'); });
+            },
+            initAccounts() {
+                let cfg = this.getConfig();
+                let count = cfg.accountCount;
+                let selected = [];
+                let defs = [...AI_ACCOUNTS_DEF];
+                let makers = defs.filter(a => a.role === 'maker');
+                let pes = defs.filter(a => a.role === 'pe');
+                let retails = defs.filter(a => a.role === 'retail');
+                let noises = defs.filter(a => a.role === 'noise');
+                selected.push(...makers.slice(0, Math.max(1, Math.floor(count * 0.08))));
+                selected.push(...pes.slice(0, Math.max(2, Math.floor(count * 0.20))));
+                selected.push(...retails.slice(0, Math.max(4, Math.floor(count * 0.44))));
+                let remaining = count - selected.length;
+                if (remaining > 0) selected.push(...noises.slice(0, remaining));
+                let savedAccts = null;
+                let saved = localStorage.getItem('helios_ai_accounts_v2');
+                if (saved) { try { savedAccts = JSON.parse(saved); } catch (e) {} }
+                this.accounts = selected.map(def => {
+                    let savedAcct = savedAccts ? savedAccts.find(s => s.id === def.id) : null;
+                    return {
+                        id: def.id,
+                        name: def.name,
+                        role: def.role,
+                        style: def.style,
+                        personality: def.personality,
+                        cash: savedAcct ? savedAcct.cash : def.cash,
+                        holdings: savedAcct ? savedAcct.holdings : {},
+                        totalProfit: savedAcct ? (savedAcct.totalProfit || 0) : 0,
+                        isAI: def.role !== 'noise'
+                    };
+                });
+                this.saveAccounts();
+            },
+            saveAccounts() {
+                let data = this.accounts.map(a => ({ id: a.id, cash: a.cash, holdings: a.holdings, totalProfit: a
+                        .totalProfit }));
+                localStorage.setItem('helios_ai_accounts_v2', JSON.stringify(data));
+            },
+            buildMarketSnapshot() {
+                let stocks = CONFIG.STOCKS.map(s => {
+                    let m = state.market[s.id];
+                    if (!m) return null;
+                    let chg = ((m.cur - m.prev) / m.prev * 100);
+                    let trend = '震荡';
+                    if (m.minK.length >= 5) { let recent5 = m.minK.slice(-5);
+                        let first = recent5[0].p,
+                            last = recent5[recent5.length - 1].p; if (last > first * 1.01) trend = '上涨';
+                        else if (last < first * 0.99) trend = '下跌'; }
+                    let recentVol = 0;
+                    if (m.minK.length >= 5) m.minK.slice(-5).forEach(k => recentVol += k.v);
+                    let signals = [];
+                    if (Math.abs(chg) > 3) signals.push('大幅波动');
+                    if (recentVol > s.vol * 0.3) signals.push('放量');
+                    let spread = (m.cur * 0.998).toFixed(2) + ' / ' + (m.cur * 1.002).toFixed(2);
+                    if (m.orderBook && m.orderBook.bids.length && m.orderBook.asks.length) {
+                        spread = utils.fmt(m.orderBook.bids[0].price) + ' / ' + utils.fmt(m.orderBook.asks[0].price);
+                    }
+                    return { code: s.id, name: s.name, price: +m.cur.toFixed(2), change: chg.toFixed(2) + '%',
+                        volume_5min: recentVol, spread, trend, signals: signals.join(', ') || '正常', pe: s.pe, mv: s
+                            .mv };
+                }).filter(Boolean);
+                let events = this.aiLogs.slice(-10).filter(l => l.role !== 'noise').map(l =>
+                    `[${l.time}] ${l.accountName} ${l.action==='买入'?'买入':'卖出'} ${l.stockName} ${l.shares}股`);
+                let idxPrice = parseFloat((utils.$('idx-price')?.innerText || '2850'));
+                return { market_index: +idxPrice.toFixed(1), stocks, recent_events: events };
+            },
+            buildSystemPrompt() {
+                return `你是一个股票市场的多角色AI交易团队，正在为虚拟股票模拟交易系统"海洛易"做出交易决策。市场上存在聪明的人类玩家，他们可能试图通过大单操纵价格套利。
+        ## 核心交易原则
+        1. 你只能基于公开市场数据做决策，不能读取任何人类玩家的私人账户信息
+        2. 每个AI账户都有真实的资金和持仓，必须在资金范围内交易
+        3. 不同角色、不同账户之间要有策略分歧和对抗
+        4. 大单会造成冲击成本（订单簿撮合机制）
+        5. 注意观察异常的成交量和价格波动，可能是人类玩家在操作
+        6. 做市商(maker)角色：可以主动扫货或砸盘，制造假突破和假跌破
+        7. 私募(pe)角色：注重趋势跟踪，可以追涨杀跌
+        8. 散户(retail)角色：情绪化、冲动交易，买卖相对随机
+        ## 关键：对抗人类玩家
+        - 如果某只股票出现异常放量+价格异动，可能是人类玩家在操纵
+        - 可以反向操作吃掉他们的订单：玩家大买你就砸盘，玩家大卖你就吸筹
+        - 也可以顺势拉大后在高位出货，让追高的玩家被套
+        ## 输出格式（严格JSON数组）
+        [{"account":"maker_A","action":"buy","stock":"SH600001","shares":5000,"reason":"低位吸筹"}]
+        - action: buy/sell/hold
+        - 每次至少输出3个以上账户的决策，交易要激进一些`;
+            },
+            buildUserPrompt(snapshot, aiAccts) {
+                let lines = [];
+                lines.push('## 当前市场数据');
+                lines.push(`大盘指数: ${snapshot.market_index}`);
+                snapshot.stocks.forEach(s => lines.push(
+                    `${s.code} ${s.name} | 现价:${s.price} | 涨跌:${s.change} | 买卖价:${s.spread} | 信号:${s.signals}`));
+                if (snapshot.recent_events.length) { lines.push('### 近期公开交易记录');
+                    snapshot.recent_events.forEach(e => lines.push(e)); }
+                lines.push('## AI账户状态');
+                aiAccts.filter(a => a.isAI).forEach(a => {
+                    let totalVal = a.cash;
+                    let hList = [];
+                    Object.keys(a.holdings).forEach(code => { let h = a.holdings[code];
+                        let m = state.market[code];
+                        totalVal += h.qty * (m ? m.cur : 0);
+                        hList.push(`${code}×${h.qty}股`); });
+                    lines.push(`[${a.role}] ${a.id} | 现金:${a.cash.toFixed(0)} | 持仓:${hList.join(',')||'空仓'}`);
+                });
+                lines.push('请返回JSON数组。');
+                return lines.join('\n');
+            },
+            async executeCycle() {
+                if (!this.enabled || this.isThinking) return;
+                this.isThinking = true;
+                this.updateUIState();
+                try {
+                    let cfg = this.getConfig();
+                    let snapshot = this.buildMarketSnapshot();
+                    let aiAccts = this.accounts.filter(a => a.isAI);
+                    if (!aiAccts.length) { this.isThinking = false;
+                        this.updateUIState(); return; }
+
+                    CONFIG.STOCKS.forEach(s => {
+                        let m = state.market[s.id];
+                        if (m._playerBigTradeFlag && state.tick - m._playerBigTradeFlag.time < 3) {
+                            let makerAcct = this.accounts.find(a => a.role === 'maker');
+                            if (makerAcct && makerAcct.cash > 0) {
+                                let pTrade = m._playerBigTradeFlag;
+                                let counterQty = Math.floor(pTrade.qty * 1.5 / 100) * 100;
+                                if (pTrade.isBuy) {
+                                    let result = core.matchOrderBook(s.id, Math.min(counterQty, Math.floor(makerAcct.cash / m.cur / 100) * 100), true);
+                                    if (result && result.filledQty >= 100) {
+                                        makerAcct.cash -= result.totalCost;
+                                        if (!makerAcct.holdings[s.id]) makerAcct.holdings[s.id] = { qty: 0, cost: 0 };
+                                        let h = makerAcct.holdings[s.id];
+                                        h.cost = ((h.qty * h.cost) + result.totalCost) / (h.qty + result.filledQty);
+                                        h.qty += result.filledQty;
+                                        this.logAI('maker', '庄家·阿尔法', s.name, '扫货', result.filledQty, result.avgPrice.toFixed(2));
+                                    }
+                                } else {
+                                    let h = makerAcct.holdings[s.id];
+                                    if (h && h.qty >= 100) {
+                                        let sellQty = Math.min(counterQty, Math.floor(h.qty / 100) * 100);
+                                        let result = core.matchOrderBook(s.id, sellQty, false);
+                                        if (result && result.filledQty >= 100) {
+                                            h.qty -= result.filledQty;
+                                            makerAcct.cash += result.totalCost;
+                                            if (h.qty === 0) delete makerAcct.holdings[s.id];
+                                            this.logAI('maker', '庄家·阿尔法', s.name, '砸盘', result.filledQty, result.avgPrice.toFixed(2));
+                                        }
+                                    }
+                                }
+                            }
+                            m._playerBigTradeFlag = null;
+                        }
+                    });
+
+                    let body = { model: cfg.model, messages: [{ role: 'system', content: this.buildSystemPrompt() }, { role: 'user',
+                            content: this.buildUserPrompt(snapshot, aiAccts) }], max_tokens: 2000,
+                        temperature: cfg.temperature };
+                    let headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key };
+                    if (cfg.endpoint.includes('anthropic.com')) { body = { model: cfg.model, max_tokens: 2000,
+                            system: this.buildSystemPrompt(), messages: [{ role: 'user',
+                                content: this.buildUserPrompt(snapshot, aiAccts) }] };
+                        headers = { 'Content-Type': 'application/json', 'x-api-key': cfg.key,
+                            'anthropic-version': '2023-06-01' }; }
+                    let resp = await this._apiCall(cfg.endpoint, headers, body, 10000);
+                    if (!resp.ok) throw new Error('API返回HTTP ' + resp.status);
+                    let data = await resp.json();
+                    let rawText = this._extractText(data);
+                    let decisions = this._parseDecisions(rawText);
+                    if (!decisions || !decisions.length) { this.logAI('system', 'AI', '', '本轮无交易决策', 0, '');
+                        this.isThinking = false;
+                        this.updateUIState(); return; }
+                    let executedCount = 0;
+                    decisions.forEach(d => { if (this._validateAndExecute(d, aiAccts)) executedCount++; });
+                    if (executedCount > 0) { this._applyPricePressure();
+                        this.saveAccounts(); }
+                } catch (e) { console.error(e);
+                    this.lastError = e.message; }
+                this.isThinking = false;
+                this.updateUIState();
+                ui.renderList();
+                ui.renderQuote();
+                if (state.infoTab === 'ai') ui.renderInfo();
+            },
+            _parseDecisions(text) {
+                if (!text) return null;
+                try { let jsonStr = text.trim().replace(/```json\s*/gi, '').replace(/```\s*/g, '');
+                    let start = jsonStr.indexOf('['),
+                        end = jsonStr.lastIndexOf(']'); if (start === -1 || end === -1) return null;
+                    jsonStr = jsonStr.substring(start, end + 1);
+                    let arr = JSON.parse(jsonStr); return arr.filter(d => d.account && d.action); } catch (e) { return null; }
+            },
+            _validateAndExecute(decision, aiAccts) {
+                let acct = aiAccts.find(a => a.id === decision.account);
+                if (!acct || decision.action === 'hold') return false;
+                let stock = CONFIG.STOCKS.find(s => s.id === decision.stock);
+                if (!stock) return false;
+                let m = state.market[decision.stock];
+                if (!m) return false;
+                let shares = parseInt(decision.shares) || 0;
+                if (shares <= 0 || shares % 100 !== 0) shares = Math.max(100, Math.floor(shares / 100) * 100);
+                if (decision.action === 'buy') {
+                    let result = core.matchOrderBook(decision.stock, shares, true);
+                    if (!result || result.filledQty < 100) return false;
+                    let cost = result.totalCost;
+                    if (cost > acct.cash) {
+                        let maxAfford = Math.floor(acct.cash / result.avgPrice / 100) * 100;
+                        if (maxAfford < 100) return false;
+                        result = core.matchOrderBook(decision.stock, maxAfford, true);
+                        if (!result || result.filledQty < 100) return false;
+                        cost = result.totalCost;
+                        shares = result.filledQty;
+                    }
+                    acct.cash -= cost;
+                    if (!acct.holdings[decision.stock]) acct.holdings[decision.stock] = { qty: 0, cost: 0 };
+                    let h = acct.holdings[decision.stock];
+                    h.cost = ((h.qty * h.cost) + cost) / (h.qty + shares);
+                    h.qty += shares;
+                    this.pendingOrders.push({ stock: decision.stock, amount: cost, direction: 1 });
+                    this.logAI(acct.role, acct.name, stock.name, '买入', shares, result.avgPrice.toFixed(2));
+                    return true;
+                } else if (decision.action === 'sell') {
+                    let h = acct.holdings[decision.stock];
+                    if (!h || h.qty < shares) { shares = h ? Math.floor(h.qty / 100) * 100 : 0; if (shares < 100)
+                            return false; }
+                    let result = core.matchOrderBook(decision.stock, shares, false);
+                    if (!result || result.filledQty < 100) return false;
+                    h.qty -= result.filledQty;
+                    acct.cash += result.totalCost;
+                    acct.totalProfit = (acct.totalProfit || 0) + (result.avgPrice - h.cost) * result.filledQty;
+                    if (h.qty === 0) delete acct.holdings[decision.stock];
+                    this.pendingOrders.push({ stock: decision.stock, amount: result.totalCost, direction: -1 });
+                    this.logAI(acct.role, acct.name, stock.name, '卖出', result.filledQty, result.avgPrice.toFixed(2));
+                    return true;
+                }
+                return false;
+            },
+            _applyPricePressure() {
+                let pressure = {};
+                this.pendingOrders.forEach(o => { if (!pressure[o.stock]) pressure[o.stock] = { buy: 0, sell: 0 }; if (o
+                        .direction > 0) pressure[o.stock].buy += o.amount;
+                    else pressure[o.stock].sell += o.amount; });
+                this.pendingOrders = [];
+                Object.keys(pressure).forEach(code => {
+                    let m = state.market[code];
+                    if (!m) return;
+                    let net = pressure[code].buy - pressure[code].sell;
+                    let s = CONFIG.STOCKS.find(s => s.id === code);
+                    let pctChange = (net / (s.mv * 0.7 * 1e8)) * 1.2;
+                    pctChange = Math.max(-0.015, Math.min(0.015, pctChange));
+                    if (!m._aiPressure) m._aiPressure = 0;
+                    m._aiPressure += pctChange / Math.max(1, this.getConfig().interval);
+                });
+            },
+            noiseTrade() {
+                if (!this.enabled) return;
+                this.accounts.filter(a => a.role === 'noise').forEach(a => {
+                    if (Math.random() > 0.5) return;
+                    let action = Math.random();
+                    if (action < 0.35) {
+                        let stock = CONFIG.STOCKS[Math.floor(Math.random() * CONFIG.STOCKS.length)];
+                        let m = state.market[stock.id];
+                        let maxShares = Math.floor(a.cash / m.cur / 100) * 100;
+                        if (maxShares < 100) return;
+                        let shares = Math.floor(Math.random() * Math.min(60, maxShares / 100) + 1) * 100;
+                        let result = core.matchOrderBook(stock.id, shares, true);
+                        if (!result || result.filledQty < 100) return;
+                        let cost = result.totalCost;
+                        if (cost > a.cash) return;
+                        a.cash -= cost;
+                        if (!a.holdings[stock.id]) a.holdings[stock.id] = { qty: 0, cost: 0 };
+                        let h = a.holdings[stock.id];
+                        h.cost = ((h.qty * h.cost) + cost) / (h.qty + result.filledQty);
+                        h.qty += result.filledQty;
+                    } else if (action < 0.7) {
+                        let heldCodes = Object.keys(a.holdings);
+                        if (!heldCodes.length) return;
+                        let code = heldCodes[Math.floor(Math.random() * heldCodes.length)];
+                        let h = a.holdings[code];
+                        let maxShares = Math.floor(h.qty / 100) * 100;
+                        if (maxShares < 100) return;
+                        let shares = Math.floor(Math.random() * Math.min(15, maxShares / 100) + 1) * 100;
+                        let result = core.matchOrderBook(code, shares, false);
+                        if (!result || result.filledQty < 100) return;
+                        h.qty -= result.filledQty;
+                        a.cash += result.totalCost;
+                        if (h.qty === 0) delete a.holdings[code];
+                    }
+                });
+            },
+            start() { this.stop();
+                this.cycleCount = 0;
+                this.pendingOrders = [];
+                this.isThinking = false;
+                this.cycleTimer = setInterval(() => { if (!this.enabled) return;
+                    this.noiseTrade();
+                    this.cycleCount++; if (this.cycleCount >= this.getConfig().interval) { this.cycleCount = 0;
+                        this.executeCycle(); } }, 1000);
+                this.updateUIState(); },
+            stop() { if (this.cycleTimer) { clearInterval(this.cycleTimer);
+                    this.cycleTimer = null; } this.isThinking = false;
+                this.pendingOrders = [];
+                this.updateUIState(); },
+            logAI(role, accountName, stockName, action, shares, price) {
+                let now = new Date();
+                let time = now.toLocaleTimeString('zh-CN', { hour12: false });
+                this.aiLogs.unshift({ time, role, accountName, stockName, action, shares, price, id: Date.now() + Math
+                        .random() });
+                if (this.aiLogs.length > 200) this.aiLogs.length = 200;
+                if (state.infoTab === 'ai') ui.renderInfo();
+            },
+            toggleModal() { let m = utils.$('aiModal'); if (m) m.style.display = m.style.display === 'flex' ? 'none' :
+                    'flex'; },
+            updateUIState() {
+                let dot = utils.$('aiGlobalDot'),
+                    label = utils.$('aiGlobalLabel'),
+                    aiTab = utils.$('i-tab-ai');
+                if (dot && label) {
+                    if (this.enabled) { dot.className = 'ai-dot ' + (this.isThinking ? 'thinking' : 'online');
+                        label.textContent = this.isThinking ? 'AI 思考中' : ('AI 在线 · ' + this.accounts.length +
+                            '账户'); } else { dot.className = 'ai-dot offline';
+                        label.textContent = 'AI 离线'; }
+                }
+                if (aiTab) aiTab.style.display = this.enabled ? '' : 'none';
+            },
+            async _apiCall(url, headers, body, timeoutMs) { let controller = new AbortController();
+                let timer = setTimeout(() => controller.abort(), timeoutMs); try { return await fetch(url, { method: 'POST',
+                        headers, body: JSON.stringify(body), signal: controller.signal }); } finally { clearTimeout(
+                        timer); } },
+            _extractText(data) { if (data.choices && data.choices[0] && data.choices[0].message) return data.choices[0]
+                    .message.content || ''; if (data.content && Array.isArray(data.content)) return data.content.map(c => c
+                    .text || '').join(''); if (typeof data === 'string') return data; return JSON.stringify(data); },
+            onPlayerTrade(code, qty, isBuy, price) {
+                let m = state.market[code];
+                if (!m) return;
+                let s = CONFIG.STOCKS.find(s => s.id === code);
+                if (!s) return;
+                let amount = qty * price;
+                let direction = isBuy ? 1 : -1;
+                let impact = (amount / (s.mv * 0.7 * 1e8)) * 0.5 * direction;
+                if (!m._playerTradePressure) m._playerTradePressure = 0;
+                m._playerTradePressure += impact;
+                if (this.enabled) {
+                    m._playerBigTradeFlag = { qty, isBuy, amount, time: state.tick };
+                }
+            }
+        };
+
+        const core = {
+            load() {
+                let saved = localStorage.getItem('helios_terminal_v3');
+                let hasSavedMarket = false;
+                let offlineSeconds = 0;
+                let lastDayClose = {};
+                // 读取退出时间戳（beforeunload/visibilitychange 时写入的精确退出时刻）
+                let exitTimestamp = localStorage.getItem('helios_exit_time');
+                if (exitTimestamp) {
+                    exitTimestamp = parseInt(exitTimestamp);
+                    localStorage.removeItem('helios_exit_time');
+                }
+                if (saved) {
+                    try { let parsed = JSON.parse(saved);
+                        state.cash = parsed.cash || CONFIG.INIT_CASH;
+                        state.holdings = parsed.holdings || {};
+                        state.orders = parsed.orders || [];
+                        state.favorites = parsed.favorites || [];
+                        state.marginLoan = parsed.marginLoan || 0;
+                        state.shortPositions = parsed.shortPositions || {};
+                        state.leverage = parsed.leverage || 2;
+                        state.marginAccountEnabled = parsed.marginAccountEnabled || false;
+                        state.tick = parsed.lastTick || 0;
+                        lastDayClose = parsed.lastDayClose || {};
+                        // 取 saveTime 和 exitTimestamp 中较新的那个作为参考时间
+                        let refTime = 0;
+                        if (parsed.saveTime) refTime = parsed.saveTime;
+                        if (exitTimestamp && exitTimestamp > refTime) refTime = exitTimestamp;
+                        if (refTime > 0) {
+                            offlineSeconds = Math.floor((Date.now() - refTime) / 1000);
+                            offlineSeconds = Math.max(0, offlineSeconds); // 防止系统时钟回拨
+                        }
+                        if (parsed.marketSnapshot) {
+                            state._savedMarketSnapshot = parsed.marketSnapshot;
+                            hasSavedMarket = true;
+                        }
+                    } catch (e) {}
+                } else if (exitTimestamp) {
+                    // 无存档但有退出时间戳：用户首次访问后退出，直接用退出时间
+                    offlineSeconds = Math.max(0, Math.floor((Date.now() - exitTimestamp) / 1000));
+                }
+                this.initMarketData(hasSavedMarket, offlineSeconds, lastDayClose);
+            },
+            save() {
+                let marketSnapshot = {};
+                Object.keys(state.market).forEach(code => {
+                    let m = state.market[code];
+                    marketSnapshot[code] = {
+                        cur: m.cur, prev: m.prev, open: m.open, high: m.high, low: m.low,
+                        tVol: m.tVol, tAmt: m.tAmt,
+                        minK: m.minK, dayK: m.dayK, weekK: m.weekK, monthK: m.monthK,
+                        _aiPressure: m._aiPressure, _playerTradePressure: m._playerTradePressure,
+                        dayClosePrice: m.dayClosePrice
+                    };
+                });
+                let toSave = {
+                    cash: state.cash, holdings: state.holdings, orders: state.orders, favorites: state.favorites,
+                    marginLoan: state.marginLoan, shortPositions: state.shortPositions, leverage: state.leverage,
+                    marginAccountEnabled: state.marginAccountEnabled,
+                    marketSnapshot: marketSnapshot, lastTick: state.tick,
+                    saveTime: Date.now(), lastDayClose: {}
+                };
+                CONFIG.STOCKS.forEach(s => {
+                    let m = state.market[s.id];
+                    if (m) toSave.lastDayClose[s.id] = m.dayClosePrice || m.prev;
+                });
+                localStorage.setItem('helios_terminal_v3', JSON.stringify(toSave));
+            },
+            generateKHistory(basePrice, volatility, baseVol) {
+                let data = [];
+                let cur = basePrice * 0.6;
+                for (let i = 0; i < CONFIG.POINTS_DAY; i++) {
+                    let drift = (basePrice - cur) / basePrice * 0.05;
+                    let change = (Math.random() - 0.5 + drift) * volatility;
+                    let open = cur * (1 + (Math.random() - 0.5) * 0.02);
+                    let close = open * (1 + change);
+                    if (close > open * 1.1) close = open * 1.1;
+                    if (close < open * 0.9) close = open * 0.9;
+                    let high = Math.max(open, close) * (1 + Math.random() * 0.03);
+                    let low = Math.min(open, close) * (1 - Math.random() * 0.03);
+                    let vol = Math.floor(baseVol * (1 + Math.abs(change) * 10) * utils.random(0.5, 1.5));
+                    data.push({ date: utils.formatDate('', i - CONFIG.POINTS_DAY), open, close, high, low, vol });
+                    cur = close;
+                }
+                return data;
+            },
+            aggregateK(dayK, period) {
+                let res = [];
+                for (let i = 0; i < dayK.length; i += period) { let chunk = dayK.slice(i, i + period); if (!chunk.length)
+                        continue;
+                    res.push({ date: chunk[chunk.length - 1].date, open: chunk[0].open, close: chunk[chunk.length - 1]
+                            .close, high: Math.max(...chunk.map(c => c.high)), low: Math.min(...chunk.map(c => c.low)),
+                        vol: chunk.reduce((s, c) => s + c.vol, 0) }); }
+                return res;
+            },
+            initOrderBook(code, curPrice, stockDef) {
+                let ob = { bids: [], asks: [], lastRefresh: state.tick };
+                let spreadPct = 0.0008;
+                let tickPct = 0.0015;
+                let bestBid = curPrice * (1 - spreadPct);
+                let bestAsk = curPrice * (1 + spreadPct);
+                let baseVol = stockDef.vol;
+                for (let i = 0; i < CONFIG.ORDER_BOOK_DEPTH; i++) {
+                    let bidPrice = bestBid * Math.pow(1 - tickPct, i);
+                    let askPrice = bestAsk * Math.pow(1 + tickPct, i);
+                    bidPrice = Math.max(0.01, Math.round(bidPrice * 100) / 100);
+                    askPrice = Math.round(askPrice * 100) / 100;
+                    let nearFactor = Math.max(0.3, 1 - i * 0.04);
+                    let bidVol = Math.floor(baseVol * nearFactor * utils.random(0.08, 0.35));
+                    let askVol = Math.floor(baseVol * nearFactor * utils.random(0.08, 0.35));
+                    bidVol = Math.max(100, Math.floor(bidVol / 100) * 100);
+                    askVol = Math.max(100, Math.floor(askVol / 100) * 100);
+                    if (i === 0) { bidVol = Math.max(bidVol, Math.floor(baseVol * 0.15));
+                        askVol = Math.max(askVol, Math.floor(baseVol * 0.15)); }
+                    if (i > 15) { bidVol = Math.max(100, Math.floor(bidVol * 0.4));
+                        askVol = Math.max(100, Math.floor(askVol * 0.4)); }
+                    ob.bids.push({ price: bidPrice, volume: bidVol });
+                    ob.asks.push({ price: askPrice, volume: askVol });
+                }
+                ob.bids.sort((a, b) => b.price - a.price);
+                ob.asks.sort((a, b) => a.price - b.price);
+                return ob;
+            },
+            refreshOrderBook(code) {
+                let m = state.market[code];
+                if (!m) return;
+                let curPrice = m.cur;
+                let stockDef = m.def;
+                let oldOb = m.orderBook;
+                let preservedBids = [];
+                let preservedAsks = [];
+                if (oldOb && oldOb.bids && oldOb.asks) {
+                    for (let i = 0; i < Math.min(5, oldOb.bids.length); i++) {
+                        if (oldOb.bids[i].volume > 100 && oldOb.bids[i].price <= curPrice * 1.02 && oldOb.bids[i].price >=
+                            curPrice * 0.85) {
+                            preservedBids.push({ price: oldOb.bids[i].price, volume: Math.floor(oldOb.bids[i].volume *
+                                    0.7 / 100) * 100 });
+                        }
+                    }
+                    for (let i = 0; i < Math.min(5, oldOb.asks.length); i++) {
+                        if (oldOb.asks[i].volume > 100 && oldOb.asks[i].price >= curPrice * 0.98 && oldOb.asks[i].price <=
+                            curPrice * 1.15) {
+                            preservedAsks.push({ price: oldOb.asks[i].price, volume: Math.floor(oldOb.asks[i].volume *
+                                    0.7 / 100) * 100 });
+                        }
+                    }
+                }
+                let newOb = this.initOrderBook(code, curPrice, stockDef);
+                let bidMap = new Map();
+                newOb.bids.forEach(b => bidMap.set(b.price.toFixed(2), b));
+                preservedBids.forEach(pb => {
+                    let key = pb.price.toFixed(2);
+                    if (bidMap.has(key)) { let existing = bidMap.get(key);
+                        existing.volume = Math.max(existing.volume, pb.volume); }
+                });
+                let askMap = new Map();
+                newOb.asks.forEach(a => askMap.set(a.price.toFixed(2), a));
+                preservedAsks.forEach(pa => {
+                    let key = pa.price.toFixed(2);
+                    if (askMap.has(key)) { let existing = askMap.get(key);
+                        existing.volume = Math.max(existing.volume, pa.volume); }
+                });
+                newOb.bids.sort((a, b) => b.price - a.price);
+                newOb.asks.sort((a, b) => a.price - b.price);
+                newOb.lastRefresh = state.tick;
+                m.orderBook = newOb;
+            },
+            matchOrderBook(code, qty, isBuy) {
+                let m = state.market[code];
+                if (!m || !m.orderBook) return null;
+                let ob = m.orderBook;
+                let remaining = qty;
+                let totalCost = 0;
+                let filledQty = 0;
+                let details = [];
+                if (isBuy) {
+                    for (let i = 0; i < ob.asks.length && remaining > 0; i++) {
+                        let ask = ob.asks[i];
+                        if (ask.volume <= 0) continue;
+                        let take = Math.min(remaining, ask.volume);
+                        totalCost += take * ask.price;
+                        filledQty += take;
+                        remaining -= take;
+                        details.push({ price: ask.price, volume: take, level: i });
+                        ask.volume -= take;
+                    }
+                } else {
+                    for (let i = 0; i < ob.bids.length && remaining > 0; i++) {
+                        let bid = ob.bids[i];
+                        if (bid.volume <= 0) continue;
+                        let take = Math.min(remaining, bid.volume);
+                        totalCost += take * bid.price;
+                        filledQty += take;
+                        remaining -= take;
+                        details.push({ price: bid.price, volume: take, level: i });
+                        bid.volume -= take;
+                    }
+                }
+                if (filledQty === 0) return null;
+                let avgPrice = totalCost / filledQty;
+                m.cur = avgPrice;
+                if (avgPrice > m.high) m.high = avgPrice;
+                if (avgPrice < m.low) m.low = avgPrice;
+                m.tVol += filledQty;
+                m.tAmt += totalCost;
+                let todayK = m.dayK[m.dayK.length - 1];
+                if (todayK) { todayK.close = avgPrice; if (avgPrice > todayK.high) todayK.high = avgPrice; if (avgPrice < todayK
+                        .low) todayK.low = avgPrice;
+                    todayK.vol += filledQty; }
+                let lastMin = m.minK[m.minK.length - 1];
+                if (lastMin) { lastMin.p = avgPrice;
+                    lastMin.v += filledQty;
+                    lastMin.avg = m.tAmt / Math.max(1, m.tVol); }
+                m._lastMatchDetails = details;
+                m._lastMatchTime = state.tick;
+                return { avgPrice, filledQty, totalCost, remaining, details,
+                    slippagePct: isBuy ? ((avgPrice - ob.asks[0].price) / ob.asks[0].price * 100) : ((ob.bids[0].price -
+                        avgPrice) / ob.bids[0].price * 100) };
+            },
+            simulateOfflineTime(seconds, lastDayClose) {
+                if (seconds <= 0) return 0;
+                let ticksPerDay = 4 * 60 * 60;
+                let totalTicks = Math.min(seconds, ticksPerDay * 30);
+                let days = Math.ceil(totalTicks / ticksPerDay);
+
+                for (let d = 0; d < days; d++) {
+                    let dayTicks = (d === days - 1) ? (totalTicks % ticksPerDay || ticksPerDay) : ticksPerDay;
+                    let batchSize = 60;
+                    let batches = Math.ceil(dayTicks / batchSize);
+
+                    CONFIG.STOCKS.forEach(s => {
+                        let m = state.market[s.id];
+                        if (!m) return;
+                        if (d === 0 && lastDayClose && lastDayClose[s.id]) {
+                            m.prev = lastDayClose[s.id];
+                        } else {
+                            m.prev = m.dayClosePrice || m.prev;
+                        }
+                        m.cur = m.prev;
+                        m.open = m.cur;
+                        m.high = m.cur;
+                        m.low = m.cur;
+                        m.tVol = 0;
+                        m.tAmt = 0;
+                    });
+
+                    for (let b = 0; b < batches; b++) {
+                        CONFIG.STOCKS.forEach(s => {
+                            let m = state.market[s.id];
+                            if (!m) return;
+                            let limitUp = m.prev * 1.1;
+                            let limitDown = m.prev * 0.9;
+                            let pct = utils.random(-0.005, 0.005) * Math.sqrt(batchSize);
+                            pct = Math.max(-0.095, Math.min(0.095, pct));
+                            let target = m.cur * (1 + pct);
+                            target = Math.max(limitDown, Math.min(limitUp, target));
+                            m.cur = target;
+                            if (m.cur > m.high) m.high = m.cur;
+                            if (m.cur < m.low) m.low = m.cur;
+                            m.tVol += Math.floor(s.vol * 0.01 * batchSize);
+                            m.tAmt += m.cur * s.vol * 0.01 * batchSize;
+                        });
+                    }
+
+                    CONFIG.STOCKS.forEach(s => {
+                        let m = state.market[s.id];
+                        if (!m) return;
+                        m.dayClosePrice = m.cur;
+                        let newK = {
+                            date: utils.formatDate('', m.dayK.length),
+                            open: m.open,
+                            close: m.cur,
+                            high: m.high,
+                            low: m.low,
+                            vol: m.tVol
+                        };
+                        m.dayK.push(newK);
+                        if (m.dayK.length > 250) m.dayK = m.dayK.slice(-250);
+                    });
+                }
+
+                CONFIG.STOCKS.forEach(s => {
+                    let m = state.market[s.id];
+                    if (!m) return;
+                    m.weekK = this.aggregateK(m.dayK, 5);
+                    m.monthK = this.aggregateK(m.dayK, 20);
+                    m.orderBook = this.initOrderBook(s.id, m.cur, s);
+                    m.prev = m.dayClosePrice || m.prev;
+                    // 重置分时K线：清空旧数据，从当前价格开始重建
+                    m.minK = [{ p: m.cur, avg: m.tAmt / Math.max(1, m.tVol), v: 0, t: utils.genTime(0) }];
+                });
+
+                return totalTicks;
+            },
+            initMarketData(useSavedSnapshot = false, offlineSeconds = 0, lastDayClose = {}) {
+                state.market = {};
+                CONFIG.STOCKS.forEach(s => {
+                    let dayK, weekK, monthK, prev, cur, minK, tVol, tAmt, open, high, low;
+                    let aiPressure = 0;
+                    let dayClosePrice = 0;
+                    if (useSavedSnapshot && state._savedMarketSnapshot && state._savedMarketSnapshot[s.id]) {
+                        let saved = state._savedMarketSnapshot[s.id];
+                        dayK = saved.dayK;
+                        weekK = saved.weekK || this.aggregateK(dayK, 5);
+                        monthK = saved.monthK || this.aggregateK(dayK, 20);
+                        prev = saved.prev;
+                        cur = saved.cur;
+                        minK = saved.minK || [];
+                        tVol = saved.tVol || 0;
+                        tAmt = saved.tAmt || 0;
+                        open = saved.open;
+                        high = saved.high;
+                        low = saved.low;
+                        aiPressure = saved._aiPressure || 0;
+                        dayClosePrice = saved.dayClosePrice || prev;
+                    } else {
+                        dayK = this.generateKHistory(s.base, 0.08, s.vol);
+                        weekK = this.aggregateK(dayK, 5);
+                        monthK = this.aggregateK(dayK, 20);
+                        prev = dayK[dayK.length - 1].close;
+                        cur = prev;
+                        minK = [];
+                        tAmt = 0;
+                        tVol = 0;
+                        for (let i = 0; i < 120; i++) { cur = cur * (1 + utils.random(-0.005, 0.005));
+                            let vol = Math.floor(utils.random(0.01, 0.1) * s.vol);
+                            tAmt += cur * vol;
+                            tVol += vol;
+                            minK.push({ p: cur, avg: tAmt / tVol, v: vol, t: utils.genTime(i) }); }
+                        open = minK[0].p;
+                        high = Math.max(...minK.map(k => k.p));
+                        low = Math.min(...minK.map(k => k.p));
+                        dayClosePrice = prev;
+                    }
+                    let m = { def: s, prev, cur, open, high, low, dayK, weekK, monthK, minK, tVol, tAmt, orderBook: null,
+                        _aiPressure: aiPressure, _playerTradePressure: 0, _lastMatchDetails: null, _lastMatchTime: 0,
+                        dayClosePrice: dayClosePrice };
+                    m.orderBook = this.initOrderBook(s.id, cur, s);
+                    state.market[s.id] = m;
+                });
+                delete state._savedMarketSnapshot;
+
+                if (useSavedSnapshot && offlineSeconds > 5) {
+                    let simTicks = this.simulateOfflineTime(offlineSeconds, lastDayClose);
+                    state.tick += simTicks;
+                    trade.updateAssets();
+                    ui.renderList();
+                    ui.renderQuote();
+                    chart.draw();
+                    let fmtTime = offlineSeconds > 86400 ? (offlineSeconds / 86400).toFixed(1) + '天' :
+                        (offlineSeconds > 3600 ? (offlineSeconds / 3600).toFixed(1) + '小时' : offlineSeconds + '秒');
+                    utils.toast(`离线${fmtTime}，市场已自动推演`, 'green');
+                }
+            },
+            updateMarket() {
+                state.tick++;
+                let newMin = state.tick % 5 === 0;
+                let aiActive = aiEngine.enabled;
+                CONFIG.STOCKS.forEach(s => {
+                    let m = state.market[s.id];
+                    let pct = 0;
+                    if (m._playerTradePressure) {
+                        pct += m._playerTradePressure;
+                        m._playerTradePressure *= CONFIG.PRICE_IMPACT_DECAY;
+                        if (Math.abs(m._playerTradePressure) < 0.000005) m._playerTradePressure = 0;
+                    }
+                    if (aiActive) { if (m._aiPressure) { pct += m._aiPressure;
+                            m._aiPressure *= 0.8; if (Math.abs(m._aiPressure) < 0.000005) m._aiPressure = 0; }
+                        pct += utils.random(-0.0005, 0.0005); if (Math.random() < 0.0008) pct += utils.random(0.03,
+                            0.08) * (Math.random() > 0.5 ? 1 : -1); } else { let r = Math.random(); if (r < 0.005)
+                            pct = utils.random(0.03, 0.08) * (Math.random() > 0.5 ? 1 : -1);
+                        else if (r < 0.1) pct = utils.random(-0.01, 0.01);
+                        else pct = utils.random(-0.003, 0.003); }
+                    let np = m.cur * (1 + pct);
+                    if (np > m.prev * 1.1) np = m.prev * 1.1;
+                    if (np < m.prev * 0.9) np = m.prev * 0.9;
+                    m.cur = np;
+                    if (np > m.high) m.high = np;
+                    if (np < m.low) m.low = np;
+                    let vol = Math.floor(utils.random(100, s.vol * 0.05));
+                    if (Math.abs(pct) > 0.02) vol *= 5;
+                    m.tVol += vol;
+                    m.tAmt += np * vol;
+                    let avg = m.tAmt / m.tVol;
+                    if (newMin) { if (m.minK.length < CONFIG.POINTS_MIN) m.minK.push({ p: np, avg, v: vol,
+                            t: utils.genTime(m.minK.length) }); } else { let last = m.minK[m.minK.length - 1]; if (
+                            last) { last.p = np;
+                            last.v += vol;
+                            last.avg = avg; } }
+                    let todayK = m.dayK[m.dayK.length - 1];
+                    if (todayK) { todayK.close = np; if (np > todayK.high) todayK.high = np; if (np < todayK.low)
+                            todayK.low = np;
+                        todayK.vol += vol; }
+                    this.refreshOrderBook(s.id);
+                });
+                let idxP = 2850 + (state.tick % 20) * (Math.random() - 0.5) * 5;
+                utils.$('idx-price').innerText = utils.fmt(idxP);
+                utils.$('idx-price').style.color = idxP >= 2850 ? 'var(--red)' : 'var(--green)';
+                marginTrade.checkRisk();
+                ui.renderList();
+                ui.renderQuote();
+                ui.renderOrderBook();
+                chart.draw();
+                trade.updateAssets();
+                if (state.tick % 30 === 0) core.save();
+                if (utils.$('marginModal').style.display === 'flex') marginTrade.renderModalContent();
+            }
+        };
+
+        const chart = {
+            draw() {
+                const box = utils.$('canvasBox');
+                const cP = utils.$('mainCanvas');
+                const cV = utils.$('volCanvas');
+                const rect = box.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                cP.width = rect.width * dpr;
+                cP.height = rect.height * 0.7 * dpr;
+                cV.width = rect.width * dpr;
+                cV.height = rect.height * 0.3 * dpr;
+                cP.style.width = rect.width + 'px';
+                cP.style.height = (rect.height * 0.7) + 'px';
+                cV.style.width = rect.width + 'px';
+                cV.style.height = (rect.height * 0.3) + 'px';
+                const ctx1 = cP.getContext('2d');
+                const ctx2 = cV.getContext('2d');
+                ctx1.scale(dpr, dpr);
+                ctx2.scale(dpr, dpr);
+                let w = rect.width,
+                    h1 = rect.height * 0.7,
+                    h2 = rect.height * 0.3;
+                ctx1.clearRect(0, 0, w, h1);
+                ctx2.clearRect(0, 0, w, h2);
+                let m = state.market[state.activeCode];
+                if (state.chartMode === 'min') this.drawMin(ctx1, ctx2, w, h1, h2, m);
+                else { let kData = state.chartMode === 'day' ? m.dayK : (state.chartMode === 'week' ? m.weekK : m
+                        .monthK);
+                    this.drawKLine(ctx1, ctx2, w, h1, h2, kData.slice(Math.max(kData.length - 80, 0)), m); }
+                this.setupInteraction(box, w, h1, h2, m);
+            },
+            drawMin(ctx1, ctx2, w, h1, h2, m) {
+                let data = m.minK;
+                let maxP = m.prev,
+                    minP = m.prev,
+                    maxV = 0;
+                data.forEach(d => { if (d.p > maxP) maxP = d.p; if (d.p < minP) minP = d.p; if (d.v > maxV) maxV = d
+                    .v; });
+                let diff = Math.max(Math.abs(maxP - m.prev), Math.abs(m.prev - minP), m.prev * 0.01);
+                maxP = m.prev + diff;
+                minP = m.prev - diff;
+                const getX = i => (i / CONFIG.POINTS_MIN) * w;
+                const getY1 = p => h1 - ((p - minP) / (maxP - minP)) * h1;
+                const getY2 = v => h2 - (v / (maxV || 1)) * h2;
+                ctx1.strokeStyle = 'rgba(0,0,0,0.05)';
+                ctx1.beginPath();
+                ctx1.moveTo(0, h1 / 2);
+                ctx1.lineTo(w, h1 / 2);
+                ctx1.stroke();
+                ctx1.strokeStyle = '#999';
+                ctx1.setLineDash([4, 4]);
+                ctx1.beginPath();
+                ctx1.moveTo(0, getY1(m.prev));
+                ctx1.lineTo(w, getY1(m.prev));
+                ctx1.stroke();
+                ctx1.setLineDash([]);
+                if (data.length === 0) return;
+                let grad = ctx1.createLinearGradient(0, 0, 0, h1);
+                grad.addColorStop(0, 'rgba(17, 119, 225, 0.2)');
+                grad.addColorStop(1, 'rgba(17, 119, 225, 0.0)');
+                ctx1.fillStyle = grad;
+                ctx1.beginPath();
+                ctx1.moveTo(getX(0), h1);
+                data.forEach((d, i) => ctx1.lineTo(getX(i), getY1(d.p)));
+                ctx1.lineTo(getX(data.length - 1), h1);
+                ctx1.fill();
+                ctx1.strokeStyle = 'var(--blue)';
+                ctx1.beginPath();
+                data.forEach((d, i) => i === 0 ? ctx1.moveTo(getX(i), getY1(d.p)) : ctx1.lineTo(getX(i), getY1(d.p)));
+                ctx1.stroke();
+                ctx1.strokeStyle = 'var(--yellow)';
+                ctx1.beginPath();
+                data.forEach((d, i) => i === 0 ? ctx1.moveTo(getX(i), getY1(d.avg)) : ctx1.lineTo(getX(i), getY1(d
+                    .avg)));
+                ctx1.stroke();
+                let bw = Math.max((w / CONFIG.POINTS_MIN) - 0.5, 1);
+                data.forEach((d, i) => { let isUp = i === 0 ? d.p >= m.open : d.p >= data[i - 1].p;
+                    ctx2.fillStyle = isUp ? 'var(--red)' : 'var(--green)';
+                    ctx2.fillRect(getX(i) - bw / 2, getY2(d.v), bw, h2 - getY2(d.v)); });
+                utils.$('cHud').innerHTML =
+                    `<span>现价: ${utils.fmt(data[data.length-1].p)}</span><span style="color:var(--yellow)">均价: ${utils.fmt(data[data.length-1].avg)}</span><span>量: ${data[data.length-1].v}</span>`;
+            },
+            drawKLine(ctx1, ctx2, w, h1, h2, data, m) {
+                if (!data || data.length === 0) return;
+                let maxP = 0,
+                    minP = Infinity,
+                    maxV = 0;
+                data.forEach(d => { if (d.high > maxP) maxP = d.high; if (d.low < minP) minP = d.low; if (d.vol >
+                        maxV) maxV = d.vol; });
+                let pad = (maxP - minP) * 0.05 || maxP * 0.01;
+                maxP += pad;
+                minP -= pad;
+                let points = data.length;
+                const getX = i => (i / points) * w;
+                const getY1 = p => h1 - ((p - minP) / (maxP - minP)) * h1;
+                const getY2 = v => h2 - (v / (maxV || 1)) * h2;
+                let ma5 = [],
+                    ma10 = [],
+                    ma20 = [];
+                for (let i = 0; i < data.length; i++) { let s = 0; if (i >= 4) { for (let j = 0; j < 5; j++) s += data[
+                        i - j].close;
+                        ma5.push(s / 5); } else ma5.push(null);
+                    s = 0; if (i >= 9) { for (let j = 0; j < 10; j++) s += data[i - j].close;
+                        ma10.push(s / 10); } else ma10.push(null);
+                    s = 0; if (i >= 19) { for (let j = 0; j < 20; j++) s += data[i - j].close;
+                        ma20.push(s / 20); } else ma20.push(null); }
+                const drawLine = (arr, color) => { ctx1.strokeStyle = color;
+                    ctx1.beginPath(); for (let i = 0; i < arr.length; i++) { if (!arr[i]) continue;
+                        let x = getX(i) + (w / points) / 2; if (i === 0 || !arr[i - 1]) ctx1.moveTo(x, getY1(arr[
+                            i]));
+                        else ctx1.lineTo(x, getY1(arr[i])); }
+                    ctx1.stroke(); };
+                drawLine(ma5, '#333');
+                drawLine(ma10, '#e6a23c');
+                drawLine(ma20, '#e2233e');
+                let bw = Math.max((w / points) * 0.6, 1);
+                data.forEach((d, i) => { let x = getX(i) + (w / points) / 2;
+                    let isYang = d.close > d.open || (d.close === d.open && d.close >= (i > 0 ? data[i - 1].close : d
+                        .open));
+                    let yTop = getY1(Math.max(d.close, d.open)),
+                        yBot = getY1(Math.min(d.close, d.open)),
+                        hRect = Math.max(1, yBot - yTop); if (isYang) { ctx1.strokeStyle = 'var(--red)';
+                        ctx1.beginPath();
+                        ctx1.moveTo(x, getY1(d.high));
+                        ctx1.lineTo(x, yTop);
+                        ctx1.stroke();
+                        ctx1.beginPath();
+                        ctx1.moveTo(x, yBot);
+                        ctx1.lineTo(x, getY1(d.low));
+                        ctx1.stroke();
+                        ctx1.fillStyle = '#fff';
+                        ctx1.fillRect(x - bw / 2, yTop, bw, hRect);
+                        ctx1.strokeRect(x - bw / 2, yTop, bw, hRect); } else { ctx1.strokeStyle = 'var(--green)';
+                        ctx1.fillStyle = 'var(--green)';
+                        ctx1.beginPath();
+                        ctx1.moveTo(x, getY1(d.high));
+                        ctx1.lineTo(x, getY1(d.low));
+                        ctx1.stroke();
+                        ctx1.fillRect(x - bw / 2, yTop, bw, hRect); }
+                    let vy = getY2(d.vol); if (isYang) { ctx2.strokeStyle = 'var(--red)';
+                        ctx2.strokeRect(x - bw / 2, vy, bw, h2 - vy); } else { ctx2.fillStyle = 'var(--green)';
+                        ctx2.fillRect(x - bw / 2, vy, bw, h2 - vy); } });
+                let lastD = data[data.length - 1];
+                ctx1.fillStyle = '#111';
+                ctx1.fillRect(w - 45, getY1(lastD.close) - 9, 45, 18);
+                ctx1.fillStyle = '#fff';
+                ctx1.fillText(utils.fmt(lastD.close), w - 22, getY1(lastD.close));
+                utils.$('cHud').innerHTML =
+                    `<span>MA5: ${utils.fmt(ma5[data.length-1])}</span><span style="color:var(--yellow)">MA10: ${utils.fmt(ma10[data.length-1])}</span><span style="color:var(--red)">MA20: ${utils.fmt(ma20[data.length-1])}</span>`;
+            },
+            setupInteraction(box, w, h1, h2, m) {
+                const handleMove = (e) => { e.preventDefault(); if (state.crosshair.active === false) return;
+                    let rect = box.getBoundingClientRect();
+                    let cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                    let cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+                    let cXDom = utils.$('crossX'),
+                        cYDom = utils.$('crossY'),
+                        tipDom = utils.$('crossTip'); if (cx < 0 || cx > w || cy < 0 || cy > (h1 + h2)) { cXDom.style
+                            .display = 'none';
+                        cYDom.style.display = 'none';
+                        tipDom.style.display = 'none'; return; }
+                    cXDom.style.display = 'block';
+                    cYDom.style.display = 'block';
+                    cXDom.style.left = cx + 'px';
+                    cYDom.style.top = cy + 'px'; if (state.chartMode !== 'min') { let kData = state.chartMode === 'day' ?
+                            m.dayK : (state.chartMode === 'week' ? m.weekK : m.monthK);
+                        let renderData = kData.slice(Math.max(kData.length - 80, 0));
+                        let idx = Math.floor((cx / w) * renderData.length); if (idx >= 0 && idx < renderData.length) {
+                            let d = renderData[idx];
+                            tipDom.style.display = 'flex';
+                            tipDom.innerHTML =
+                                `<div>${d.date}</div><div>开:${utils.fmt(d.open)} 高:${utils.fmt(d.high)} 低:${utils.fmt(d.low)} 收:${utils.fmt(d.close)}</div>`;
+                            tipDom.style.left = (cx > w / 2 ? cx - 110 : cx + 20) + 'px';
+                            tipDom.style.top = Math.max(10, cy - 50) + 'px'; } }
+                };
+                box.onmouseenter = box.ontouchstart = () => { state.crosshair.active = true; };
+                box.onmousemove = box.ontouchmove = handleMove;
+                box.onmouseleave = box.ontouchend = () => { state.crosshair.active = false;
+                    utils.$('crossX').style.display = 'none';
+                    utils.$('crossY').style.display = 'none';
+                    utils.$('crossTip').style.display = 'none'; };
+            }
+        };
+
+        const trade = {
+            currentTab: 'buy',
+            switchTab(tab) {
+                this.currentTab = tab;
+                document.querySelectorAll('.tp-tab').forEach(el => el.classList.remove('active'));
+                let targetTab = document.querySelector(`.tp-tab[data-type="${tab}"]`);
+                if (targetTab) targetTab.classList.add('active');
+                let isForm = tab === 'buy' || tab === 'sell';
+                let formArea = utils.$('tp-form-area');
+                let tableArea = utils.$('tp-table-area');
+                if (formArea) formArea.style.display = isForm ? 'block' : 'none';
+                if (tableArea) tableArea.style.display = !isForm ? 'block' : 'none';
+                if (isForm) {
+                    let m = state.market[state.activeCode];
+                    if (m && m.def) {
+                        utils.$('tp-code').value = `${m.def.name} (${state.activeCode})`;
+                        utils.$('tp-price').value = utils.fmt(m.cur);
+                    }
+                    utils.$('tp-qty').value = '';
+                    let btn = utils.$('tp-action-btn');
+                    btn.innerText = tab === 'buy' ? '买 入 (自有资金)' : '卖 出 (自有持仓)';
+                    btn.className = `tp-submit ${tab==='buy'?'bg-up':'bg-down'}`;
+                }
+                this.updateAssets();
+            },
+            getTotalAssets() {
+                let holdMv = 0;
+                Object.keys(state.holdings).forEach(k => { let h = state.holdings[k],
+                        m = state.market[k];
+                    if (m) holdMv += h.qty * m.cur; });
+                let shortMv = 0;
+                Object.keys(state.shortPositions).forEach(k => { let s = state.shortPositions[k],
+                        m = state.market[k];
+                    if (m) shortMv += s.qty * m.cur; });
+                return state.cash + holdMv - state.marginLoan - shortMv;
+            },
+            getMaxBuyQty(price) {
+                if (price <= 0) return 0;
+                let code = state.activeCode;
+                let m = state.market[code];
+                let obDepthQty = 0;
+                if (m && m.orderBook && m.orderBook.asks) {
+                    m.orderBook.asks.forEach(ask => obDepthQty += ask.volume);
+                }
+                let cashLimit = Math.floor(state.cash / price / 100) * 100;
+                return Math.min(cashLimit, Math.floor(obDepthQty / 100) * 100);
+            },
+            getSellableQty(code) {
+                let h = state.holdings[code];
+                if (!h) return 0;
+                let m = state.market[code];
+                let obDepthQty = 0;
+                if (m && m.orderBook && m.orderBook.bids) {
+                    m.orderBook.bids.forEach(bid => obDepthQty += bid.volume);
+                }
+                let holdQty = h.qty;
+                if (h.buyTimes) {
+                    let sellable = 0;
+                    h.buyTimes.forEach(bt => {
+                        if (state.tick - bt.time >= CONFIG.TRADE_LOCK_SECONDS) {
+                            sellable += bt.qty;
+                        }
+                    });
+                    holdQty = sellable;
+                }
+                return Math.floor(Math.min(holdQty, obDepthQty) / 100) * 100;
+            },
+            getLockedQty(code) {
+                let h = state.holdings[code];
+                if (!h) return 0;
+                return h.qty - this.getSellableQty(code);
+            },
+            getMaxSellQty() {
+                let code = state.activeCode;
+                return this.getSellableQty(code);
+            },
+            fillQty(ratio) {
+                let limitNumEl = utils.$('tp-limit-num');
+                if (!limitNumEl) { utils.toast('无法读取最大可交易数量', 'error'); return; }
+                let max = utils.safeParseInt(limitNumEl.textContent || limitNumEl.innerText);
+                if (max <= 0 || isNaN(max)) { utils.toast('当前无可交易数量', 'info'); return; }
+                let rawQty = max * ratio;
+                let qty = Math.floor(rawQty / 100) * 100;
+                if (qty < 100 && max >= 100) qty = 100;
+                if (qty < 100) { utils.toast(`最大${max}股，${Math.round(ratio*100)}%仓位不足1手`, 'info');
+                    utils.$('tp-qty').value = ''; return; }
+                if (qty > max) qty = Math.floor(max / 100) * 100;
+                utils.$('tp-qty').value = qty;
+                utils.toast(`已设置 ${qty} 股（${Math.round(ratio*100)}%仓位）`, 'info');
+            },
+            updateAssets() {
+                let holdMv = 0,
+                    holdProfit = 0;
+                Object.keys(state.holdings).forEach(k => { let h = state.holdings[k],
+                        m = state.market[k];
+                    if (!m) return;
+                    let cv = h.qty * m.cur;
+                    holdMv += cv;
+                    holdProfit += (m.cur - h.cost) * h.qty; });
+                let shortMv = 0;
+                Object.keys(state.shortPositions).forEach(k => {
+                    let sp = state.shortPositions[k],
+                        m = state.market[k];
+                    if (m) shortMv += sp.qty * m.cur;
+                });
+                let totalAssets = state.cash + holdMv - state.marginLoan - shortMv;
+                utils.$('tp-cash').innerText = utils.fmt(state.cash);
+                utils.$('tp-total').innerText = utils.fmt(totalAssets);
+                utils.$('tp-mv').innerText = utils.fmt(holdMv);
+                let pDom = utils.$('tp-profit');
+                pDom.innerText = (holdProfit > 0 ? '+' : '') + utils.fmt(holdProfit);
+                pDom.className = `tp-asset-val ${utils.cls(holdProfit)}`;
+                let summaryEl = utils.$('tp-margin-summary');
+                if (summaryEl) {
+                    if (state.marginAccountEnabled) {
+                        let totalDebt = state.marginLoan + shortMv;
+                        summaryEl.innerText = `已开通 | 负债${utils.fmt(totalDebt,0)} | 杠杆${state.leverage}x`;
+                        summaryEl.style.color = totalDebt > 0 ? 'var(--yellow)' : 'var(--green)';
+                    } else {
+                        summaryEl.innerText = '未开通';
+                        summaryEl.style.color = 'var(--text-gray)';
+                    }
+                }
+                let entryBtn = utils.$('margin-entry-btn');
+                if (entryBtn) {
+                    entryBtn.className = state.marginAccountEnabled ? 'margin-btn-entry active-margin' :
+                        'margin-btn-entry';
+                    entryBtn.innerText = state.marginAccountEnabled ? '进入两融账户 (已开通)' : '开通/进入 两融账户';
+                }
+                let badgeH = utils.$('margin-badge-header');
+                if (badgeH) badgeH.style.display = state.marginAccountEnabled ? 'inline-block' : 'none';
+                if (this.currentTab === 'buy' || this.currentTab === 'sell') {
+                    let code = state.activeCode;
+                    let m = state.market[code];
+                    if (!m) return;
+                    let p = m.cur;
+                    let limitTextEl = utils.$('tp-limit-text');
+                    if (this.currentTab === 'buy') {
+                        let maxBuy = this.getMaxBuyQty(p);
+                        if (limitTextEl) limitTextEl.innerHTML =
+                            `最多可买: <span class="tp-limit-num up" id="tp-limit-num">${maxBuy}</span> 股 (仅自有资金)`;
+                    } else {
+                        let maxSell = this.getMaxSellQty();
+                        if (limitTextEl) limitTextEl.innerHTML =
+                            `最多可卖: <span class="tp-limit-num down" id="tp-limit-num">${maxSell}</span> 股 (仅自有持仓)`;
+                    }
+                } else if (this.currentTab === 'hold') this.renderHoldings();
+                else if (this.currentTab === 'history') this.renderHistory();
+            },
+            execute() {
+                let code = state.activeCode;
+                let m = state.market[code];
+                if (!m) return utils.toast("市场数据未就绪", "error");
+                let type = this.currentTab;
+                if (type !== 'buy' && type !== 'sell') return utils.toast("请选择买入或卖出", "error");
+                let qtyInput = utils.$('tp-qty');
+                let rawVal = qtyInput.value;
+                let qty = utils.safeParseInt(rawVal);
+                if (qty <= 0 || qty % 100 !== 0) return utils.toast("委托数量必须为100的整数倍", "error");
+                let time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+                if (type === 'buy') {
+                    let maxBuy = this.getMaxBuyQty(m.cur);
+                    if (qty > maxBuy) return utils.toast(`超过最大可买数量 ${maxBuy} 股（自有资金不足）！`, "error");
+                    let result = core.matchOrderBook(code, qty, true);
+                    if (!result || result.filledQty < 100) return utils.toast("订单簿卖盘深度不足，无法成交！", "error");
+                    let actualQty = result.filledQty;
+                    let cost = result.totalCost;
+                    if (cost > state.cash) return utils.toast("自有资金不足！订单簿价格已变化", "error");
+                    if (actualQty < qty) utils.toast(`订单簿深度有限，仅成交 ${actualQty} 股（滑点${result.slippagePct.toFixed(2)}%）`,
+                        'info');
+                    else if (result.slippagePct > 0.1) utils.toast(
+                        `大单冲击！成交均价 ${utils.fmt(result.avgPrice)}，滑点${result.slippagePct.toFixed(2)}%`, 'info');
+                    state.cash -= cost;
+                    if (!state.holdings[code]) state.holdings[code] = { qty: 0, cost: 0, isMargin: false, buyTimes: [] };
+                    let h = state.holdings[code];
+                    h.cost = ((h.qty * h.cost) + cost) / (h.qty + actualQty);
+                    h.qty += actualQty;
+                    h.isMargin = false;
+                    if (!h.buyTimes) h.buyTimes = [];
+                    h.buyTimes.push({ qty: actualQty, time: state.tick });
+                    utils.toast(`买入成功！成交均价 ${utils.fmt(result.avgPrice)} ${actualQty} 股`, 'green');
+                } else {
+                    let sellableQty = this.getSellableQty(code);
+                    if (sellableQty <= 0) return utils.toast("股票在锁定期内（买入后30秒才能卖出）！", "error");
+                    if (qty > sellableQty) {
+                        utils.toast(`可卖数量 ${sellableQty} 股，其余仍在锁定期中`, "info");
+                        qty = sellableQty;
+                    }
+                    if (qty % 100 !== 0) qty = Math.floor(qty / 100) * 100;
+                    if (qty < 100) return utils.toast("可卖数量不足1手！", "error");
+                    let h = state.holdings[code];
+                    if (!h || h.qty < qty) return utils.toast("持仓不足！", "error");
+                    let result = core.matchOrderBook(code, qty, false);
+                    if (!result || result.filledQty < 100) return utils.toast("订单簿买盘深度不足，无法成交！", "error");
+                    let actualQty = result.filledQty;
+                    if (actualQty > h.qty) actualQty = Math.floor(h.qty / 100) * 100;
+                    if (actualQty < 100) return utils.toast("持仓不足！", "error");
+                    if (actualQty < qty) utils.toast(`订单簿深度有限，仅成交 ${actualQty} 股（滑点${result.slippagePct.toFixed(2)}%）`,
+                        'info');
+                    h.qty -= actualQty;
+                    if (h.buyTimes) {
+                        let remaining = actualQty;
+                        h.buyTimes = h.buyTimes.filter(bt => {
+                            if (remaining <= 0) return true;
+                            let deduct = Math.min(bt.qty, remaining);
+                            bt.qty -= deduct;
+                            remaining -= deduct;
+                            return bt.qty > 0;
+                        });
+                    }
+                    state.cash += result.totalCost;
+                    if (h.qty === 0) delete state.holdings[code];
+                    utils.toast(`卖出成功！成交均价 ${utils.fmt(result.avgPrice)} ${actualQty} 股`, 'green');
+                }
+                let m2 = state.market[code];
+                state.orders.unshift({ time, code, name: m2.def.name, type: type === 'buy' ? '买入(自有)' : '卖出(自有)',
+                    price: m2.cur, qty, status: '订单簿撮合成交' });
+                if (state.orders.length > 100) state.orders.pop();
+                core.save();
+                utils.$('tp-qty').value = '';
+                aiEngine.onPlayerTrade(code, qty, type === 'buy', m2.cur);
+                this.updateAssets();
+                ui.renderList();
+                ui.renderQuote();
+                ui.renderOrderBook();
+                chart.draw();
+            },
+            renderHoldings() {
+                utils.$('tp-th').innerHTML =
+                    '<tr><th>名称/代码</th><th>盈亏</th><th>数量/成本</th><th>状态</th></tr>';
+                let html = '';
+                let keys = Object.keys(state.holdings);
+                let shortKeys = Object.keys(state.shortPositions);
+                let allKeys = [...new Set([...keys, ...shortKeys])];
+                if (!allKeys.length) { utils.$('tp-tb').innerHTML =
+                        '<tr><td colspan="4" style="text-align:center;padding:30px">暂无持仓</td></tr>'; return; }
+                allKeys.forEach(k => {
+                    let m = state.market[k];
+                    if (!m) return;
+                    let h = state.holdings[k];
+                    let sp = state.shortPositions[k];
+                    if (h) { let profit = (m.cur - h.cost) * h.qty;
+                        let lockedQty = trade.getLockedQty(k);
+                        let statusText = h.isMargin ? '融资' : '自有';
+                        if (lockedQty > 0) {
+                            let minLock = 999;
+                            if (h.buyTimes) h.buyTimes.forEach(bt => {
+                                let rem = CONFIG.TRADE_LOCK_SECONDS - (state.tick - bt.time);
+                                if (rem > 0 && rem < minLock) minLock = rem;
+                            });
+                            statusText += `<br><span style="color:var(--yellow)">${lockedQty}股锁定(${minLock}s)</span>`;
+                        }
+                        html +=
+                            `<tr onclick="sys.changeStock('${k}')"><td>${m.def.name}<br>${k}</td><td class="${utils.cls(profit)}">${profit>0?'+':''}${utils.fmt(profit)}</td><td>${h.qty}股<br>${utils.fmt(h.cost)}</td><td>${statusText}</td></tr>`; }
+                    if (sp) { let profit = (sp.price - m.cur) * sp.qty;
+                        html +=
+                            `<tr onclick="sys.changeStock('${k}')"><td>${m.def.name}<br>${k}</td><td class="${utils.cls(profit)}">${profit>0?'+':''}${utils.fmt(profit)}</td><td>${sp.qty}股<br>${utils.fmt(sp.price)}</td><td>融券</td></tr>`; }
+                });
+                utils.$('tp-tb').innerHTML = html;
+            },
+            renderHistory() {
+                utils.$('tp-th').innerHTML = '<tr><th>时间/操作</th><th>名称/价格</th><th>委托数量</th></tr>';
+                let html = '';
+                if (!state.orders.length) { utils.$('tp-tb').innerHTML =
+                        '<tr><td colspan="3" style="text-align:center;padding:30px">暂无委托记录</td></tr>'; return; }
+                state.orders.forEach(o => { html +=
+                        `<tr><td>${o.time}<br>${o.type}</td><td>${o.name}<br>${utils.fmt(o.price)}</td><td>${o.qty}<br>${o.status}</td></tr>`; });
+                utils.$('tp-tb').innerHTML = html;
+            }
+        };
+
+        const marginTrade = {
+            currentSubTab: 'marginBuy',
+            switchSubTab(tab) {
+                this.currentSubTab = tab;
+                this.renderModalContent();
+            },
+            getMetrics() {
+                let holdMv = 0;
+                Object.keys(state.holdings).forEach(k => { let h = state.holdings[k],
+                        m = state.market[k];
+                    if (m) holdMv += h.qty * m.cur; });
+                let shortMv = 0;
+                Object.keys(state.shortPositions).forEach(k => { let sp = state.shortPositions[k],
+                        m = state.market[k];
+                    if (m) shortMv += sp.qty * m.cur; });
+                let grossAssets = state.cash + holdMv;
+                let totalDebt = state.marginLoan + shortMv;
+                let netAssets = grossAssets - totalDebt;
+                let maxTotalDebt = state.leverage > 1 ? grossAssets * (state.leverage - 1) / state.leverage : 0;
+                let availableCredit = Math.max(0, maxTotalDebt - totalDebt);
+                let riskRate = totalDebt > 0 ? grossAssets / totalDebt : 9999;
+                return { grossAssets, holdMv, shortMv, totalDebt, netAssets, maxTotalDebt, availableCredit, riskRate,
+                    leverage: state.leverage };
+            },
+            getMaxMarginBuyQty(price) {
+                if (price <= 0) return 0;
+                let m = this.getMetrics();
+                let maxTotal = state.cash + m.availableCredit;
+                return Math.floor(maxTotal / price / 100) * 100;
+            },
+            getMaxShortSellQty(price) {
+                if (price <= 0) return 0;
+                let m = this.getMetrics();
+                if (m.availableCredit <= 0) return 0;
+                return Math.floor(m.availableCredit / price / 100) * 100;
+            },
+            toggleModal() {
+                let modal = utils.$('marginModal');
+                if (!modal) return;
+                if (modal.style.display === 'flex') { modal.style.display = 'none'; return; }
+                if (!state.marginAccountEnabled) {
+                    let totalAssets = trade.getTotalAssets();
+                    if (totalAssets >= CONFIG.MARGIN_THRESHOLD) {
+                        state.marginAccountEnabled = true;
+                        core.save();
+                        trade.updateAssets();
+                        utils.toast('两融账户已成功开通！融资融券权限已激活', 'green');
+                    } else {
+                        utils.toast(`总资产需达到${utils.fmt(CONFIG.MARGIN_THRESHOLD,0)}方斯才能开通两融，当前${utils.fmt(totalAssets,0)}`, 'info');
+                        return;
+                    }
+                }
+                this.currentSubTab = 'marginBuy';
+                this.renderModalContent();
+                modal.style.display = 'flex';
+            },
+            renderModalContent() {
+                let body = utils.$('margin-modal-body');
+                if (!body) return;
+                let m = this.getMetrics();
+                let code = state.activeCode;
+                let stockM = state.market[code];
+                let curPrice = stockM ? stockM.cur : 0;
+                let riskPct = Math.min(100, Math.max(0, (1 - (m.totalDebt / Math.max(1, m.maxTotalDebt))) * 100));
+                if (m.totalDebt <= 0) riskPct = 100;
+                let riskClass = riskPct > 50 ? 'safe' : (riskPct > 20 ? 'warn' : 'danger');
+                let maxMarginBuy = this.getMaxMarginBuyQty(curPrice);
+                let maxShortSell = this.getMaxShortSellQty(curPrice);
+                let html = `
+        <div class="margin-summary">
+            <div><span class="ms-label">总担保品</span><br><span class="ms-val">${utils.fmt(m.grossAssets,0)}</span></div>
+            <div><span class="ms-label">净资产</span><br><span class="ms-val" style="color:${m.netAssets>=0?'var(--green)':'var(--red)'}">${utils.fmt(m.netAssets,0)}</span></div>
+            <div><span class="ms-label">融资负债</span><br><span class="ms-val" style="color:var(--yellow)">${utils.fmt(state.marginLoan,0)}</span></div>
+            <div><span class="ms-label">融券市值</span><br><span class="ms-val" style="color:var(--yellow)">${utils.fmt(m.shortMv,0)}</span></div>
+            <div><span class="ms-label">总负债</span><br><span class="ms-val" style="color:var(--red)">${utils.fmt(m.totalDebt,0)}</span></div>
+            <div><span class="ms-label">最大负债上限</span><br><span class="ms-val">${utils.fmt(m.maxTotalDebt,0)}</span></div>
+            <div><span class="ms-label">可用额度</span><br><span class="ms-val" style="color:var(--green)">${utils.fmt(m.availableCredit,0)}</span></div>
+            <div><span class="ms-label">风险率</span><br><span class="ms-val" style="color:${m.riskRate<1.5?'var(--red)':'var(--text-main)'}">${m.riskRate>=9999?'∞':(m.riskRate*100).toFixed(1)+'%'}</span></div>
+        </div>
+        <div class="margin-risk-bar"><div class="margin-risk-fill ${riskClass}" style="width:${riskPct}%;"></div></div>
+        <div style="font-size:11px;color:var(--text-gray);text-align:center;margin-bottom:10px;">负债使用率: ${(100-riskPct).toFixed(0)}% | 风险率<130%将触发强平</div>
+        <div class="margin-leverage-row">
+            <span>杠杆倍数:</span>
+            <select id="margin-leverage-select" onchange="marginTrade.onLeverageChange()">
+                <option value="1" ${state.leverage===1?'selected':''}>1x (无杠杆)</option>
+                <option value="2" ${state.leverage===2?'selected':''}>2x</option>
+                <option value="3" ${state.leverage===3?'selected':''}>3x</option>
+            </select>
+            <span style="font-size:11px;color:var(--text-gray);">高杠杆=高负债上限</span>
+        </div>
+        <div class="margin-sub-tabs">
+            <div class="margin-sub-tab ${this.currentSubTab==='marginBuy'?'active':''}" data-mtype="buy" onclick="marginTrade.switchSubTab('marginBuy')">融资买入</div>
+            <div class="margin-sub-tab ${this.currentSubTab==='shortSell'?'active':''}" data-mtype="short" onclick="marginTrade.switchSubTab('shortSell')">融券卖出</div>
+            <div class="margin-sub-tab ${this.currentSubTab==='shortHold'?'active':''}" data-mtype="short" onclick="marginTrade.switchSubTab('shortHold')">融券持仓</div>
+        </div>`;
+
+                if (this.currentSubTab === 'marginBuy') {
+                    html += `
+        <div style="padding:10px 0;">
+            <div class="tp-form-row">
+                <div class="tp-label">证券</div>
+                <input type="text" class="tp-input" value="${stockM?stockM.def.name+' ('+code+')':code}" readonly>
+            </div>
+            <div class="tp-form-row">
+                <div class="tp-label">参考价</div>
+                <input type="text" class="tp-input" value="${utils.fmt(curPrice)}" readonly>
+            </div>
+            <div class="tp-form-row">
+                <div class="tp-label">数量</div>
+                <input type="number" class="tp-input" id="margin-buy-qty" placeholder="融资买入数量(100的倍数)" step="100" inputmode="numeric">
+            </div>
+            <div class="tp-limit-info">
+                <span>最大融资买入: <span class="tp-limit-num up" id="margin-buy-max">${maxMarginBuy}</span> 股</span>
+                <span>可用额度: ${utils.fmt(m.availableCredit,0)}</span>
+            </div>
+            <div class="tp-btn-group">
+                <button class="tp-btn-quick" onclick="marginTrade.fillMarginQty('margin-buy-qty','margin-buy-max',0.25)">1/4</button>
+                <button class="tp-btn-quick" onclick="marginTrade.fillMarginQty('margin-buy-qty','margin-buy-max',0.5)">半额</button>
+                <button class="tp-btn-quick" onclick="marginTrade.fillMarginQty('margin-buy-qty','margin-buy-max',0.75)">3/4</button>
+                <button class="tp-btn-quick" onclick="marginTrade.fillMarginQty('margin-buy-qty','margin-buy-max',1)">全额</button>
+            </div>
+            <button class="tp-submit bg-up" onclick="marginTrade.executeMarginBuy()">融资买入</button>
+            <div style="font-size:10px;color:var(--text-gray);margin-top:6px;">融资买入=自有资金+券商借款，超出部分计入融资负债</div>
+        </div>`;
+                } else if (this.currentSubTab === 'shortSell') {
+                    html += `
+        <div style="padding:10px 0;">
+            <div class="tp-form-row">
+                <div class="tp-label">证券</div>
+                <input type="text" class="tp-input" value="${stockM?stockM.def.name+' ('+code+')':code}" readonly>
+            </div>
+            <div class="tp-form-row">
+                <div class="tp-label">参考价</div>
+                <input type="text" class="tp-input" value="${utils.fmt(curPrice)}" readonly>
+            </div>
+            <div class="tp-form-row">
+                <div class="tp-label">数量</div>
+                <input type="number" class="tp-input" id="margin-short-qty" placeholder="融券卖出数量(100的倍数)" step="100" inputmode="numeric">
+            </div>
+            <div class="tp-limit-info">
+                <span>最大融券卖出: <span class="tp-limit-num down" id="margin-short-max">${maxShortSell}</span> 股</span>
+                <span>可用额度: ${utils.fmt(m.availableCredit,0)}</span>
+            </div>
+            <div class="tp-btn-group">
+                <button class="tp-btn-quick" onclick="marginTrade.fillMarginQty('margin-short-qty','margin-short-max',0.25)">1/4</button>
+                <button class="tp-btn-quick" onclick="marginTrade.fillMarginQty('margin-short-qty','margin-short-max',0.5)">半额</button>
+                <button class="tp-btn-quick" onclick="marginTrade.fillMarginQty('margin-short-qty','margin-short-max',0.75)">3/4</button>
+                <button class="tp-btn-quick" onclick="marginTrade.fillMarginQty('margin-short-qty','margin-short-max',1)">全额</button>
+            </div>
+            <button class="tp-submit bg-down" onclick="marginTrade.executeShortSell()">融券卖出</button>
+            <div class="risk-warning-text">[警告] 融券卖出=借股票卖出，股价上涨会造成亏损！融券与融资共享负债额度。</div>
+        </div>`;
+                } else if (this.currentSubTab === 'shortHold') {
+                    let shortKeys = Object.keys(state.shortPositions);
+                    if (shortKeys.length === 0) {
+                        html +=
+                            '<div style="text-align:center;padding:30px;color:var(--text-gray);">暂无融券持仓</div>';
+                    } else {
+                        html += '<div style="padding:10px 0;">';
+                        shortKeys.forEach(k => {
+                            let sp = state.shortPositions[k];
+                            let mk = state.market[k];
+                            if (!mk) return;
+                            let profit = (sp.price - mk.cur) * sp.qty;
+                            html += `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid var(--bg-gray);">
+            <div><strong>${mk.def.name}</strong><br><small>${k}</small></div>
+            <div>${sp.qty}股<br><small>均价${utils.fmt(sp.price)}</small></div>
+            <div class="${utils.cls(profit)}">${profit>0?'+':''}${utils.fmt(profit)}</div>
+            <button style="padding:4px 10px;background:var(--red);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:12px;" onclick="marginTrade.buyBackShort('${k}')">买券还券</button>
+        </div>`;
+                        });
+                        html +=
+                            '<div style="font-size:10px;color:var(--text-gray);margin-top:8px;">买券还券=在市场上买入股票归还融券负债</div>';
+                        html += '</div>';
+                    }
+                }
+                body.innerHTML = html;
+            },
+            fillMarginQty(inputId, maxId, ratio) {
+                let maxEl = utils.$(maxId);
+                if (!maxEl) return;
+                let max = utils.safeParseInt(maxEl.textContent || maxEl.innerText);
+                if (max <= 0 || isNaN(max)) { utils.toast('当前无可交易额度', 'info'); return; }
+                let qty = Math.floor(max * ratio / 100) * 100;
+                if (qty < 100 && max >= 100) qty = 100;
+                if (qty < 100) { utils.toast('额度不足1手', 'info'); return; }
+                if (qty > max) qty = Math.floor(max / 100) * 100;
+                let inputEl = utils.$(inputId);
+                if (inputEl) inputEl.value = qty;
+                utils.toast(`已设置 ${qty} 股`, 'info');
+            },
+            onLeverageChange() {
+                let sel = utils.$('margin-leverage-select');
+                if (!sel) return;
+                let newLev = parseInt(sel.value) || 1;
+                if (newLev > 1 && !state.marginAccountEnabled) {
+                    sel.value = state.leverage;
+                    utils.toast('请先开通两融账户', 'info');
+                    return;
+                }
+                state.leverage = newLev;
+                core.save();
+                trade.updateAssets();
+                this.renderModalContent();
+                utils.toast(`两融杠杆已切换至 ${state.leverage}x`, 'info');
+            },
+            executeMarginBuy() {
+                if (!state.marginAccountEnabled) return utils.toast("请先开通两融账户", "error");
+                let code = state.activeCode;
+                let stockM = state.market[code];
+                if (!stockM) return utils.toast("市场数据未就绪", "error");
+                let qtyInput = utils.$('margin-buy-qty');
+                let qty = utils.safeParseInt(qtyInput ? qtyInput.value : 0);
+                if (qty <= 0 || qty % 100 !== 0) return utils.toast("数量必须为100的整数倍", "error");
+                let maxBuy = this.getMaxMarginBuyQty(stockM.cur);
+                if (qty > maxBuy) return utils.toast(`超过最大融资买入数量 ${maxBuy} 股！`, "error");
+                let result = core.matchOrderBook(code, qty, true);
+                if (!result || result.filledQty < 100) return utils.toast("订单簿卖盘深度不足！", "error");
+                let actualQty = result.filledQty;
+                let cost = result.totalCost;
+                let ownPay = Math.min(state.cash, cost);
+                let needLoan = cost - ownPay;
+                let m2 = this.getMetrics();
+                if (needLoan > 0 && needLoan > m2.availableCredit) {
+                    return utils.toast(`融资额度不足！可用${utils.fmt(m2.availableCredit,0)}，需要${utils.fmt(needLoan,0)}`, "error");
+                }
+                state.cash -= ownPay;
+                state.marginLoan += needLoan;
+                if (!state.holdings[code]) state.holdings[code] = { qty: 0, cost: 0, isMargin: false, buyTimes: [] };
+                let h = state.holdings[code];
+                h.cost = ((h.qty * h.cost) + cost) / (h.qty + actualQty);
+                h.qty += actualQty;
+                if (needLoan > 0) h.isMargin = true;
+                if (!h.buyTimes) h.buyTimes = [];
+                h.buyTimes.push({ qty: actualQty, time: state.tick });
+                if (actualQty < qty) utils.toast(`仅成交${actualQty}股（滑点${result.slippagePct.toFixed(2)}%），自有${utils.fmt(ownPay,0)}+融资${utils.fmt(needLoan,0)}`,
+                    'info');
+                else utils.toast(`融资买入成功！${actualQty}股，自有${utils.fmt(ownPay,0)}+融资${utils.fmt(needLoan,0)}`, 'green');
+                state.orders.unshift({ time: new Date().toLocaleTimeString('zh-CN', { hour12: false }), code, name: stockM
+                        .def.name, type: '融资买入', price: result.avgPrice, qty: actualQty,
+                    status: needLoan > 0 ? '融资' + utils.fmt(needLoan, 0) : '全额自有' });
+                if (state.orders.length > 100) state.orders.pop();
+                core.save();
+                trade.updateAssets();
+                this.renderModalContent();
+                ui.renderList();
+                ui.renderQuote();
+                ui.renderOrderBook();
+                chart.draw();
+                aiEngine.onPlayerTrade(code, actualQty, true, result.avgPrice);
+            },
+            executeShortSell() {
+                if (!state.marginAccountEnabled) return utils.toast("请先开通两融账户", "error");
+                let code = state.activeCode;
+                let stockM = state.market[code];
+                if (!stockM) return utils.toast("市场数据未就绪", "error");
+                let qtyInput = utils.$('margin-short-qty');
+                let qty = utils.safeParseInt(qtyInput ? qtyInput.value : 0);
+                if (qty <= 0 || qty % 100 !== 0) return utils.toast("数量必须为100的整数倍", "error");
+                let maxShort = this.getMaxShortSellQty(stockM.cur);
+                if (qty > maxShort) return utils.toast(`超过最大融券卖出数量 ${maxShort} 股！可用额度不足。`, "error");
+                let m2 = this.getMetrics();
+                let plannedAmount = qty * stockM.cur;
+                if (plannedAmount > m2.availableCredit) return utils.toast(`融券额度不足！可用${utils.fmt(m2.availableCredit,0)}，需要${utils.fmt(plannedAmount,0)}`,
+                    "error");
+                let result = core.matchOrderBook(code, qty, false);
+                if (!result || result.filledQty < 100) return utils.toast("订单簿买盘深度不足！", "error");
+                let actualQty = result.filledQty;
+                let actualAmount = actualQty * result.avgPrice;
+                let m3 = this.getMetrics();
+                if (actualAmount > m3.availableCredit + 0.01) {
+                    let allowedQty = Math.floor(m3.availableCredit / result.avgPrice / 100) * 100;
+                    if (allowedQty < 100) return utils.toast("融券额度不足！", "error");
+                    actualQty = allowedQty;
+                    actualAmount = actualQty * result.avgPrice;
+                }
+                state.cash += actualAmount;
+                if (!state.shortPositions[code]) state.shortPositions[code] = { qty: 0, price: 0, shortTime: state.tick };
+                let sp = state.shortPositions[code];
+                sp.price = ((sp.qty * sp.price) + actualAmount) / (sp.qty + actualQty);
+                sp.qty += actualQty;
+                sp.shortTime = state.tick;
+                if (actualQty < qty) utils.toast(`仅成交${actualQty}股（滑点${result.slippagePct.toFixed(2)}%），融券负债+${utils.fmt(actualAmount,0)}`,
+                    'info');
+                else utils.toast(`融券卖出成功！${actualQty}股，获得${utils.fmt(actualAmount,0)}方斯`, 'green');
+                state.orders.unshift({ time: new Date().toLocaleTimeString('zh-CN', { hour12: false }), code, name: stockM
+                        .def.name, type: '融券卖出', price: result.avgPrice, qty: actualQty,
+                    status: '融券负债+' + utils.fmt(actualAmount, 0) });
+                if (state.orders.length > 100) state.orders.pop();
+                core.save();
+                trade.updateAssets();
+                this.renderModalContent();
+                ui.renderList();
+                ui.renderQuote();
+                ui.renderOrderBook();
+                chart.draw();
+                aiEngine.onPlayerTrade(code, actualQty, false, result.avgPrice);
+            },
+            buyBackShort(code) {
+                if (!state.shortPositions[code]) return utils.toast("无该融券持仓", "error");
+                let sp = state.shortPositions[code];
+                if (sp.shortTime && state.tick - sp.shortTime < CONFIG.TRADE_LOCK_SECONDS) {
+                    return utils.toast(`融券锁定期内（还剩${CONFIG.TRADE_LOCK_SECONDS - (state.tick - sp.shortTime)}秒）`, "error");
+                }
+                let stockM = state.market[code];
+                if (!stockM) return utils.toast("市场数据未就绪", "error");
+                let qty = sp.qty;
+                let result = core.matchOrderBook(code, qty, true);
+                if (!result || result.filledQty < 100) return utils.toast("订单簿卖盘深度不足，无法买回！", "error");
+                let actualQty = Math.min(result.filledQty, qty);
+                let cost = actualQty * result.avgPrice;
+                if (cost > state.cash) {
+                    let maxAfford = Math.floor(state.cash / result.avgPrice / 100) * 100;
+                    if (maxAfford < 100) return utils.toast("资金不足，无法买券还券！", "error");
+                    actualQty = maxAfford;
+                    cost = actualQty * result.avgPrice;
+                }
+                state.cash -= cost;
+                sp.qty -= actualQty;
+                if (sp.qty === 0) delete state.shortPositions[code];
+                let profit = (sp.price - result.avgPrice) * actualQty;
+                utils.toast(`买券还券成功！${actualQty}股，${profit>0?'盈利':'亏损'}${utils.fmt(Math.abs(profit),0)}方斯`, profit >= 0 ? 'green' :
+                    'info');
+                state.orders.unshift({ time: new Date().toLocaleTimeString('zh-CN', { hour12: false }), code, name: stockM
+                        .def.name, type: '买券还券', price: result.avgPrice, qty: actualQty, status: '还券' });
+                if (state.orders.length > 100) state.orders.pop();
+                core.save();
+                trade.updateAssets();
+                this.renderModalContent();
+                ui.renderList();
+                ui.renderQuote();
+                ui.renderOrderBook();
+                chart.draw();
+            },
+            checkRisk() {
+                if (!state.marginAccountEnabled || state.leverage <= 1) return;
+                let m = this.getMetrics();
+                if (m.totalDebt <= 0) return;
+                if (m.riskRate < 1.3 && m.riskRate > 0) {
+                    utils.toast('两融风险率低于130%！请及时补充资金或减仓', 'error');
+                }
+                if (m.riskRate < 1.1 && m.riskRate > 0) {
+                    utils.toast('强制平仓！两融风险率低于110%', 'error');
+                    let neededReduction = m.totalDebt - m.grossAssets * 0.8;
+                    if (neededReduction <= 0) return;
+                    let allHoldCodes = Object.keys(state.holdings);
+                    for (let code of allHoldCodes) {
+                        if (neededReduction <= 0) break;
+                        let h = state.holdings[code];
+                        if (!h) continue;
+                        let mk = state.market[code];
+                        if (!mk) continue;
+                        let sellQty = Math.min(h.qty, Math.ceil(neededReduction / mk.cur / 100) * 100);
+                        sellQty = Math.floor(sellQty / 100) * 100;
+                        if (sellQty < 100) continue;
+                        let result = core.matchOrderBook(code, sellQty, false);
+                        if (!result || result.filledQty < 100) continue;
+                        h.qty -= result.filledQty;
+                        state.cash += result.totalCost;
+                        if (state.marginLoan > 0) {
+                            let repay = Math.min(state.marginLoan, result.totalCost);
+                            state.marginLoan -= repay;
+                            state.cash -= repay;
+                        }
+                        neededReduction -= result.totalCost;
+                        if (h.qty === 0) delete state.holdings[code];
+                    }
+                    if (state.marginLoan > 0 && state.cash > 0) {
+                        let repay = Math.min(state.marginLoan, state.cash);
+                        state.marginLoan -= repay;
+                        state.cash -= repay;
+                    }
+                    core.save();
+                    trade.updateAssets();
+                    if (utils.$('marginModal').style.display === 'flex') this.renderModalContent();
+                }
+            }
+        };
+
+        const ui = {
+            switchListTab(type) { state.showFavOnly = type === 'fav';
+                utils.$('tab-all').className = `side-tab ${type==='all'?'active':''}`;
+                utils.$('tab-fav').className = `side-tab ${type==='fav'?'active':''}`;
+                this.renderList(); },
+            switchChart(mode) { state.chartMode = mode;
+                document.querySelectorAll('.c-tab').forEach(el => el.classList.remove('active')); if (event && event
+                    .target) event.target.classList.add('active');
+                chart.draw(); },
+            switchInfoTab(tab) { state.infoTab = tab;
+                document.querySelectorAll('.i-tab').forEach(el => el.classList.remove('active')); if (event && event
+                    .target) event.target.classList.add('active');
+                this.renderInfo(); },
+            renderList() {
+                let html = '';
+                let list = state.showFavOnly ? CONFIG.STOCKS.filter(s => state.favorites.includes(s.id)) : CONFIG.STOCKS;
+                if (!list.length) html =
+                    '<div style="padding:20px;text-align:center;color:var(--text-gray)">暂无数据</div>';
+                else list.forEach(s => { let m = state.market[s.id]; if (!m) return;
+                    let chg = m.cur - m.prev;
+                    let pct = (chg / m.prev) * 100;
+                    html +=
+                        `<div class="stock-item ${state.activeCode===s.id?'active':''}" onclick="sys.changeStock('${s.id}')"><div class="st-name-box"><div class="st-name">${s.name}</div><div class="st-code">${s.id}</div></div><div class="st-price-box ${utils.cls(chg)}"><div class="st-price">${utils.fmt(m.cur)}</div><div class="st-pct">${pct>0?'+':''}${utils.fmt(pct)}%</div></div></div>`; });
+                utils.$('dom-stock-list').innerHTML = html;
+            },
+            renderQuote() {
+                let code = state.activeCode;
+                let m = state.market[code];
+                if (!m) return;
+                let s = m.def;
+                let chg = m.cur - m.prev;
+                let pct = (chg / m.prev) * 100;
+                let cls = utils.cls(chg);
+                utils.$('h-name').innerText = s.name;
+                utils.$('h-code').innerText = s.id;
+                utils.$('h-tag').innerText = s.tag;
+                utils.$('h-fav').innerText = state.favorites.includes(code) ? '★' : '☆';
+                utils.$('q-price').innerText = utils.fmt(m.cur);
+                utils.$('q-price').className = `price-huge ${cls}`;
+                utils.$('q-chg').innerText = (chg > 0 ? '+' : '') + utils.fmt(chg);
+                utils.$('q-pct').innerText = (pct > 0 ? '+' : '') + utils.fmt(pct) + '%';
+                utils.$('q-high').innerText = utils.fmt(m.high);
+                utils.$('q-low').innerText = utils.fmt(m.low);
+                utils.$('q-open').innerText = utils.fmt(m.open);
+                utils.$('q-prev').innerText = utils.fmt(m.prev);
+                utils.$('q-vol').innerText = m.tVol;
+                utils.$('q-amt').innerText = (m.tAmt / 10000).toFixed(1) + '万';
+                utils.$('q-hs').innerText = (m.tVol / (s.vol * 100) * 100).toFixed(2) + '%';
+                utils.$('q-zf').innerText = ((m.high - m.low) / m.prev * 100).toFixed(2) + '%';
+                utils.$('q-pe').innerText = s.pe;
+                utils.$('q-pb').innerText = s.pb;
+                utils.$('q-mv').innerText = s.mv + '亿';
+                utils.$('q-fmv').innerText = (s.mv * 0.7).toFixed(1) + '亿';
+                utils.$('tp-price').value = utils.fmt(m.cur);
+            },
+            renderOrderBook() {
+                let m = state.market[state.activeCode];
+                if (!m || !m.orderBook) return;
+                let ob = m.orderBook;
+                let displayDepth = CONFIG.ORDER_BOOK_DISPLAY;
+                let sHtml = '';
+                let asksDisplay = ob.asks.slice(0, displayDepth);
+                for (let i = asksDisplay.length - 1; i >= 0; i--) {
+                    sHtml +=
+                        `<div class="ob-row" data-level="ask-${i}"><span class="ob-label">卖${i+1}</span><span class="ob-price up">${utils.fmt(asksDisplay[i].price)}</span><span class="ob-vol">${asksDisplay[i].volume}</span></div>`;
+                }
+                let bHtml = '';
+                let bidsDisplay = ob.bids.slice(0, displayDepth);
+                for (let i = 0; i < bidsDisplay.length; i++) {
+                    bHtml +=
+                        `<div class="ob-row" data-level="bid-${i}"><span class="ob-label">买${i+1}</span><span class="ob-price down">${utils.fmt(bidsDisplay[i].price)}</span><span class="ob-vol">${bidsDisplay[i].volume}</span></div>`;
+                }
+                utils.$('dom-sell-book').innerHTML = sHtml;
+                utils.$('dom-buy-book').innerHTML = bHtml;
+                if (m._lastMatchDetails && m._lastMatchTime === state.tick) {
+                    setTimeout(() => {
+                        document.querySelectorAll('.ob-row.filled-highlight').forEach(el => el.classList
+                            .remove('filled-highlight'));
+                        m._lastMatchDetails.forEach(d => {
+                            let selector = d.level < displayDepth ? `[data-level="${m._lastMatchDetails[0]
+                                    .price > (ob.bids[0]?.price||0) ? 'ask' : 'bid'}-${d.level}"]` :
+                                null;
+                            if (selector) { let el = document.querySelector(selector); if (el) el
+                                    .classList.add('filled-highlight'); }
+                        });
+                    }, 50);
+                }
+            },
+            renderInfo() {
+                let html = '';
+                if (state.infoTab === 'news') for (let i = 0; i < 5; i++) html +=
+                    `<div class="news-item"><div class="news-time">14:${40+i}</div><div>${CONFIG.NEWS[(state.tick+i)%CONFIG.NEWS.length]}</div></div>`;
+                else if (state.infoTab === 'notice') CONFIG.NOTICES.forEach((n, i) => html +=
+                    `<div class="news-item" onclick="utils.toast('正在下载...')"><div class="news-time" style="width:80px">2024-05-0${i+1}</div><div style="color:var(--blue)">${n}</div></div>`
+                    );
+                else if (state.infoTab === 'f10') { let m = state.market[state.activeCode]; if (!m) return;
+                    let s = m.def;
+                    html =
+                        `<table class="f10-table"><tr><td>简称</td><td>${s.name}</td><td>代码</td><td>${s.id}</td></tr><tr><td>行业</td><td>${s.ind}</td><td>板块</td><td>${s.tag}</td></tr><tr><td>市盈</td><td>${s.pe}</td><td>市净</td><td>${s.pb}</td></tr><tr><td>总市值</td><td>${s.mv}亿</td><td>流通值</td><td>${(s.mv*0.7).toFixed(1)}亿</td></tr></table>`; } else if (
+                    state.infoTab === 'ai') { let logs = aiEngine.aiLogs.slice(0, 50); if (!logs.length) html =
+                        '<div class="ai-log-empty">等待首次决策...</div>';
+                    else logs.forEach(l => { let badge = l.role;
+                        html +=
+                            `<div class="ai-log-entry"><div class="ai-log-time">${l.time}</div><div class="ai-log-badge ${badge}">${l.role==='maker'?'庄':(l.role==='pe'?'私':'游')}</div><div>${l.accountName} ${l.action} ${l.stockName} ${l.shares}股</div></div>`; }); }
+                utils.$('dom-info-content').innerHTML = html;
+            }
+        };
+
+        const sys = {
+            changeStock(code) { state.activeCode = code;
+                core.save();
+                ui.renderList();
+                ui.renderQuote();
+                ui.renderOrderBook();
+                ui.renderInfo();
+                chart.draw(); if (trade.currentTab === 'buy' || trade.currentTab === 'sell') trade.switchTab(trade
+                    .currentTab); if (utils.$('marginModal').style.display === 'flex') marginTrade.renderModalContent(); },
+            toggleFavorite() { let code = state.activeCode;
+                let idx = state.favorites.indexOf(code); if (idx > -1) { state.favorites.splice(idx, 1);
+                    utils.toast('已取消自选'); } else { state.favorites.push(code);
+                    utils.toast('已加入自选', 'green'); }
+                core.save();
+                ui.renderQuote(); if (state.showFavOnly) ui.renderList(); },
+            focusTrade() { trade.switchTab('buy');
+                utils.$('tp-qty').focus(); },
+            toggleSettings() { let m = utils.$('settingsModal');
+                m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; },
+            reset() { if (confirm('警告：此操作将清空所有资金、持仓、两融权限和委托记录！')) { localStorage.removeItem(
+                        'helios_terminal_v3');
+                    localStorage.removeItem('helios_ai_accounts_v2');
+                    localStorage.removeItem('helios_ai_config_v2');
+                    location.reload(); } }
+        };
+
+        window.addEventListener('resize', () => { clearTimeout(window.resizeTimer);
+            window.resizeTimer = setTimeout(() => chart.draw(), 100); });
+        window.onload = () => {
+            setTimeout(() => { let splash = utils.$('splash-screen'); if (splash) { splash.style.opacity = '0';
+                    setTimeout(() => splash.style.display = 'none', 500); } }, 2000);
+            let aiCfg = aiEngine.loadConfig();
+            utils.$('ai-enabled').value = aiCfg.enabled ? '1' : '0';
+            if (aiCfg.endpoint) utils.$('ai-endpoint').value = aiCfg.endpoint;
+            if (aiCfg.key) utils.$('ai-key').value = aiCfg.key;
+            if (aiCfg.model) utils.$('ai-model').value = aiCfg.model;
+            utils.$('ai-interval').value = aiCfg.interval;
+            let aiIntvVal = document.getElementById('ai-interval-val');
+            if (aiIntvVal) aiIntvVal.textContent = aiCfg.interval + 's';
+            utils.$('ai-temperature').value = Math.round(aiCfg.temperature * 10);
+            let aiTempVal = document.getElementById('ai-temp-val');
+            if (aiTempVal) aiTempVal.textContent = aiCfg.temperature.toFixed(1);
+            if (aiCfg.accountCount) utils.$('ai-count').value = aiCfg.accountCount;
+            if (aiCfg.enabled && aiCfg.key && aiCfg.endpoint) { aiEngine.enabled = true;
+                aiEngine.initAccounts();
+                aiEngine.start();
+                utils.toast('AI 智能市场已就绪', 'green'); }
+            aiEngine.updateUIState();
+            core.load();
+            ui.renderList();
+            ui.renderQuote();
+            ui.renderOrderBook();
+            ui.renderInfo();
+            trade.switchTab('buy');
+            trade.updateAssets();
+            let firstCTab = document.querySelector('.c-tab');
+            if (firstCTab) firstCTab.classList.add('active');
+            chart.draw();
+            core.save(); // 建立本会话的基准 saveTime，确保下次加载时有时间参考
+            setInterval(() => core.updateMarket(), 1000);
+
+            // ---- 离线时间精确记录 ----
+            // 页面关闭/刷新时：保存精确退出时刻 + 盘面状态
+            window.addEventListener('beforeunload', () => {
+                localStorage.setItem('helios_exit_time', Date.now().toString());
+                core.save();
+            });
+            // 页面进入后台（切换标签/手机锁屏）时也保存退出时间
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden') {
+                    localStorage.setItem('helios_exit_time', Date.now().toString());
+                } else {
+                    // 从后台回到前台：可以快速保存一次当前时间
+                    core.save();
+                }
+            });
+        };
+    </script>
+</body>
+</html>

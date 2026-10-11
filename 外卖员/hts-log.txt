@@ -1,0 +1,12 @@
+HTTrack3.50-2 launched on Fri, 18 Sep 2026 23:46:54 at https://www.bilibili.com/toy/waimai5/index.html +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2%f#f -F "Mozilla/5.0 (compatible; HTTrack; +https://www.httrack.com/)" -%F "<!-- Mirrored from {url} by HTTrack Website Copier/3.x [XR&CO], {date} -->" -%l "zh, en, *" https://www.bilibili.com/toy/waimai5/index.html -O1 "C:\My Websites\1" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+23:46:58	Error: 	"Not Found" (404) at link https://www.bilibili.com/fingerPrint.js (from s1.hdslb.com/bfs/seed/jinkela/short/reporter-pb/index.js)
+
+HTTrack Website Copier/3.50-2 mirror complete in 4 seconds : 9 links scanned, 7 files written (509988 bytes overall) [297880 bytes received at 74470 bytes/sec], 328476 bytes transferred using HTTP compression in 6 files, ratio 31%, 1.8 requests per connection
+(1 errors, 0 warnings, 0 messages)

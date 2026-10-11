@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/网盘 by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:23 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ninerty-One网盘 - 安全稳定的云存储</title>
+    <style>
+        :root {
+            --primary: #108cee;
+            --nav-bg: #1e2229;
+            --bg: #f5f6f8;
+            --card-bg: #ffffff;
+            --text: #1f2a3a;
+            --text-light: #8d98a8;
+            --border: #e2e6ed;
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { 
+            font-family:var(--font); 
+            background:var(--bg); 
+            color:var(--text); 
+            line-height:1.5; 
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .navbar { 
+            background:var(--nav-bg); 
+            height:56px; 
+            display:flex; 
+            align-items:center; 
+            justify-content:space-between; 
+            padding:0 16px; 
+            position:sticky; 
+            top:0; 
+            z-index:100; 
+            box-shadow:0 1px 4px rgba(0,0,0,0.15); 
+        }
+        .logo { display:flex; align-items:center; gap:8px; color:#fff; font-size:18px; font-weight:600; }
+        .logo-icon { width:28px; height:28px; background:var(--primary); border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; font-size:14px; }
+        .nav-links { display:flex; gap:12px; color:#b0b8c5; font-size:13px; margin-left:12px; }
+        .nav-links span.active { color:#fff; font-weight:500; }
+        .nav-right { display:flex; align-items:center; gap:10px; }
+        .user-badge { color:#d1d7e0; font-size:12px; background:rgba(255,255,255,0.06); padding:4px 10px; border-radius:20px; white-space:nowrap; }
+        .level-tag { font-weight:600; color:#fff; }
+        .btn-recharge { padding:5px 14px; border-radius:18px; font-size:12px; font-weight:600; border:none; background:var(--primary); color:#fff; cursor:pointer; white-space:nowrap; }
+        .btn-recharge:disabled { background:#5e6a7a; cursor:not-allowed; }
+        .main-container { max-width:780px; margin:20px auto 60px; padding:0 16px; }
+        .file-card { background:var(--card-bg); border-radius:12px; padding:20px 16px; box-shadow:0 2px 12px rgba(0,0,0,0.06); border:1px solid var(--border); }
+        .file-header { display:flex; gap:14px; margin-bottom:16px; }
+        .file-icon-box { width:48px; height:48px; border-radius:12px; background:#f2f5fa; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+        .file-name { font-size:16px; font-weight:600; word-break:break-all; }
+        .file-meta { font-size:12px; color:var(--text-light); display:flex; gap:8px; align-items:center; margin-top:4px; flex-wrap:wrap; }
+        .btn-download { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px; border-radius:24px; font-size:15px; font-weight:600; border:none; background:var(--primary); color:#fff; cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+        .btn-download:active { opacity:0.8; transform:scale(0.98); }
+        .btn-download.downloading { background:#2ecc71; }
+        .progress-panel { margin-top:16px; display:none; }
+        .progress-panel.visible { display:block; }
+        .progress-bar-bg { width:100%; height:12px; background:#edf0f5; border-radius:10px; overflow:hidden; }
+        .progress-fill { height:100%; width:0%; background:var(--primary); border-radius:10px; }
+        .speed-value { font-weight:700; }
+        .speed-value.slow { color:#e74c3c; }
+
+        /* 通用弹窗 */
+        .modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:200; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px); animation:fadeIn 0.2s; padding:16px; }
+        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+        .modal-dialog { background:#fff; border-radius:14px; box-shadow:0 20px 50px rgba(0,0,0,0.2); max-width:440px; width:100%; padding:20px; position:relative; animation:slideUp 0.25s; max-height:90vh; overflow-y:auto; }
+        @keyframes slideUp { from{transform:translateY(30px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+        .modal-close { position:absolute; top:10px; right:10px; background:#f0f2f5; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer; font-size:16px; color:#666; display:flex; align-items:center; justify-content:center; }
+
+        /* 下载方式弹窗 */
+        .download-option-btn { display:block; width:100%; padding:14px; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; margin-bottom:12px; border:none; transition:0.2s; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+        .btn-fast { background:linear-gradient(135deg,#27ae60,#2ecc71); color:#fff; font-size:20px; box-shadow:0 4px 15px rgba(39,174,96,0.4); animation:pulse 1s infinite; }
+        @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(46,204,113,0.5);} 70%{box-shadow:0 0 20px 15px rgba(46,204,113,0);} 100%{box-shadow:0 0 0 0 rgba(46,204,113,0);} }
+        .btn-normal { background:#e0e0e0; color:#999; font-size:12px; padding:8px; text-decoration:underline; cursor:pointer; border:1px solid #ccc; }
+        .btn-vip-dl { background:linear-gradient(135deg,#f1c40f,#f39c12); color:#000; }
+        .btn-vip-dl:disabled { opacity:0.5; cursor:not-allowed; }
+
+        /* 广告样式 (恶心版) - 移动端优化 */
+        .ad-unit { 
+            position:fixed; 
+            z-index:150; 
+            background:#ffff00; 
+            border:3px solid #ff0000; 
+            border-radius:8px; 
+            box-shadow:0 0 25px red; 
+            animation:shake 0.2s infinite; 
+            overflow:hidden; 
+            max-width:90vw; 
+            max-height:80vh; 
+            touch-action:manipulation; 
+            will-change:transform; 
+        }
+        @keyframes shake { 
+            0%{transform:translate(0,0) rotate(0deg);} 
+            25%{transform:translate(-2px,2px) rotate(-1deg);} 
+            50%{transform:translate(2px,-1px) rotate(1deg);} 
+            75%{transform:translate(-1px,-2px) rotate(-1deg);} 
+            100%{transform:translate(1px,1px) rotate(0deg);} 
+        }
+        @media (max-width: 640px) {
+            .ad-unit { 
+                animation:shakeMobile 0.3s infinite; 
+                border-width:2px; 
+                border-radius:6px; 
+                max-width:92vw; 
+                max-height:70vh; 
+            }
+            @keyframes shakeMobile { 
+                0%{transform:translate(0,0);} 
+                25%{transform:translate(-1px,1px);} 
+                50%{transform:translate(1px,-1px);} 
+                75%{transform:translate(-1px,-1px);} 
+                100%{transform:translate(1px,1px);} 
+            }
+            .ad-header { font-size:10px; padding:3px 6px; }
+            .ad-body { padding:8px; font-size:14px; }
+            .ad-blinking { font-size:16px; }
+            .ad-footer { font-size:10px; padding:4px; }
+            .ad-vip-link { font-size:11px; padding:3px; }
+        }
+        .ad-header { background:#ff0000; color:#fff; padding:4px 8px; font-size:12px; display:flex; justify-content:space-between; align-items:center; }
+        .ad-close-fake { background:#ff0000; color:#fff; border:none; font-weight:bold; cursor:pointer; font-size:16px; padding:0 4px; }
+        .ad-body { padding:10px; text-align:center; background:#ffffcc; font-weight:bold; color:#cc0000; }
+        .ad-blinking { font-size:20px; animation:blink 0.5s infinite; }
+        @keyframes blink { 50%{opacity:0;} }
+        .ad-footer { background:#ffcc00; padding:5px; text-align:center; font-size:11px; cursor:pointer; border-top:1px solid #ff0000; }
+        .ad-vip-link { background:#ff00ff; color:#fff; padding:4px; text-align:center; font-weight:bold; animation:bgPulse 0.8s infinite; cursor:pointer; }
+        @keyframes bgPulse { 0%{background:#ff00ff;} 50%{background:#ff6600;} 100%{background:#ff00ff;} }
+
+        .toast { 
+            position:fixed; 
+            top:30px; 
+            left:50%; 
+            transform:translateX(-50%); 
+            background:#323a45; 
+            color:#fff; 
+            padding:10px 22px; 
+            border-radius:20px; 
+            z-index:999; 
+            box-shadow:0 8px 20px rgba(0,0,0,0.2); 
+            max-width:90vw; 
+            text-align:center; 
+            font-size:14px; 
+            word-break:break-all; 
+        }
+        .captcha-box { background:#f0f0f0; padding:10px; font-size:24px; letter-spacing:8px; font-weight:bold; text-align:center; margin:10px 0; user-select:none; overflow-x:auto; }
+
+        /* 移动端适配 */
+        @media (max-width: 640px) {
+            .navbar { padding:0 12px; height:50px; }
+            .logo { font-size:15px; gap:6px; }
+            .logo-icon { width:24px; height:24px; font-size:12px; }
+            .nav-links { gap:8px; font-size:12px; margin-left:8px; }
+            .nav-links span { white-space:nowrap; }
+            .user-badge { font-size:11px; padding:3px 8px; }
+            .btn-recharge { font-size:11px; padding:4px 10px; }
+            .main-container { margin:12px auto 40px; padding:0 12px; }
+            .file-card { padding:16px 12px; border-radius:10px; }
+            .file-header { gap:10px; }
+            .file-icon-box { width:40px; height:40px; font-size:20px; }
+            .file-name { font-size:14px; }
+            .btn-download { padding:11px; font-size:14px; border-radius:20px; }
+            .modal-dialog { padding:16px; max-width:100%; margin:0 8px; }
+            .download-option-btn { font-size:15px; padding:12px; }
+            .btn-fast { font-size:17px; }
+        }
+
+        @media (max-width: 400px) {
+            .navbar { padding:0 8px; height:46px; }
+            .logo { font-size:13px; gap:4px; }
+            .nav-links { gap:4px; font-size:11px; margin-left:4px; }
+            .user-badge { font-size:10px; padding:2px 6px; }
+            .btn-recharge { font-size:10px; padding:3px 8px; }
+            .file-card { padding:12px 10px; }
+            .file-icon-box { width:36px; height:36px; font-size:18px; }
+            .file-name { font-size:13px; }
+            .btn-download { padding:10px; font-size:13px; }
+        }
+
+        /* 输入框移动端优化 */
+        input { 
+            -webkit-appearance: none; 
+            appearance: none; 
+            font-size:16px !important; /* 防止iOS缩放 */ 
+        }
+        input, button { touch-action:manipulation; }
+
+        /* 修复广告在移动端的位置 */
+        @media (max-width: 640px) {
+            .ad-unit {
+                top: 10% !important;
+                left: 5% !important;
+                width: 90% !important;
+                max-width: 90vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo"><div class="logo-icon">L</div>Ninety-One网盘</div>
+            <div class="nav-links"><span class="active">我的文件</span><span>传输列表</span><span>回收站</span></div>
+        </div>
+        <div class="nav-right">
+            <div class="user-badge">👤 <span class="level-tag" id="levelTag">普通用户</span></div>
+            <button class="btn-recharge" id="btnRecharge" onclick="openVIPPanel()">开通VIP</button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon-box">📦</div>
+                <div class="file-info">
+                    <div class="file-name">项目资料_2024.zip</div>
+                    <div class="file-meta"><span>10.00 MB</span><span>|</span><span>压缩包</span></div>
+                </div>
+            </div>
+            <button class="btn-download" id="btnDownload" onclick="handleDownloadClick()">⬇️ 下载文件</button>
+            <div class="progress-panel" id="progressPanel">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; gap:4px;">
+                    <span>下载速度 <span class="speed-value slow" id="speedDisplay">1 B/s</span></span>
+                    <span id="percentDisplay">0%</span>
+                </div>
+                <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-light); margin-top:6px; flex-wrap:wrap; gap:4px;">
+                    <span id="downloadedText">0 B / 10.00 MB</span>
+                    <span id="etaText">--</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalRoot"></div>
+    <div id="adRoot"></div>
+    <div id="toastRoot"></div>
+
+    <script>
+        (() => {
+            const FILE_SIZE = 10485760;
+            const LEVELS = [
+                { id: 0, name: '普通用户', speed: 1, price: 0, adInterval: 5, maxAds: 5 },
+                { id: 1, name: 'VIP1', speed: 10, price: 9.9, adInterval: 8, maxAds: 4 },
+                { id: 2, name: 'VIP2', speed: 30, price: 19.9, adInterval: 12, maxAds: 4 },
+                { id: 3, name: 'VIP3', speed: 60, price: 29.9, adInterval: 15, maxAds: 3 },
+                { id: 4, name: 'VIP4', speed: 100, price: 39.9, adInterval: 18, maxAds: 3 },
+                { id: 5, name: 'VIP5', speed: 200, price: 49.9, adInterval: 22, maxAds: 3 },
+                { id: 6, name: 'VIP6', speed: 500, price: 59.9, adInterval: 26, maxAds: 2 },
+                { id: 7, name: 'VIP7', speed: 1024, price: 69.9, adInterval: 30, maxAds: 2 },
+                { id: 8, name: 'VIP8', speed: 3072, price: 79.9, adInterval: 35, maxAds: 2 },
+                { id: 9, name: 'VIP9', speed: 10240, price: 89.9, adInterval: 40, maxAds: 2 },
+                { id: 10, name: 'VIP10', speed: 51200, price: 99.9, adInterval: 50, maxAds: 1 },
+                { id: 11, name: 'VIP11', speed: 204800, price: 109.9, adInterval: 60, maxAds: 1 },
+                { id: 12, name: 'VIP12', speed: 512000, price: 119.9, adInterval: 70, maxAds: 1 },
+                { id: 13, name: 'VIP13', speed: 1048576, price: 129.9, adInterval: 80, maxAds: 1 },
+                { id: 14, name: 'VIP14', speed: 5242880, price: 149.9, adInterval: 90, maxAds: 1 },
+                { id: 15, name: 'SVIP', speed: 52428800, price: 199.9, adInterval: 120, maxAds: 1 },
+            ];
+
+            let currentLevelId = 0;
+            let downloadedBytes = 0;
+            let isDownloading = false;
+            let lastTickTime = null;
+            let adTimerId = null;
+            let downloadTimerId = null;
+            let activeAds = [];
+
+            const $ = (sel) => document.querySelector(sel);
+            const btnDownload = $('#btnDownload');
+            const progressPanel = $('#progressPanel');
+            const progressFill = $('#progressFill');
+            const speedDisplay = $('#speedDisplay');
+            const percentDisplay = $('#percentDisplay');
+            const downloadedText = $('#downloadedText');
+            const etaText = $('#etaText');
+            const levelTag = $('#levelTag');
+            const btnRecharge = $('#btnRecharge');
+            const modalRoot = $('#modalRoot');
+            const adRoot = $('#adRoot');
+            const toastRoot = $('#toastRoot');
+
+            const getLevel = () => LEVELS[currentLevelId];
+            const formatBytes = b => b < 1024 ? b + ' B' : b < 1048576 ? (b/1024).toFixed(2)+' KB' : (b/1048576).toFixed(2)+' MB';
+            const formatSpeed = bps => bps < 1024 ? bps+' B/s' : bps < 1048576 ? (bps/1024).toFixed(1)+' KB/s' : (bps/1048576).toFixed(2)+' MB/s';
+            const formatTime = sec => !isFinite(sec)||sec<=0 ? '即将完成' : sec<60 ? Math.ceil(sec)+'秒' : sec<3600 ? Math.ceil(sec/60)+'分钟' : (sec/3600).toFixed(1)+'小时';
+
+            function refreshUI() {
+                const lv = getLevel();
+                levelTag.textContent = lv.name;
+                btnRecharge.textContent = currentLevelId >= LEVELS.length-1 ? '已是SVIP' : '开通VIP';
+                btnRecharge.disabled = currentLevelId >= LEVELS.length-1;
+                updateProgressUI();
+            }
+            function updateProgressUI() {
+                if(!isDownloading && downloadedBytes===0 && !progressPanel.classList.contains('visible')) return;
+                const percent = Math.min((downloadedBytes/FILE_SIZE)*100,100);
+                const remaining = Math.max(FILE_SIZE-downloadedBytes,0);
+                const speed = getLevel().speed;
+                const eta = speed>0 ? remaining/speed : Infinity;
+                percentDisplay.textContent = percent.toFixed(2)+'%';
+                downloadedText.textContent = `已下载 ${formatBytes(downloadedBytes)} / 10.00 MB`;
+                progressFill.style.width = percent+'%';
+                speedDisplay.textContent = formatSpeed(speed);
+                speedDisplay.className = 'speed-value'+(speed<100?' slow':'');
+                etaText.textContent = percent>=99.995 ? '即将完成' : '预计剩余 '+formatTime(eta);
+            }
+            function toast(msg) {
+                const el = document.createElement('div'); el.className='toast'; el.textContent=msg;
+                toastRoot.appendChild(el); setTimeout(()=>el.remove(),2700);
+            }
+
+            // ========== 广告系统 ==========
+            function clearAdTimer() { if(adTimerId){clearTimeout(adTimerId);adTimerId=null;} }
+            function spawnAd() {
+                const level = getLevel();
+                while(activeAds.length > level.maxAds) {
+                    const ad = activeAds.pop(); if(ad) ad.remove();
+                }
+                if(activeAds.length >= level.maxAds) return;
+                const ad = document.createElement('div');
+                ad.className = 'ad-unit';
+                
+                // 移动端适配位置
+                const isMobile = window.innerWidth <= 640;
+                if (isMobile) {
+                    ad.style.top = (10 + Math.random() * 50) + '%';
+                    ad.style.left = (5 + Math.random() * 5) + '%';
+                    ad.style.width = (85 + Math.random() * 10) + '%';
+                } else {
+                    ad.style.top = (5 + Math.random() * 70) + '%';
+                    ad.style.left = (2 + Math.random() * 70) + '%';
+                    ad.style.width = (200 + Math.random() * 200) + 'px';
+                }
+                ad.innerHTML = `
+                    <div class="ad-header"><span>🔥 热门推荐</span><button class="ad-close-fake" onclick="window._fakeCloseAd(this)">×</button></div>
+                    <div class="ad-body"><div class="ad-blinking">${['🎉中奖啦','💥病毒警告','🔥同城约会'][Math.floor(Math.random()*3)]}</div></div>
+                    <div class="ad-footer" onclick="window._clickAdFooter()">点击领取 ></div>
+                    <div class="ad-vip-link" onclick="window._adGoVIP()">🚀 开通VIP免广告</div>`;
+                adRoot.appendChild(ad);
+                activeAds.push(ad);
+            }
+            window._fakeCloseAd = function(btn) {
+                const ad = btn.closest('.ad-unit');
+                if(ad){ ad.remove(); activeAds = activeAds.filter(a=>a!==ad); }
+                spawnAd(); spawnAd();
+            };
+            window._clickAdFooter = function() { toast('🎉 恭喜！您已订阅广告'); spawnAd(); };
+            window._adGoVIP = function() {
+                activeAds.forEach(a=>a.remove()); activeAds=[];
+                openVIPPanel();
+            };
+            function scheduleAd() {
+                clearAdTimer();
+                adTimerId = setTimeout(()=>{ spawnAd(); scheduleAd(); }, getLevel().adInterval*1000);
+            }
+            function refreshAds() {
+                while(activeAds.length > getLevel().maxAds) { const a=activeAds.pop(); if(a)a.remove(); }
+                clearAdTimer(); scheduleAd();
+            }
+
+            // 窗口变化时重新调整广告位置
+            let resizeTimeout = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const isMobile = window.innerWidth <= 640;
+                    activeAds.forEach(ad => {
+                        if (isMobile) {
+                            ad.style.top = (10 + Math.random() * 50) + '%';
+                            ad.style.left = (5 + Math.random() * 5) + '%';
+                            ad.style.width = (85 + Math.random() * 10) + '%';
+                        } else {
+                            ad.style.top = (5 + Math.random() * 70) + '%';
+                            ad.style.left = (2 + Math.random() * 70) + '%';
+                            ad.style.width = (200 + Math.random() * 200) + 'px';
+                        }
+                    });
+                }, 300);
+            });
+
+            // ========== 下载重重阻碍 ==========
+            function handleDownloadClick() {
+                if(isDownloading) { pauseDownload(); return; }
+                if(downloadedBytes >= FILE_SIZE) { resetDownloadState(); }
+                showDownloadOptions();
+            }
+
+            function showDownloadOptions() {
+                const lv = getLevel();
+                const vipAvailable = currentLevelId >= 1;
+                modalRoot.innerHTML = `
+                <div class="modal-overlay" id="optionsOverlay">
+                    <div class="modal-dialog">
+                        <div style="font-weight:600;font-size:18px;margin-bottom:16px;">选择下载方式</div>
+                        <button class="download-option-btn btn-fast" onclick="window._selectFast()">⚡ 极速下载 (推荐)</button>
+                        <div style="font-size:12px;color:#888;text-align:center;margin-bottom:8px;">安全高速，需下载客户端</div>
+                        <button class="download-option-btn btn-vip-dl" ${vipAvailable?'':'disabled'} onclick="window._selectVIP()">
+                            👑 VIP尊享下载 ${vipAvailable?'':'(需VIP)'}
+                        </button>
+                        <div style="text-align:center;margin-top:12px;">
+                            <span class="btn-normal" onclick="window._selectNormal()">普通下载 (慢速)</span>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            window._selectFast = function() {
+                modalRoot.innerHTML = '';
+                modalRoot.innerHTML = `
+                <div class="modal-overlay">
+                    <div class="modal-dialog" style="text-align:center;">
+                        <div style="font-size:20px;font-weight:bold;margin-bottom:12px;">📥 请先下载客户端</div>
+                        <p style="color:#555;">使用LING网盘客户端即可享受极速下载</p>
+                        <button class="download-option-btn btn-fast" onclick="window._downloadClient()">📦 下载客户端 (免费)</button>
+                        <button class="btn-normal" style="margin-top:8px;" onclick="modalRoot.innerHTML='';">返回</button>
+                    </div>
+                </div>`;
+            };
+            window._downloadClient = function() {
+                toast('客户端下载已开始 (模拟)');
+                modalRoot.innerHTML = '';
+            };
+            window._selectVIP = function() {
+                if(currentLevelId < 1) { toast('请先开通VIP'); return; }
+                modalRoot.innerHTML = '';
+                startDownloadReal();
+            };
+            window._selectNormal = function() {
+                modalRoot.innerHTML = '';
+                startVerification();
+            };
+
+            function startVerification() {
+                const code = Math.random().toString(36).substring(2,6).toUpperCase();
+                modalRoot.innerHTML = `
+                <div class="modal-overlay">
+                    <div class="modal-dialog">
+                        <div style="font-weight:600;margin-bottom:8px;">安全验证</div>
+                        <div class="captcha-box" style="background:repeating-linear-gradient(45deg,#eee,#eee 10px,#ddd 10px,#ddd 20px);">
+                            ${code}
+                        </div>
+                        <input id="captchaInput" placeholder="请输入上方验证码" style="width:100%;padding:8px;margin:10px 0;border:1px solid #ccc;border-radius:4px;font-size:16px;">
+                        <button onclick="window._verifyCaptcha('${code}')" style="width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;">确认</button>
+                        <div style="font-size:11px;color:#999;margin-top:8px;">点击确认继续</div>
+                    </div>
+                </div>`;
+            }
+            window._verifyCaptcha = function(code) {
+                const input = document.getElementById('captchaInput');
+                if(input && input.value.toUpperCase() === code) {
+                    modalRoot.innerHTML = '';
+                    proceedToConfirm();
+                } else {
+                    toast('验证码错误，请重试');
+                    if(input) input.value = '';
+                }
+            };
+
+            function proceedToConfirm() {
+                const lv = getLevel();
+                modalRoot.innerHTML = `
+                <div class="modal-overlay">
+                    <div class="modal-dialog">
+                        <div style="font-weight:600;margin-bottom:8px;">下载确认</div>
+                        <p style="font-size:14px;">当前速度 <b style="color:#e67e22;">${formatSpeed(lv.speed)}</b>，预计耗时较长，建议开通VIP。</p>
+                        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+                            <button onclick="window._finalDownload()" style="flex:1;padding:10px;background:#fff;border:1px solid #ccc;border-radius:8px;font-size:14px;cursor:pointer;min-width:100px;">继续下载</button>
+                            <button onclick="window._finalGoVIP()" style="flex:1;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;min-width:100px;">开通VIP</button>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            window._finalDownload = function() {
+                modalRoot.innerHTML = '';
+                startDownloadReal();
+            };
+            window._finalGoVIP = function() {
+                modalRoot.innerHTML = '';
+                openVIPPanel();
+            };
+
+            function resetDownloadState() {
+                downloadedBytes = 0;
+                progressFill.classList.remove('completed');
+                progressFill.style.width = '0%';
+                updateProgressUI();
+            }
+
+            function startDownloadReal() {
+                resetDownloadState();
+                isDownloading = true;
+                lastTickTime = Date.now();
+                progressPanel.classList.add('visible');
+                btnDownload.textContent = '⏸ 暂停下载';
+                btnDownload.classList.add('downloading');
+                updateProgressUI();
+                if(downloadTimerId) clearInterval(downloadTimerId);
+                downloadTimerId = setInterval(downloadTick, 100);
+            }
+            function downloadTick() {
+                if(!isDownloading) return;
+                const now = Date.now();
+                const elapsed = (now - lastTickTime)/1000;
+                lastTickTime = now;
+                const inc = getLevel().speed * elapsed;
+                downloadedBytes = Math.min(downloadedBytes + inc, FILE_SIZE);
+                updateProgressUI();
+                if(downloadedBytes >= FILE_SIZE) completeDownload();
+            }
+            function completeDownload() {
+                isDownloading = false;
+                if(downloadTimerId) { clearInterval(downloadTimerId); downloadTimerId=null; }
+                downloadedBytes = FILE_SIZE;
+                updateProgressUI();
+                progressFill.classList.add('completed');
+                btnDownload.textContent = '✅ 下载完成 (重新下载)';
+                btnDownload.classList.remove('downloading');
+                btnDownload.classList.add('completed');
+                toast('下载完成！');
+            }
+            function pauseDownload() {
+                isDownloading = false;
+                if(downloadTimerId) { clearInterval(downloadTimerId); downloadTimerId=null; }
+                btnDownload.textContent = '⬇️ 继续下载';
+                btnDownload.classList.remove('downloading');
+                updateProgressUI();
+            }
+
+            // ========== VIP升级面板 ==========
+            function openVIPPanel() {
+                const cur = getLevel();
+                const nextId = currentLevelId+1;
+                const next = LEVELS[nextId] || null;
+                let body = '';
+                if(next) {
+                    body = `
+                        <div style="background:#f7f9fc;padding:12px;border-radius:8px;margin-bottom:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;">
+                            <span>当前</span><strong>${cur.name}</strong><span>${formatSpeed(cur.speed)}</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;text-align:center;flex-wrap:wrap;justify-content:center;">
+                            <div style="flex:1;background:#f5f7fa;padding:12px;border-radius:8px;min-width:80px;">${cur.name}<br>广告${cur.maxAds}个</div>
+                            <span>→</span>
+                            <div style="flex:1;background:#f0f7ff;padding:12px;border-radius:8px;border:1px solid #108cee;min-width:80px;"><strong>${next.name}</strong><br>广告${next.maxAds}个</div>
+                        </div>
+                        <button onclick="window.upgradeTo(${nextId})" style="width:100%;margin-top:16px;padding:12px;background:var(--primary);color:#fff;border:none;border-radius:24px;font-weight:bold;font-size:16px;cursor:pointer;">升级 ¥${next.price}</button>`;
+                } else {
+                    body = '<p style="text-align:center;color:#27ae60;font-weight:bold;">已是SVIP</p>';
+                }
+                modalRoot.innerHTML = `
+                <div class="modal-overlay" onclick="if(event.target===this) modalRoot.innerHTML=''">
+                    <div class="modal-dialog">${body}</div>
+                </div>`;
+            }
+            window.upgradeTo = function(targetId) {
+                if(targetId !== currentLevelId+1) return;
+                currentLevelId = targetId;
+                refreshUI();
+                modalRoot.innerHTML = '';
+                toast(`升级为 ${getLevel().name}，广告减少至${getLevel().maxAds}个`);
+                refreshAds();
+                if(isDownloading) lastTickTime = Date.now();
+            };
+            window.openVIPPanel = openVIPPanel;
+
+            // 初始化
+            refreshUI();
+            for(let i=0;i<getLevel().maxAds;i++) spawnAd();
+            scheduleAd();
+            window.handleDownloadClick = handleDownloadClick;
+        })();
+    </script>
+</body>
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/网盘 by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:23 GMT -->
+</html>

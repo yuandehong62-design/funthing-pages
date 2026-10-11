@@ -1,0 +1,68 @@
+2026.7.31
+这小破网站成立了，最开始啥也没有
+
+2026.8.4
+新增国际卤蛋贸易有限公司，棍涛舞团，卡片增加到5个
+
+2026.9.4
+买下新域名了！Funthing.me
+
+2026.9.18
+超级大更新，卡片增加到15个
+从政模拟器，股市，扣帽子模拟器，猎奇复杂登录，牛来模拟器，起早贪黑模拟器，双人音游，外卖员模拟器，股市在线
+Funthing.me正式上线了，更新日志公开，维护日志开放，网站证书供阅览
+
+2026.9.19更新细则
+1.新增域名Funthing.me
+2.棍涛舞团更新
+2.1优化流畅度
+2.2新增可爱风模块Beta
+2.3票务更新可以出图片票根
+2.4新增返回导航页接口
+2.5删去多余无用模块
+2.6新增表演地点，更新时间，增加开演倒计时模块
+2.7新增csy彩蛋
+3.更新网站证书，更新网站TTL SSL TLS 证书，TLS协议降级1.0适配老旧古董设备，关闭Cloudflare CDN代理
+4.Ninety-one.cc.cd更改为并存状态，导航页新增网站所有者WHOIS证书，以及更新日志
+5.导航页新增15个卡片游戏（在此感谢B站UP：Ling不道提供的网页源码）
+声明：本网站使用的开源协议为 MIT License
+网站传播以及使用均须遵守 MIT License开源协议
+
+2026.10.2维护性更新
+修复类更新
+1.修补TLS漏洞及恢复cloudflare代理权限
+2.关闭老设备SSL TTL认证连接证书
+3.修复网页反应效率低，减少粒子特效
+4.解决了一些已知问题，感谢Codex倾力支持
+
+
+为了保证开源权益以及保护我的私人权益，请有需要传播二次分发免费副本时增加以下行段，更多信息可前往WHOIS查询
+Copyright (c) [2026] [DehongYuan]
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+2026.10.11更新
+1.更新
+1.1棍涛舞团增加其下分支csy 个人show ，网站内置12首歌曲，以供csy学习
+1.2棍涛舞团停止大版本维护，仅做媒介跳板
+1.3 international ld .ltd 迎来更新距离上次更新142天，新增人物介绍等
+1.4 导航页继续更新新游戏
+针对班中老旧Seewo进行性能优化
+无限期延期项目
+1.云岭猴园
+2.网站图片预览（啥服务器要我90一个月？还是2核心 2GB 宽带50MBPS）
+

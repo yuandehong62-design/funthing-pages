@@ -1,0 +1,12 @@
+HTTrack3.50-2 launched on Sun, 11 Oct 2026 01:31:01 at https://www.bilibili.com/toy/fowlBrawl/index.html +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2%f#f -F "Mozilla/5.0 (compatible; HTTrack; +https://www.httrack.com/)" -%F "<!-- Mirrored from {url} by HTTrack Website Copier/3.x [XR&CO], {date} -->" -%l "zh, en, *" https://www.bilibili.com/toy/fowlBrawl/index.html -O1 "C:\My Websites\fennudexiaoniao" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+01:31:03	Error: 	"Not Found" (404) at link https://www.bilibili.com/fingerPrint.js (from s1.hdslb.com/bfs/seed/jinkela/short/reporter-pb/index.js)
+
+HTTrack Website Copier/3.50-2 mirror complete in 2 seconds : 8 links scanned, 6 files written (325973 bytes overall) [120625 bytes received at 60312 bytes/sec], 330858 bytes transferred using HTTP compression in 6 files, ratio 34%, 2.0 requests per connection
+(1 errors, 0 warnings, 0 messages)

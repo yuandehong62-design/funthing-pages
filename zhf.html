@@ -1,0 +1,2497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/zhf by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:24 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国际卤蛋贸易有限公司 - International Marinated Egg Trading Co., Ltd</title>
+    <style>
+        :root {
+            --gold: #d4a853;
+            --gold-light: #f0d78c;
+            --dark: #1a1a1a;
+            --darker: #0d0d0d;
+            --cream: #fdf6e8;
+            --warm-brown: #5c3d2e;
+            --accent: #e8833a;
+            --card-bg: #1e1e1e;
+            --text-light: #e0d5c1;
+            --text-muted: #b0a590;
+            --glow-gold: rgba(212, 168, 83, 0.5);
+            --transition-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold) var(--dark);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 3px;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif;
+            background: var(--darker);
+            color: #e8e0d5;
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body.lang-en {
+            font-family: 'Segoe UI', 'Helvetica Neue', 'PingFang SC', 'Noto Sans SC', sans-serif;
+        }
+
+        /* ============ NAVIGATION ============ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.5s var(--transition-smooth),
+                        box-shadow 0.5s var(--transition-smooth),
+                        padding 0.5s var(--transition-smooth),
+                        backdrop-filter 0.5s var(--transition-smooth);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 10px 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(212, 168, 83, 0.2);
+        }
+        .nav-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+        .nav-logo .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #f5d78c, #b8860b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(212, 168, 83, 0.5);
+            transition: box-shadow 0.4s, transform 0.4s;
+        }
+        .nav-logo:hover .logo-icon {
+            box-shadow: 0 0 35px rgba(212, 168, 83, 0.8);
+            transform: scale(1.08);
+        }
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s;
+            padding: 6px 0;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.4s var(--transition-smooth);
+            border-radius: 2px;
+        }
+        .nav-links a:hover {
+            color: var(--gold-light);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-cta {
+            background: linear-gradient(135deg, var(--gold), #c8963e);
+            color: #1a1a1a !important;
+            padding: 10px 20px !important;
+            border-radius: 30px;
+            font-weight: 700 !important;
+            letter-spacing: 1px;
+            transition: box-shadow 0.4s, transform 0.4s, color 0.4s;
+            box-shadow: 0 4px 20px rgba(212, 168, 83, 0.35);
+            cursor: pointer;
+            border: none;
+            font-size: 0.85rem;
+        }
+        .nav-cta:hover {
+            box-shadow: 0 8px 35px rgba(212, 168, 83, 0.6) !important;
+            transform: translateY(-3px);
+            color: #000 !important;
+        }
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        /* Language Switcher */
+        .lang-switch {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 4px;
+            cursor: pointer;
+            transition: border-color 0.4s, box-shadow 0.4s;
+            user-select: none;
+            position: relative;
+            min-width: 70px;
+        }
+        .lang-switch:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 168, 83, 0.3);
+        }
+        .lang-switch .lang-option {
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: background 0.4s var(--transition-smooth),
+                        color 0.4s var(--transition-smooth),
+                        box-shadow 0.4s var(--transition-smooth);
+            color: #999;
+            text-align: center;
+            flex: 1;
+            z-index: 1;
+            white-space: nowrap;
+        }
+        .lang-switch .lang-option.active {
+            background: var(--gold);
+            color: #1a1a1a;
+            box-shadow: 0 2px 12px rgba(212, 168, 83, 0.4);
+        }
+        .lang-switch .lang-slider {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: calc(50% - 4px);
+            height: calc(100% - 8px);
+            background: var(--gold);
+            border-radius: 20px;
+            transition: transform 0.4s var(--transition-smooth);
+            box-shadow: 0 2px 12px rgba(212, 168, 83, 0.4);
+            z-index: 0;
+        }
+        .lang-switch.en-active .lang-slider {
+            transform: translateX(100%);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* ============ HERO SECTION (f.jpg) ============ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg,
+                    rgba(0, 0, 0, 0.55) 0%,
+                    rgba(0, 0, 0, 0.4) 40%,
+                    rgba(0, 0, 0, 0.65) 100%),
+                url('f.jpg') center/cover no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            animation: heroGlow 6s ease-in-out infinite;
+            will-change: opacity;
+        }
+        @keyframes heroGlow {
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 20px;
+            max-width: 850px;
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border: 1px solid rgba(212, 168, 83, 0.5);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            color: var(--gold-light);
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.3);
+            animation: fadeInDown 1s var(--transition-smooth);
+            transition: border-color 0.3s, color 0.3s, background 0.3s;
+        }
+        .hero-title {
+            font-size: clamp(2.4rem, 5vw, 4.2rem);
+            font-weight: 900;
+            letter-spacing: 3px;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: #fff;
+            animation: fadeInUp 1s var(--transition-smooth) 0.2s both;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        .hero-title span {
+            color: var(--gold);
+            display: inline-block;
+            position: relative;
+        }
+        .hero-subtitle {
+            font-size: 1.15rem;
+            letter-spacing: 2px;
+            color: #d5c8b0;
+            margin-bottom: 36px;
+            animation: fadeInUp 1s var(--transition-smooth) 0.4s both;
+            line-height: 1.8;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s var(--transition-smooth) 0.6s both;
+        }
+        .btn-primary {
+            padding: 14px 36px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.4s var(--transition-smooth),
+                        box-shadow 0.4s var(--transition-smooth);
+            background: linear-gradient(135deg, #d4a853, #b8860b);
+            color: #1a1a1a;
+            box-shadow: 0 6px 30px rgba(212, 168, 83, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 45px rgba(212, 168, 83, 0.65);
+        }
+        .btn-outline {
+            padding: 14px 36px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            display: inline-block;
+            transition: border-color 0.4s var(--transition-smooth),
+                        color 0.4s var(--transition-smooth),
+                        background 0.4s var(--transition-smooth),
+                        transform 0.4s var(--transition-smooth);
+            background: transparent;
+            color: #fff;
+        }
+        .btn-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold-light);
+            background: rgba(212, 168, 83, 0.08);
+            transform: translateY(-4px);
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: bounceDown 2s ease-in-out infinite;
+            cursor: pointer;
+        }
+        .scroll-indicator span {
+            display: block;
+            width: 30px;
+            height: 30px;
+            border-right: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            transform: rotate(45deg);
+            opacity: 0.8;
+        }
+        @keyframes bounceDown {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(15px);
+            }
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============ SECTION STYLES ============ */
+        .section {
+            padding: 100px 40px;
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-tag {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            color: var(--gold);
+            border: 1px solid rgba(212, 168, 83, 0.35);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            transition: border-color 0.3s, color 0.3s;
+        }
+        .section-title {
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .section-subtitle {
+            color: #999;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--gold);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* ============ DEPARTMENTS ============ */
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+        .dept-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px 22px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.5s var(--transition-smooth),
+                        border-color 0.5s var(--transition-smooth),
+                        box-shadow 0.5s var(--transition-smooth);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .dept-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top, rgba(212, 168, 83, 0.1) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .dept-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212, 168, 83, 0.4);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 168, 83, 0.3);
+        }
+        .dept-card:hover::before {
+            opacity: 1;
+        }
+        .dept-avatar {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            background: radial-gradient(circle at 40% 35%, #f0d78c, #8b6914);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #1a1a1a;
+            box-shadow: 0 0 25px rgba(212, 168, 83, 0.35);
+            overflow: hidden;
+            position: relative;
+            border: 2px solid rgba(212, 168, 83, 0.4);
+            transition: box-shadow 0.4s, transform 0.4s;
+        }
+        .dept-card:hover .dept-avatar {
+            box-shadow: 0 0 35px rgba(212, 168, 83, 0.7);
+            transform: scale(1.05);
+        }
+        .dept-avatar::after {
+            content: '👤';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: rgba(26, 26, 26, 0.45);
+            z-index: 0;
+        }
+        .dept-avatar img {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .dept-icon {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+        .dept-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .dept-desc {
+            font-size: 0.9rem;
+            color: #b0a590;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            min-height: 2.5em;
+        }
+        .dept-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(212, 168, 83, 0.15);
+            font-size: 0.82rem;
+            text-align: left;
+        }
+        .dept-meta-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            color: #999;
+        }
+        .dept-meta-row strong {
+            color: var(--gold);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .dept-meta-row span {
+            color: #c0b59d;
+            text-align: right;
+            word-break: break-word;
+            min-width: 0;
+        }
+
+        /* 部门弹窗内部 */
+        .dept-modal-avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            margin: 0 auto 18px;
+            background: radial-gradient(circle at 40% 35%, #f0d78c, #8b6914);
+            overflow: hidden;
+            position: relative;
+            border: 2px solid rgba(212, 168, 83, 0.5);
+            box-shadow: 0 0 30px rgba(212, 168, 83, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #1a1a1a;
+        }
+        .dept-modal-avatar::after {
+            content: '👤';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(26, 26, 26, 0.4);
+            z-index: 0;
+        }
+        .dept-modal-avatar img {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .dept-modal-icon {
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .dept-modal-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+            margin: 22px 0;
+            padding: 20px;
+            background: rgba(212, 168, 83, 0.05);
+            border-radius: 12px;
+            border: 1px dashed rgba(212, 168, 83, 0.25);
+        }
+        .dept-modal-info-item {
+            text-align: center;
+        }
+        .dept-modal-info-item .label {
+            font-size: 0.72rem;
+            color: #888;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+        .dept-modal-info-item .value {
+            font-size: 0.92rem;
+            color: var(--gold-light);
+            font-weight: 600;
+            word-break: break-word;
+        }
+        .dept-modal-section-title {
+            font-size: 0.9rem;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin: 22px 0 12px;
+            padding-left: 12px;
+            border-left: 3px solid var(--gold);
+        }
+        .dept-modal-desc {
+            color: #c8bfa8;
+            line-height: 2;
+            font-size: 0.95rem;
+        }
+        .dept-modal-desc p {
+            margin-bottom: 12px;
+            text-indent: 2em;
+        }
+        .dept-modal-duties {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .dept-modal-duties li {
+            padding: 8px 0 8px 22px;
+            color: #c8bfa8;
+            position: relative;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .dept-modal-duties li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-size: 0.7rem;
+            top: 12px;
+        }
+
+        /* ============ LEADER TABS & AVATAR ============ */
+        .leader-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 26px;
+            flex-wrap: wrap;
+        }
+        .leader-tab {
+            font-family: inherit;
+            font-size: 0.84rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 10px 26px;
+            border-radius: 30px;
+            border: 1px solid rgba(212, 168, 83, 0.35);
+            background: transparent;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.4s var(--transition-smooth),
+                        border-color 0.4s var(--transition-smooth),
+                        background 0.4s var(--transition-smooth),
+                        box-shadow 0.4s var(--transition-smooth);
+        }
+        .leader-tab:hover {
+            color: var(--gold-light);
+            border-color: var(--gold);
+        }
+        .leader-tab.active {
+            background: linear-gradient(135deg, #d4a853, #b8860b);
+            color: #1a1a1a;
+            border-color: var(--gold);
+            box-shadow: 0 4px 20px rgba(212, 168, 83, 0.4);
+        }
+        .leader-avatar-big {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 14px;
+            background: radial-gradient(circle at 40% 35%, #f0d78c, #8b6914);
+            overflow: hidden;
+            position: relative;
+            border: 2px solid rgba(212, 168, 83, 0.5);
+            box-shadow: 0 0 30px rgba(212, 168, 83, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #1a1a1a;
+        }
+        .leader-avatar-big::after {
+            content: '👤';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(26, 26, 26, 0.4);
+            z-index: 0;
+        }
+        .leader-avatar-big img {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ============ ABOUT / HOME SHOWCASE (1.jpg) ============ */
+        .home-showcase {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            padding: 60px 0;
+        }
+        .home-showcase-image {
+            flex: 1 1 400px;
+            min-width: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.5s var(--transition-smooth);
+            position: relative;
+            aspect-ratio: 4/3;
+            background: #1a1a1a;
+        }
+        .home-showcase-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s var(--transition-smooth);
+        }
+        .home-showcase-image:hover img {
+            transform: scale(1.05);
+        }
+        .home-showcase-image:hover {
+            box-shadow: 0 25px 70px rgba(212, 168, 83, 0.3);
+        }
+        .home-showcase-text {
+            flex: 1 1 350px;
+            min-width: 280px;
+        }
+        .home-showcase-text h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .home-showcase-text p {
+            color: #c0b59d;
+            line-height: 1.9;
+            font-size: 1.02rem;
+        }
+        .highlight-number {
+            display: inline-block;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-right: 8px;
+        }
+
+        /* ============ PRODUCTS ============ */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.5s var(--transition-smooth),
+                        box-shadow 0.5s var(--transition-smooth),
+                        border-color 0.5s var(--transition-smooth);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            cursor: pointer;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 168, 83, 0.3);
+            border-color: rgba(212, 168, 83, 0.4);
+        }
+        .product-card-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            position: relative;
+            background: #252525;
+        }
+        .product-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s var(--transition-smooth);
+        }
+        .product-card:hover .product-card-image img {
+            transform: scale(1.08);
+        }
+        .product-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+        .badge-hot {
+            background: #e8833a;
+            color: #fff;
+        }
+        .badge-premium {
+            background: #9b59b6;
+            color: #fff;
+        }
+        .badge-taiwan {
+            background: #2c3e50;
+            color: #fff;
+        }
+        .product-card-body {
+            padding: 24px 20px;
+            text-align: center;
+        }
+        .product-card-body h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .product-card-body .net-weight {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .product-card-body .price {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 1px;
+        }
+        .product-card-body .price .currency {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .product-card-glow {
+            position: absolute;
+            inset: -1px;
+            border-radius: 20px;
+            background: transparent;
+            pointer-events: none;
+            transition: background 0.5s var(--transition-smooth);
+            z-index: -1;
+        }
+        .product-card:hover .product-card-glow {
+            background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.08) 0%, transparent 70%);
+        }
+
+        /* ============ TESTIMONIALS ============ */
+        .testimonials-section {
+            background: linear-gradient(180deg,
+                    var(--darker) 0%,
+                    #111 30%,
+                    #111 70%,
+                    var(--darker) 100%);
+            padding: 100px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .testimonials-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 168, 83, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            border-radius: 50%;
+        }
+        .testimonials-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+        .testimonial-card {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 18px;
+            padding: 30px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.5s var(--transition-smooth),
+                        border-color 0.5s var(--transition-smooth),
+                        box-shadow 0.5s var(--transition-smooth),
+                        background 0.5s var(--transition-smooth);
+            position: relative;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(212, 168, 83, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            background: rgba(35, 35, 35, 0.9);
+        }
+        .testimonial-stars {
+            color: var(--gold);
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+        }
+        .testimonial-text {
+            color: #c8bfa8;
+            font-style: italic;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+        .testimonial-author {
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        .testimonial-role {
+            color: #888;
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+        }
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(212, 168, 83, 0.1);
+            border: 1px solid rgba(212, 168, 83, 0.3);
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+        }
+        .rating-badge .big-star {
+            font-size: 1.8rem;
+            color: var(--gold);
+        }
+        .rating-badge .rating-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--gold);
+        }
+        .rating-subtitle {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        /* ============ CONTACT ============ */
+        .contact-wrapper {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            align-items: stretch;
+        }
+        .contact-info {
+            flex: 1 1 350px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: border-color 0.4s, box-shadow 0.4s;
+        }
+        .contact-info:hover {
+            border-color: rgba(212, 168, 83, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+        .contact-info h3 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .contact-email {
+            display: inline-block;
+            font-size: 0.95rem;
+            color: var(--gold-light);
+            word-break: break-all;
+            padding: 12px 20px;
+            background: rgba(212, 168, 83, 0.06);
+            border-radius: 12px;
+            border: 1px dashed rgba(212, 168, 83, 0.3);
+            transition: background 0.3s, border-color 0.3s;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+        .contact-email:hover {
+            background: rgba(212, 168, 83, 0.12);
+            border-color: var(--gold);
+        }
+        .contact-detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 18px;
+            color: #bbb;
+        }
+        .contact-detail-item .icon-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gold);
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+        .contact-detail-item strong {
+            color: #fff;
+            display: block;
+        }
+        .contact-detail-item span {
+            color: #bbb;
+        }
+        .contact-desc {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 16px;
+            line-height: 1.7;
+        }
+
+        /* ============ FOOTER ============ */
+        .site-footer {
+            background: #080808;
+            padding: 40px 30px 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+        .footer-powered {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .power-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: transform 0.4s var(--transition-smooth),
+                        color 0.4s var(--transition-smooth),
+                        border-color 0.4s var(--transition-smooth),
+                        box-shadow 0.4s var(--transition-smooth);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+        .power-link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 0;
+        }
+        .power-link:hover::before {
+            opacity: 1;
+        }
+        .power-link::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 32px;
+            box-shadow: 0 0 22px currentColor;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: -1;
+            animation: glowPulse 2.6s ease-in-out infinite;
+            will-change: opacity;
+        }
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.12; }
+            50%      { opacity: 0.55; }
+        }
+        .power-link span {
+            position: relative;
+            z-index: 1;
+        }
+        .power-link .pw-icon {
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+        }
+        .pw-cloudflare {
+            background: #1a1a1a;
+            color: #f6821f;
+            border: 2px solid #f6821f;
+        }
+        .pw-cloudflare::before {
+            background: rgba(246, 130, 31, 0.15);
+        }
+        .pw-cloudflare::after {
+            animation-delay: 0s;
+        }
+        .pw-cloudflare:hover {
+            box-shadow: 0 0 35px rgba(246, 130, 31, 0.7), 0 0 60px rgba(246, 130, 31, 0.35);
+            transform: translateY(-3px);
+            color: #fff;
+            border-color: #ff9f3d;
+        }
+        .pw-qianwen {
+            background: #1a1a1a;
+            color: #6ec6ff;
+            border: 2px solid #6ec6ff;
+        }
+        .pw-qianwen::before {
+            background: rgba(110, 198, 255, 0.15);
+        }
+        .pw-qianwen::after {
+            animation-delay: 0.4s;
+        }
+        .pw-qianwen:hover {
+            box-shadow: 0 0 35px rgba(110, 198, 255, 0.7), 0 0 60px rgba(110, 198, 255, 0.35);
+            transform: translateY(-3px);
+            color: #fff;
+            border-color: #8dd4ff;
+        }
+        .pw-chatgpt {
+            background: #1a1a1a;
+            color: #74c89b;
+            border: 2px solid #74c89b;
+        }
+        .pw-chatgpt::before {
+            background: rgba(116, 200, 155, 0.15);
+        }
+        .pw-chatgpt::after {
+            animation-delay: 0.8s;
+        }
+        .pw-chatgpt:hover {
+            box-shadow: 0 0 35px rgba(116, 200, 155, 0.7), 0 0 60px rgba(116, 200, 155, 0.35);
+            transform: translateY(-3px);
+            color: #fff;
+            border-color: #8fe8b0;
+        }
+        .pw-deepseek {
+            background: #1a1a1a;
+            color: #b89ef5;
+            border: 2px solid #b89ef5;
+        }
+        .pw-deepseek::before {
+            background: rgba(184, 158, 245, 0.15);
+        }
+        .pw-deepseek::after {
+            animation-delay: 1.2s;
+        }
+        .pw-deepseek:hover {
+            box-shadow: 0 0 35px rgba(184, 158, 245, 0.7), 0 0 60px rgba(184, 158, 245, 0.35);
+            transform: translateY(-3px);
+            color: #fff;
+            border-color: #cfbfff;
+        }
+        .footer-copy {
+            color: #666;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        /* ============ MODAL (Leader / Dept) ============ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s var(--transition-smooth);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-dialog {
+            background: #1a1a1a;
+            border-radius: 20px;
+            max-width: 750px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 40px 30px;
+            position: relative;
+            border: 1px solid rgba(212, 168, 83, 0.3);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            transform: translateY(30px);
+            transition: transform 0.5s var(--transition-smooth);
+        }
+        .modal-overlay.active .modal-dialog {
+            transform: translateY(0);
+        }
+        .modal-close {
+            position: sticky;
+            top: 10px;
+            float: right;
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+        .modal-dialog h2 {
+            font-size: 1.8rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .modal-dialog .modal-title-sub {
+            text-align: center;
+            color: #999;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+        }
+        .modal-dialog .bio-content {
+            color: #c8bfa8;
+            line-height: 2;
+            font-size: 0.95rem;
+            text-align: justify;
+        }
+        .modal-dialog .bio-content p {
+            margin-bottom: 14px;
+            text-indent: 2em;
+        }
+        .modal-dialog .bio-content .highlight-line {
+            border-left: 3px solid var(--gold);
+            padding-left: 16px;
+            color: #e0d5c1;
+            font-weight: 500;
+            margin: 16px 0;
+            text-indent: 0;
+        }
+
+        /* ============ FLOATING LEADER ENTRY ============ */
+        .floating-leader-entry {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            border: 2px solid rgba(212, 168, 83, 0.5);
+            color: var(--gold);
+            padding: 12px 20px;
+            border-radius: 35px;
+            cursor: pointer;
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            transition: background 0.4s var(--transition-smooth),
+                        border-color 0.4s var(--transition-smooth),
+                        color 0.4s var(--transition-smooth),
+                        box-shadow 0.4s var(--transition-smooth);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: floatGentle 3s ease-in-out infinite;
+            will-change: transform;
+        }
+        .floating-leader-entry:hover {
+            background: linear-gradient(135deg, #3a3020, #2a1a0a);
+            border-color: var(--gold);
+            box-shadow: 0 12px 40px rgba(212, 168, 83, 0.45);
+            transform: translateY(-4px);
+            color: #fff;
+        }
+        @keyframes floatGentle {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        .floating-leader-entry .leader-avatar-mini {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #f0d78c, #8b6914);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        /* ============ REVEAL ANIMATIONS ============ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
+            will-change: opacity, transform;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+        .reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+        .reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+        .reveal-delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        /* ============ PARTICLES ============ */
+        .particles-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(212, 168, 83, 0.15);
+            animation: floatParticle 8s ease-in-out infinite;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+        @keyframes floatParticle {
+            0%,
+            100% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            30% {
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-120px) translateX(30px) scale(1.8);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 16px;
+            }
+            .navbar.scrolled {
+                padding: 8px 16px;
+            }
+            .nav-row {
+                gap: 10px;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 75%;
+                max-width: 320px;
+                height: 100vh;
+                background: rgba(10, 10, 10, 0.97);
+                flex-direction: column;
+                padding: 80px 30px 30px;
+                gap: 20px;
+                transition: right 0.4s var(--transition-smooth);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                z-index: 1001;
+                border-left: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            .nav-links.open {
+                right: 0;
+            }
+            .mobile-toggle {
+                display: block;
+                z-index: 1002;
+            }
+            .hero {
+                background-attachment: scroll;
+                min-height: 90vh;
+            }
+            .section {
+                padding: 60px 16px;
+            }
+            .testimonials-section {
+                padding: 60px 16px;
+            }
+            .floating-leader-entry {
+                bottom: 16px;
+                right: 10px;
+                padding: 10px 14px;
+                font-size: 0.75rem;
+                letter-spacing: 1px;
+                gap: 4px;
+            }
+            .footer-powered {
+                gap: 10px;
+            }
+            .power-link {
+                padding: 8px 12px;
+                font-size: 0.72rem;
+                letter-spacing: 0.5px;
+            }
+            .modal-dialog {
+                padding: 24px 16px;
+                max-height: 80vh;
+            }
+            .modal-dialog h2 {
+                font-size: 1.4rem;
+            }
+            .lang-switch {
+                min-width: 60px;
+            }
+            .lang-switch .lang-option {
+                padding: 5px 10px;
+                font-size: 0.7rem;
+            }
+            .nav-logo span {
+                font-size: 0.9rem;
+                letter-spacing: 1px;
+            }
+            .departments-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+            .dept-avatar {
+                width: 78px;
+                height: 78px;
+            }
+            .dept-modal-avatar {
+                width: 100px;
+                height: 100px;
+            }
+            .leader-avatar-big {
+                width: 100px;
+                height: 100px;
+            }
+            .leader-tab {
+                font-size: 0.76rem;
+                padding: 8px 18px;
+                letter-spacing: 1px;
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hero::before,
+            .scroll-indicator,
+            .floating-leader-entry,
+            .power-link::after,
+            .particle {
+                animation: none !important;
+            }
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            html {
+                scroll-behavior: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ PARTICLES BACKGROUND ============ -->
+    <div class="particles-container" id="particlesContainer"></div>
+
+    <!-- ============ NAVIGATION ============ -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-logo">
+            <div class="logo-icon">🥚</div>
+            <span data-i18n="nav.logo">国际卤蛋贸易</span>
+        </a>
+        <div class="nav-row">
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" data-i18n="nav.home">首页</a></li>
+                <li><a href="#departments">部门介绍</a></li>
+                <li><a href="#products" data-i18n="nav.products">产品中心</a></li>
+                <li><a href="#testimonials" data-i18n="nav.reviews">客户评价</a></li>
+                <li><a href="#contact" data-i18n="nav.contact">联系我们</a></li>
+                <li><a href="certificate.pdf" target="_blank" data-i18n="nav.cert">📜 网站证书</a></li>
+                <li><a href="javascript:void(0)" class="nav-cta" onclick="openLeaderModal()" data-i18n="nav.leader">👔 领导层介绍</a></li>
+            </ul>
+            <!-- Language Switcher -->
+            <div class="lang-switch" id="langSwitch" onclick="toggleLanguage()" title="Switch Language / 切换语言">
+                <div class="lang-slider" id="langSlider"></div>
+                <div class="lang-option" data-lang="zh" id="langOptZh">中</div>
+                <div class="lang-option" data-lang="en" id="langOptEn">EN</div>
+            </div>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="菜单">☰</button>
+        </div>
+    </nav>
+
+    <!-- ============ HERO SECTION (f.jpg) ============ -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-badge" data-i18n="hero.badge">SINCE 2016 · 全球20+国家</div>
+            <h1 class="hero-title" data-i18n="hero.title">
+                中式卤蛋<span>·</span>全球流通
+            </h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+                从市井小吃到国际快消品<br>
+                一枚卤蛋，横跨亚洲、欧洲、美洲、中东
+            </p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn-primary" data-i18n="hero.btnProducts">🛒 探索产品</a>
+                <a href="#contact" class="btn-outline" data-i18n="hero.btnContact">📧 商务合作</a>
+            </div>
+        </div>
+        <div class="scroll-indicator" onclick="document.getElementById('departments').scrollIntoView({behavior:'smooth'})">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- ============ DEPARTMENTS SECTION ============ -->
+    <section class="section" id="departments">
+        <div class="section-header reveal">
+            <div class="section-tag">Departments</div>
+            <h2 class="section-title">部门介绍</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">专业分工 · 协同作战 · 全球布局</p>
+        </div>
+        <div class="departments-grid" id="departmentsGrid"></div>
+    </section>
+
+    <!-- ============ HOME SHOWCASE (1.jpg) ============ -->
+    <section class="section" id="about">
+        <div class="section-header reveal">
+            <div class="section-tag" data-i18n="about.tag">About Us</div>
+            <h2 class="section-title" data-i18n="about.title">关于我们</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="home-showcase">
+            <div class="home-showcase-image reveal reveal-delay-1">
+                <img src="1.jpg" alt="展示图片"
+                onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg, #2a1a0a, #3d2b14, #1a1005)';this.parentElement.innerHTML+='<div style=position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#d4a853;font-size:4rem;>🥚</div>';">
+            </div>
+            <div class="home-showcase-text reveal reveal-delay-2">
+                <h3 data-i18n="about.heading">从市井烟火到<span style="color:#d4a853;">全球餐桌</span></h3>
+                <p data-i18n="about.desc">
+                    <span class="highlight-number">20+</span>个国家与地区<br>
+                    <span class="highlight-number">50+</span>款定制化风味<br>
+                    <span class="highlight-number">3</span>大洲海外仓布局<br><br>
+                    国际卤蛋贸易有限公司，深耕卤蛋跨境贸易领域，以标准化生产、全球化冷链、精准化市场策略，
+                    将中式卤蛋打造为海外商超的常驻爆款单品。从新加坡到洛杉矶，从迪拜到东京，
+                    我们让世界品尝到地道的中式卤味文化。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PRODUCTS SECTION ============ -->
+    <section class="section" id="products">
+        <div class="section-header reveal">
+            <div class="section-tag" data-i18n="products.tag">Product Center</div>
+            <h2 class="section-title" data-i18n="products.title">产品中心</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle" data-i18n="products.subtitle">严选品质 · 标准化生产 · 全球配送</p>
+        </div>
+        <div class="products-grid">
+            <!-- 产品1: 经典五香卤蛋 -->
+            <div class="product-card reveal reveal-delay-1">
+                <div class="product-card-image">
+                    <img src="1.jpg" alt="经典五香卤蛋"
+                    onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg, #3d2b14, #5c3d2e, #3d2b14)';this.parentElement.innerHTML+='<div style=position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#f0d78c;font-size:5rem;>🥚</div>';">
+                    <div class="product-badge badge-hot" data-i18n="products.badge1">🔥 爆款</div>
+                </div>
+                <div class="product-card-body">
+                    <h4 data-i18n="products.name1">经典五香卤蛋</h4>
+                    <p class="net-weight" data-i18n="products.weight1">净含量：90g</p>
+                    <p class="price"><span class="currency">¥</span>58</p>
+                </div>
+                <div class="product-card-glow"></div>
+            </div>
+
+            <!-- 产品2: 鹌鹑卤蛋 -->
+            <div class="product-card reveal reveal-delay-2">
+                <div class="product-card-image">
+                    <img src="2.jpg" alt="鹌鹑卤蛋"
+                    onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg, #2a1a2a, #4a2a3a, #2a1a2a)';this.parentElement.innerHTML+='<div style=position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#f0c8d8;font-size:4rem;>🥚🥚</div>';">
+                    <div class="product-badge badge-premium" data-i18n="products.badge2">⭐ 精品</div>
+                </div>
+                <div class="product-card-body">
+                    <h4 data-i18n="products.name2">鹌鹑卤蛋</h4>
+                    <p class="net-weight" data-i18n="products.weight2">净含量：100g</p>
+                    <p class="price"><span class="currency">¥</span>180</p>
+                </div>
+                <div class="product-card-glow"></div>
+            </div>
+
+            <!-- 产品3: 台湾风味铁蛋 -->
+            <div class="product-card reveal reveal-delay-3">
+                <div class="product-card-image">
+                    <img src="3.jpg" alt="台湾风味铁蛋"
+                    onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg, #1a1a2a, #2a3040, #1a1a2a)';this.parentElement.innerHTML+='<div style=position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#c8d0e0;font-size:4.5rem;>🟤</div>';">
+                    <div class="product-badge badge-taiwan" data-i18n="products.badge3">🏆 台湾风味</div>
+                </div>
+                <div class="product-card-body">
+                    <h4 data-i18n="products.name3">台湾风味铁蛋</h4>
+                    <p class="net-weight" data-i18n="products.weight3">净含量：250g</p>
+                    <p class="price"><span class="currency">¥</span>248</p>
+                </div>
+                <div class="product-card-glow"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ TESTIMONIALS / REVIEWS ============ -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="testimonials-inner">
+            <div class="section-header reveal">
+                <div class="section-tag" data-i18n="reviews.tag">Customer Reviews</div>
+                <h2 class="section-title" data-i18n="reviews.title">服务评分评价</h2>
+                <div class="section-divider"></div>
+                <div class="rating-badge reveal reveal-delay-1" style="display:inline-flex;margin-top:16px;">
+                    <span class="big-star">⭐</span>
+                    <span class="rating-number">4.9</span>
+                    <span class="rating-subtitle" data-i18n="reviews.rating">/ 5.0 · 全球客户一致好评</span>
+                </div>
+            </div>
+            <div class="testimonials-grid" id="testimonialsGrid">
+                <!-- 评价卡片由JS动态生成 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CONTACT SECTION ============ -->
+    <section class="section" id="contact">
+        <div class="section-header reveal">
+            <div class="section-tag" data-i18n="contact.tag">Contact Us</div>
+            <h2 class="section-title" data-i18n="contact.title">联系我们</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="contact-wrapper">
+            <div class="contact-info reveal reveal-delay-1">
+                <h3 data-i18n="contact.heading">📬 商务咨询</h3>
+                <div class="contact-detail-item">
+                    <div class="icon-dot"></div>
+                    <div>
+                        <strong data-i18n="contact.companyLabel">公司全称</strong>
+                        <span>International Marinated Egg Trading Co., Ltd</span>
+                    </div>
+                </div>
+                <div class="contact-detail-item">
+                    <div class="icon-dot"></div>
+                    <div>
+                        <strong data-i18n="contact.emailLabel">电子邮箱</strong>
+                        <a href="mailto:InternationalMarinatedEggTrading%20Co.%2C%20Ltd@office.jp" class="contact-email">
+                            InternationalMarinatedEggTrading Co., Ltd@office.jp
+                        </a>
+                    </div>
+                </div>
+                <div class="contact-detail-item">
+                    <div class="icon-dot"></div>
+                    <div>
+                        <strong data-i18n="contact.officesLabel">全球办事处</strong>
+                        <span data-i18n="contact.offices">新加坡 · 洛杉矶 · 迪拜 · 东京 · 广州</span>
+                    </div>
+                </div>
+                <p class="contact-desc" data-i18n="contact.desc">
+                    我们期待与全球各地的经销商、零售商及合作伙伴建立长期稳定的合作关系。
+                    如有任何产品咨询、定制需求或合作意向，欢迎随时通过邮件与我们联系，
+                    我们将在24小时内回复。
+                </p>
+            </div>
+            <div class="contact-info reveal reveal-delay-2" style="display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;">
+                <div style="font-size:6rem;margin-bottom:16px;">🌍</div>
+                <h3 data-i18n="contact.networkTitle">全球配送网络</h3>
+                <p style="color:#bbb;line-height:1.8;" data-i18n="contact.networkDesc">
+                    覆盖 <strong style="color:#d4a853;">20+</strong> 个国家与地区<br>
+                    海外仓总面积超 <strong style="color:#d4a853;">50,000</strong> 平方米<br>
+                    冷链配送 · 全程可追溯
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer">
+        <div class="footer-powered">
+            <a href="https://www.cloudflare.com/" target="_blank" rel="noopener" class="power-link pw-cloudflare">
+                <span class="pw-icon">☁️</span> <span>Power By CloudFlare</span>
+            </a>
+            <a href="https://tongyi.aliyun.com/" target="_blank" rel="noopener" class="power-link pw-qianwen">
+                <span class="pw-icon">✨</span> <span>Power By QianWen</span>
+            </a>
+            <a href="https://chat.openai.com/" target="_blank" rel="noopener" class="power-link pw-chatgpt">
+                <span class="pw-icon">🤖</span> <span>Power By ChatGPT</span>
+            </a>
+            <a href="https://www.deepseek.com/" target="_blank" rel="noopener" class="power-link pw-deepseek">
+                <span class="pw-icon">🧠</span> <span>Power By DeepSeek</span>
+            </a>
+        </div>
+        <p class="footer-copy" data-i18n="footer.copy">
+            © 2024 International Marinated Egg Trading Co., Ltd. All Rights Reserved.
+        </p>
+    </footer>
+
+    <!-- ============ FLOATING LEADER ENTRY BUTTON ============ -->
+    <button class="floating-leader-entry" onclick="openLeaderModal()" title="领导层介绍">
+        <div class="leader-avatar-mini">👔</div>
+        <span data-i18n="floating.leader">领导层介绍</span>
+    </button>
+
+    <!-- ============ LEADER PROFILE MODAL ============ -->
+    <div class="modal-overlay" id="leaderModal">
+        <div class="modal-dialog">
+            <button class="modal-close" onclick="closeLeaderModal()">✕</button>
+            <div class="leader-tabs">
+                <button class="leader-tab active" data-leader="chairman" onclick="switchLeader('chairman')">董事长</button>
+                <button class="leader-tab" data-leader="gm" onclick="switchLeader('gm')">总经理</button>
+            </div>
+            <div id="leaderContent">
+                <!-- 由JS动态填充 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ DEPARTMENT DETAIL MODAL ============ -->
+    <div class="modal-overlay" id="deptModal">
+        <div class="modal-dialog">
+            <button class="modal-close" onclick="closeDeptModal()">✕</button>
+            <div id="deptModalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============ LANGUAGE SYSTEM ============
+        const i18n = {
+            zh: {
+                'nav.logo': '国际卤蛋贸易',
+                'nav.home': '首页',
+                'nav.products': '产品中心',
+                'nav.reviews': '客户评价',
+                'nav.contact': '联系我们',
+                'nav.cert': '📜 网站证书',
+                'nav.leader': '👔 领导层介绍',
+                'hero.badge': 'SINCE 2016 · 全球20+国家',
+                'hero.title': '中式卤蛋<span>·</span>全球流通',
+                'hero.subtitle': '从市井小吃到国际快消品<br>一枚卤蛋，横跨亚洲、欧洲、美洲、中东',
+                'hero.btnProducts': '🛒 探索产品',
+                'hero.btnContact': '📧 商务合作',
+                'about.tag': 'About Us',
+                'about.title': '关于我们',
+                'about.heading': '从市井烟火到<span style="color:#d4a853;">全球餐桌</span>',
+                'about.desc': '<span class="highlight-number">20+</span>个国家与地区<br><span class="highlight-number">50+</span>款定制化风味<br><span class="highlight-number">3</span>大洲海外仓布局<br><br>国际卤蛋贸易有限公司，深耕卤蛋跨境贸易领域，以标准化生产、全球化冷链、精准化市场策略，将中式卤蛋打造为海外商超的常驻爆款单品。从新加坡到洛杉矶，从迪拜到东京，我们让世界品尝到地道的中式卤味文化。',
+                'products.tag': 'Product Center',
+                'products.title': '产品中心',
+                'products.subtitle': '严选品质 · 标准化生产 · 全球配送',
+                'products.badge1': '🔥 爆款',
+                'products.name1': '经典五香卤蛋',
+                'products.weight1': '净含量：90g',
+                'products.badge2': '⭐ 精品',
+                'products.name2': '鹌鹑卤蛋',
+                'products.weight2': '净含量：100g',
+                'products.badge3': '🏆 台湾风味',
+                'products.name3': '台湾风味铁蛋',
+                'products.weight3': '净含量：250g',
+                'reviews.tag': 'Customer Reviews',
+                'reviews.title': '服务评分评价',
+                'reviews.rating': '/ 5.0 · 全球客户一致好评',
+                'contact.tag': 'Contact Us',
+                'contact.title': '联系我们',
+                'contact.heading': '📬 商务咨询',
+                'contact.companyLabel': '公司全称',
+                'contact.emailLabel': '电子邮箱',
+                'contact.officesLabel': '全球办事处',
+                'contact.offices': '新加坡 · 洛杉矶 · 迪拜 · 东京 · 广州',
+                'contact.desc': '我们期待与全球各地的经销商、零售商及合作伙伴建立长期稳定的合作关系。如有任何产品咨询、定制需求或合作意向，欢迎随时通过邮件与我们联系，我们将在24小时内回复。',
+                'contact.networkTitle': '全球配送网络',
+                'contact.networkDesc': '覆盖 <strong style="color:#d4a853;">20+</strong> 个国家与地区<br>海外仓总面积超 <strong style="color:#d4a853;">50,000</strong> 平方米<br>冷链配送 · 全程可追溯',
+                'floating.leader': '领导层介绍',
+                'footer.copy': '© 2024 International Marinated Egg Trading Co., Ltd. All Rights Reserved.',
+            },
+            en: {
+                'nav.logo': 'Intl Marinated Egg',
+                'nav.home': 'Home',
+                'nav.products': 'Products',
+                'nav.reviews': 'Reviews',
+                'nav.contact': 'Contact',
+                'nav.cert': '📜 Certificate',
+                'nav.leader': '👔 Leadership',
+                'hero.badge': 'SINCE 2016 · 20+ Countries',
+                'hero.title': 'Chinese Marinated Egg<span>·</span>Global Reach',
+                'hero.subtitle': 'From street-side snack to international FMCG<br>One marinated egg, spanning Asia, Europe, America & the Middle East',
+                'hero.btnProducts': '🛒 Explore Products',
+                'hero.btnContact': '📧 Business Inquiry',
+                'about.tag': 'About Us',
+                'about.title': 'About Us',
+                'about.heading': 'From humble street stalls to <span style="color:#d4a853;">global tables</span>',
+                'about.desc': '<span class="highlight-number">20+</span>countries & regions<br><span class="highlight-number">50+</span>customized flavors<br><span class="highlight-number">3</span>continents with overseas warehouses<br><br>International Marinated Egg Trading Co., Ltd. has deeply cultivated the marinated egg cross-border trade sector. Through standardized production, global cold-chain logistics, and precise market strategies, we have turned Chinese marinated eggs into a staple bestseller in overseas supermarkets. From Singapore to Los Angeles, from Dubai to Tokyo, we bring authentic Chinese braised snack culture to the world.',
+                'products.tag': 'Product Center',
+                'products.title': 'Our Products',
+                'products.subtitle': 'Premium Quality · Standardized Production · Global Delivery',
+                'products.badge1': '🔥 Best Seller',
+                'products.name1': 'Classic Five-Spice Egg',
+                'products.weight1': 'Net Weight: 90g',
+                'products.badge2': '⭐ Premium',
+                'products.name2': 'Quail Marinated Egg',
+                'products.weight2': 'Net Weight: 100g',
+                'products.badge3': '🏆 Taiwanese Style',
+                'products.name3': 'Taiwanese Iron Egg',
+                'products.weight3': 'Net Weight: 250g',
+                'reviews.tag': 'Customer Reviews',
+                'reviews.title': 'Ratings & Reviews',
+                'reviews.rating': '/ 5.0 · Consistently praised worldwide',
+                'contact.tag': 'Contact Us',
+                'contact.title': 'Contact Us',
+                'contact.heading': '📬 Business Inquiries',
+                'contact.companyLabel': 'Company Name',
+                'contact.emailLabel': 'Email',
+                'contact.officesLabel': 'Global Offices',
+                'contact.offices': 'Singapore · Los Angeles · Dubai · Tokyo · Guangzhou',
+                'contact.desc': 'We look forward to establishing long-term, stable partnerships with distributors, retailers, and collaborators worldwide. For any product inquiries, customization needs, or partnership opportunities, please feel free to contact us via email. We will respond within 24 hours.',
+                'contact.networkTitle': 'Global Distribution Network',
+                'contact.networkDesc': 'Covering <strong style="color:#d4a853;">20+</strong> countries & regions<br>Overseas warehouse area exceeding <strong style="color:#d4a853;">50,000</strong> sqm<br>Cold-chain delivery · Full traceability',
+                'floating.leader': 'Leadership',
+                'footer.copy': '© 2024 International Marinated Egg Trading Co., Ltd. All Rights Reserved.',
+            }
+        };
+
+        // ============ DEPARTMENTS DATA（仅中文，不参与语言切换） ============
+        const departmentsData = [
+            {
+                id: 'publicity',
+                icon: '📣',
+                name: '宣传部',
+                desc: '负责公司品牌传播、内容创作与媒体关系维护。',
+                photo: 'dept1.jpg',
+                manager: '吴成扬',
+                contact: 'wuchengyang@zhfld.dpdns.org',
+                staff: '15',
+                founded: '2026.10.1',
+                intro: '宣传部是公司对外形象的窗口，负责品牌故事的讲述、内容的生产与传播，以及媒体关系的维护与拓展。部门通过官网、社交媒体、海外数字渠道等平台，向全球客户传递公司的品牌理念与产品价值。他带领团队常常说着这一句话“能动就是好东西"常常劝勉道：「不要做漂泊在他乡的倡客」',
+                duties: [
+                    '策划并执行品牌传播方案与阶段性推广活动',
+                    '生产图文、视频、海报等各类传播素材',
+                    '维护与行业媒体、KOL 及合作伙伴的长期关系',
+                    '监控全球传播舆情，及时响应品牌相关内容'
+                ]
+            },
+            {
+                id: 'sales',
+                icon: '💼',
+                name: '销售部',
+                desc: '负责客户开发、订单成交与销售目标的达成。',
+                photo: 'dept2.jpg',
+                manager: '陈演军',
+                contact: 'chenyanjun@zhfld.dpdns.org',
+                staff: '67',
+                founded: '2067.09.01',
+                intro: '销售部是公司营收的核心驱动部门，负责开拓客户、促成订单成交、维护客户关系，并对整体销售目标的达成负责。未达成目标及时使用工具鞭策职员，部门对接经销商、商超、连锁便利店等各类渠道客户，覆盖亚洲、北美、中东、欧洲等主要市场。',
+                duties: [
+                    '开发新客户，维护现有客户关系',
+                    '对接客户需求，提供报价、合同与订单支持',
+                    '跟进订单执行进度，协调内部资源保障交付',
+                    '陈演军于本周购入电棍20根220v'
+                ]
+            },
+            {
+                id: 'cleaning',
+                icon: '🧹',
+                name: '钟任政',
+                desc: '负责办公区、卫生间，生产区及公共区域的日常清洁与卫生管理。',
+                photo: 'dept3.jpg',
+                manager: '待定',
+                contact: 'zhongrenzheng@dpdns.org',
+                staff: '78',
+                founded: '2078.09.01',
+                intro: '清洁部负责公司办公区、生产区、仓储区及公共区域的日常清洁与卫生管理工作，为员工提供整洁、卫生、舒适的办公和生产环境，也为公司食品生产环节的卫生合规提供基础保障。',
+                duties: [
+                    '执行办公区、生产区、公共区域的日常清洁',
+                    '负责垃圾分类、清运与环境卫生维护',
+                    '配合生产部门执行食品卫生相关规范',
+                    '钟任政于本周折断18把扫把，42把拖把'
+                ]
+            },
+            {
+                id: 'security',
+                icon: '🛡️',
+                name: '安保部',
+                desc: '负责公司人员、财产及生产安全的全方位保障。',
+                photo: 'dept4.jpg',
+                manager: '肖遥',
+                contact: 'security@egg-trade.com',
+                staff: '1',
+                founded: '1991.01.01',
+                intro: '安保部负责公司人员、财产、消防及生产安全的全方位保障工作，包括门禁管理、访客登记、消防检查、安全巡查与突发事件应急处置，为公司正常运营提供稳定可靠的安全环境。',
+                duties: [
+                    '执行门禁管理与访客登记制度',
+                    '开展日常安全巡查与成人工作设施检查',
+                    '处置突发事件并配合相关部门处理',
+                    '组织安全培训与应急演练'
+                ]
+            },
+            {
+                id: 'hr',
+                icon: '👥',
+                name: '人事部',
+                desc: '负责员工招聘、考勤、绩效与员工关系管理。',
+                photo: 'dept5.jpg',
+                manager: '张罗睿',
+                contact: 'fushouluo@dpdns.org',
+                staff: '8',
+                founded: '1999.12.31',
+                intro: '人事部负责公司员工的招聘、入职、考勤、绩效、薪酬与员工关系管理等工作，是公司与员工之间的桥梁。部门致力于搭建健康的人才梯队与和谐的劳动关系，为公司长期发展提供人力资源支撑。',
+                duties: [
+                    '制定一些四千家的规章制度，筛选与录用合适人才',
+                    '管理员工考勤、假期、绩效与薪酬事宜',
+                    '处理员工关系，组织员工活动与关怀',
+                    '维护员工档案与人事制度文件'
+                ]
+            },
+            {
+                id: 'accounting',
+                icon: '💰',
+                name: '会计部',
+                desc: '负责财务核算、税务申报与经营数据分析。',
+                photo: 'dept6.jpg',
+                manager: '俞昕泽',
+                contact: 'accounting@egg-trade.com',
+                staff: '1',
+                founded: '昨天',
+                intro: '会计部负责公司日常财务核算、成本管理、税务申报与经营数据分析工作，为公司经营决策提供财务支持。部门严格执行会计准则与内部财务制度，确保公司财务信息的真实、准确、完整与合规。',
+                duties: [
+                    '昨日由于偷税漏税共计20亿美元，已被依法立案调查',
+                    '涉嫌A B 帐 已于今日被捕',
+                    '公司实际流水9100亿，实际申报20RMB，因个人贪污7000亿，已于昨日由人事部内部电棍治理',
+                    '配合审计、年检与外部监管检查'
+                ]
+            },
+            {
+                id: 'manpower',
+                icon: '🧭',
+                name: '人力统筹部',
+                desc: '负责跨部门人员调度、培训规划与人力配置优化。',
+                photo: 'dept7.jpg',
+                manager: '黄海华',
+                contact: 'yellowseahua@egg-trade.com',
+                staff: '0',
+                founded: '1999.09。09',
+                intro: '人力统筹部负责公司整体人力资源的统筹规划与配置优化，包括跨部门人员调度、培训体系搭建、人才梯队建设与人力成本优化，确保各部门人力配置与业务发展节奏相匹配。',
+                duties: [
+                    '统筹公司整体人力规划与人员调度',
+                    '搭建培训体系，组织员工能力提升项目',
+                    '评估各部门人力需求，优化人员配置',
+                    '对接人事部与业务部门，协调人力事项'
+                ]
+            },
+            {
+                id: 'tech-support',
+                icon: '🛠️',
+                name: '后期技术支持',
+                desc: '负责系统维护、IT 支持与技术保障工作。',
+                photo: 'dept8.jpg',
+                manager: 'Rf Fg',
+                contact: 'yuandehong62@gmail.com',
+                staff: '1',
+                founded: '2026.07.01',
+                intro: '后期技术支持负责公司信息系统、办公设备、网络环境及官网平台的技术维护与保障工作，为公司各项业务提供稳定可靠的 IT 支持。部门同时承担内部系统的日常运维、故障排查与升级迭代工作。',
+                duties: [
+                    '维护公司内部系统、服务器与网络环境',
+                    '处理员工办公设备与软件的日常 IT 支持',
+                    '负责官网、小程序等线上平台的运维',
+                    '排查系统故障，推动技术方案优化迭代'
+                ]
+            }
+        ];
+
+        // ============ LEADERS DATA ============
+        const leadersData = {
+            chairman: {
+                avatar: 'chairman.jpg',
+                isBilingual: true,
+                zh: {
+                    name: 'Mr.Zhong',
+                    title: '创始人 · 董事会主席 · 首席执行官',
+                    bio: `
+                    <p>Mr.Zhong，国际卤蛋贸易有限公司创始人、董事会主席兼首席执行官，是全球卤蛋跨境贸易领域极具代表性的实业外贸企业家，也是国内首个将中式卤制蛋类单品打造为全球化流通快消品的先行者。在大众印象里，卤蛋只是街边小吃、泡面搭档，而在他的商业布局之下，这一枚小小的卤蛋，构建起了横跨亚洲、欧洲、美洲、中东等二十余个国家和地区的食品贸易网络，改写了海外对于中式卤味零食的固有认知。</p>
+                    <p>他的商业启蒙，早早扎根在烟火市井之中。Zhong出生于南方一座老牌美食城市的普通个体户家庭，父辈经营着一家深耕街坊邻里十几年的传统卤味小店，卤蛋是店里的招牌爆款。少年时期的他，放学之后便会在档口帮忙，从挑选新鲜鸡蛋、把控熬制卤汤的火候，到区分不同腌制时长带来的溏心、全熟口感，日积月累之下，他吃透了传统卤蛋制作的全部细节，也察觉到传统线下卤味门店的局限：口味再好，辐射范围也仅仅局限于一座城市，很难突破地域的边界。</p>
+                    <div class="highlight-line">高考填报志愿时，他没有选择食品加工相关专业，反而笃定地报考了国际经济与贸易专业。一个把中式卤蛋卖到全世界的想法，在大学阶段正式成型。</div>
+                    <p>大学毕业之后，身边的同学大多涌入金融、电子、大型机械外贸等热门赛道，没有人看好不起眼的卤蛋外贸，认为单品体量太小，难以形成规模。但Zhong顶住了各方质疑，启动了自己的创业计划。创业启动资金并不算充裕，他先是整合了本地三家具备食品出口资质的蛋品加工厂，敲定稳定的鸡蛋供应链，同时结合多年家传卤汁配方，进行工业化改良，解决传统手工卤制口味不稳定、无法长时间跨境保存的痛点。</p>
+                    <p>创立国际卤蛋贸易公司初期，是他创业路上最艰难的阶段。没有成熟的海外合作渠道，他便背着样品独自飞往东南亚各国，挨个走访华人商超、连锁便利店、当地食材批发商，逐一对接洽谈合作。针对不同地域的饮食差异，他牵头研发了数十款定制化风味产品线：面向越南、泰国等东南亚国家，推出加入鱼露、香茅的清淡风味卤蛋；针对中东穆斯林地区，打造完全无酒精、无猪油配方的高蛋白健身卤蛋；为北美、欧洲华人市场，还原广式五香、川味麻辣等国内经典口味。</p>
+                    <p>随着海外订单量持续上涨，Zhong意识到零散代加工模式无法支撑长期发展，于是斥资自建现代化标准化生产园区，实现从种蛋筛选、清洗消毒、卤制入味、真空封装、冷链出库全流程自主把控。同时，他布局全球海外仓体系，在新加坡、洛杉矶、迪拜等贸易枢纽设立仓储中心，搭建起从源头养殖基地到海外终端货架的完整闭环供应链。</p>
+                    <div class="highlight-line">谈及创业初心，他始终认为，中华美食出海，不一定只有大餐、名茶这些品类，像卤蛋这样的国民小零食，同样具备走向全球的潜力。把平凡的国民小吃，做成具备国际影响力的中国食品品牌。</div>
+                `
+                },
+                en: {
+                    name: 'Zhong Hanfeng',
+                    title: 'Founder · Chairman · CEO',
+                    bio: `
+                    <p>Zhong Hanfeng, founder, Chairman of the Board, and CEO of International Marinated Egg Trading Co., Ltd., is a highly representative industrial foreign trade entrepreneur in the global marinated egg cross-border trade sector. He is also the pioneer who first transformed Chinese-style marinated egg products into globally circulating FMCG items. In the public perception, marinated eggs are merely street snacks or instant noodle companions. Yet under his business vision, this humble egg has built a food trade network spanning over twenty countries and regions across Asia, Europe, the Americas, and the Middle East, fundamentally reshaping overseas perceptions of Chinese braised snacks.</p>
+                    <p>His business acumen was rooted early in the bustling marketplace. Zhong Hanfeng was born into an ordinary self-employed family in a renowned culinary city in southern China, where his family ran a traditional braised food shop beloved by the local community for over a decade, with marinated eggs as the signature bestseller. As a teenager, he would help out at the stall after school — from selecting fresh eggs and controlling the braising broth temperature to distinguishing between soft-boiled and fully-cooked textures based on different marinating durations. Over time, he mastered every detail of traditional marinated egg production and also recognized the limitations of traditional offline braised food shops: no matter how good the flavor, their reach was confined to a single city, making it difficult to break geographical boundaries.</p>
+                    <div class="highlight-line">When filling out his college application, he did not choose a food processing-related major. Instead, he resolutely applied for International Economics and Trade. The idea of selling Chinese marinated eggs to the world formally took shape during his university years.</div>
+                    <p>After graduating from university, while most of his peers flocked to popular sectors like finance, electronics, and large-scale machinery foreign trade, no one was optimistic about the humble marinated egg export business, believing the product volume was too small to achieve scale. But Zhong Hanfeng withstood the skepticism from all sides and launched his entrepreneurial venture. With limited startup capital, he first integrated three local egg processing factories with food export qualifications, secured a stable egg supply chain, and combined his family's generations-old braising recipes with industrial improvements to solve the pain points of inconsistent flavors in traditional manual braising and the inability to preserve products for long-distance cross-border shipping.</p>
+                    <p>The early days of International Marinated Egg Trading Company were the toughest phase of his entrepreneurial journey. Without established overseas partnership channels, he carried samples and flew solo to various Southeast Asian countries, visiting Chinese supermarkets, chain convenience stores, and local food wholesalers one by one to negotiate partnerships. In response to regional dietary differences, he led the development of dozens of customized flavor product lines: for Southeast Asian countries like Vietnam and Thailand, he introduced lighter-flavored marinated eggs with fish sauce and lemongrass; for the Middle Eastern Muslim market, he created high-protein fitness marinated eggs with completely alcohol-free and lard-free formulations; for the North American and European Chinese markets, he faithfully recreated domestic classic flavors such as Cantonese five-spice and Sichuan spicy.</p>
+                    <p>As overseas orders continued to surge, Zhong Hanfeng realized that the fragmented contract manufacturing model could not sustain long-term growth. He invested heavily in building a modern, standardized production campus, achieving full-process independent control from breeding egg selection, cleaning and sterilization, braising and flavor infusion, vacuum packaging, to cold-chain dispatch. Simultaneously, he established a global overseas warehouse network, setting up storage centers in trade hubs such as Singapore, Los Angeles, and Dubai, building a complete closed-loop supply chain from source farms to overseas retail shelves.</p>
+                    <div class="highlight-line">Reflecting on his founding初心, he has always believed that Chinese cuisine going global does not only have to be about grand banquets or famous teas — humble national snacks like marinated eggs also possess the potential to reach the world. His mission is to transform an ordinary national snack into a Chinese food brand with international influence.</div>
+                `
+                }
+            },
+            gm: {
+                avatar: 'gm.jpg',
+                isBilingual: false,
+                zh: {
+                    name: '俞昕泽',
+                    title: '总经理 · 反人口贩卖警示宣讲人',
+                    bio: `
+                        <p>俞昕泽，现任国际卤蛋贸易有限公司总经理，同时是公司内部「反跨国人口贩卖」公益宣讲的发起人。他很少主动提起自己的过去，但每一次新员工入职培训，他都会亲自讲一遍——不是为了博取同情，而是为了让更多人避开他当年踩过的坑。</p>
+                        <div class="highlight-line">⚠️ 以下内容涉及真实跨国犯罪手法的警示描述，请读者务必以防范为目的阅读。</div>
+                        <p>俞昕泽出生在南方一座普通小城。二十岁出头时，他听信了「海外高薪、包吃包住、月入三万」的招聘广告，跟着中介出境，结果一落地就被收走护照、手机和身份证，被押进缅北一处诈骗园区。园区四周围墙、铁丝网、持枪看守，每天被迫拨打诈骗电话，完不成「业绩」就挨打、被关小黑屋、被电击。他见过太多人在里面彻底消失。</p>
+                        <p>他是怎么逃出来的，他很少细说。只知道有一次园区内部转移人员，押送途中遇上当地武装与园区之间火并，他在混乱中翻过一道围墙，在山里躲了整整四天，靠喝溪水、啃野果撑到遇上过路的边民，才被辗转送回口岸。他身上从此留下一道长长的疤，也留下长期失眠和应激反应。</p>
+                        <p>但那不是结束。因为证件被扣、身无分文、又不敢报警，他在边境被第二拨人贩子盯上，以「帮你回家」为名再次被控制，此后数年，他被当作「货物」一样辗转倒卖：</p>
+                        <p><strong>阿拉伯</strong>——被卖进一处建筑工地，护照被收，工资从未发放，每天工作十六小时以上，工地外围有持枪监工，直到当地警方突袭非法用工窝点，他才被解救出来，但因身份文件丢失，又被当作非法滞留者处理。</p>
+                        <p><strong>朝鲜</strong>——在边境偷渡链条中被转手，短暂滞留在图们江对岸的一处农场，白天做重体力农活，晚上被锁在仓房里。那段日子他几乎以为自己会死在那里，后来趁着一次大雪天换岗的空档逃回中国一侧。</p>
+                        <p><strong>东南亚</strong>——再次被骗到东南亚某国的「客服公司」，实为另一个网络诈骗窝点。他这次学乖了，进去第三天就假装配合，暗中记住了窝点的换班规律和逃跑路线，在一个停电的深夜从二楼窗户翻出，光脚跑了六公里才找到当地的华人商户求助。</p>
+                        <p><strong>日本</strong>——被中介以「研修生」名义带走，落地后才发现是要他去打黑工。他在一家地下食品加工厂干了近一年，日结现金、没有合同、没有保险，期间右手被机器压伤，对方只给了他一笔极少的路费就把他扫地出门。</p>
+                        <p><strong>台湾</strong>——在渔船用工链条中被转卖上船，做了几个月远洋渔工，遭遇克扣工资、长期不靠港、船上暴力。靠港补给时他抓住机会联系上了当地一个民间救助组织，才得以脱身。</p>
+                        <div class="highlight-line">⚠️ 请记住：所有「海外高薪、无需经验、包吃包住、出国即可月入数万」的招聘，绝大多数都是人口贩卖的入口。</div>
+                        <p>俞昕泽是在辗转回国、几乎一无所有的时候遇见中汉风（Mr.Zhong）的。那时候他在一家小食品厂做临时搬运工，因为做事踏实、又肯动脑子，被当时正好来厂里谈供应链合作的 Zhong 注意到。Zhong 没有像别人那样追问他身上的伤和那段空白的履历，只问了他一句话：「你还想不想重新开始？」</p>
+                        <p>那之后，俞昕泽从最基层的仓储做起，一步一步做到采购、供应链协调，最后被 Zhong 提拔为总经理。他很少谈自己的过去，但他要求公司所有对外招聘信息必须写明「不收取任何中介费用、不扣押证件、不派往高风险地区」——因为他知道，很多人的人生，就是从一条不起眼的招聘广告开始被毁掉的。</p>
+                        <div class="highlight-line">「我没办法让那些把我卖掉的人付出代价，但我可以让至少一部分人，不要变成下一个我。」——俞昕泽</div>
+                        <p style="text-align:center;color:#d4a853;font-size:0.85rem;letter-spacing:1px;">如果你或你身边的人正在被胁迫、被扣押证件、被限制人身自由，请立即联系当地警方或中国驻当地使领馆。你不是一个人。</p>
+                    `
+                }
+            }
+        };
+
+        // Testimonials data
+        const testimonialsData = {
+            zh: [
+                { stars: '★★★★★', text: '在洛杉矶的华人超市第一次买到这款卤蛋，一口下去瞬间回到国内！五香味浓郁，蛋白弹牙，蛋黄绵密，已经回购无数次了。强烈推荐！',
+                    author: 'David Chen', role: '洛杉矶 · 华人商超采购经理' },
+                { stars: '★★★★★', text: '作为健身爱好者，高蛋白便携零食一直是我的刚需。这款卤蛋完美契合我的需求，无酒精配方、独立真空包装，训练后来一颗太满足了。',
+                    author: 'Ahmed Al-Rashid', role: '迪拜 · 健身教练 & 营养顾问' },
+                { stars: '★★★★★', text: '我们拉面连锁店一直采购贵司的商用溏心卤蛋，品质稳定、配送及时，客户反馈非常好。专业的B2B服务团队让人省心。',
+                    author: '田中健太', role: '东京 · 连锁拉面品牌运营总监' },
+                { stars: '★★★★☆', text: '新加坡这边气候湿热，对进口食品要求极高。贵司的锁鲜包装技术确实过硬，卤蛋到港后依然保持最佳口感，值得信赖的合作伙伴。',
+                    author: 'Melissa Lim', role: '新加坡 · 食品进口贸易商' },
+                { stars: '★★★★★', text: '川味麻辣卤蛋在巴黎简直卖疯了！法国人对这种复合香料口感非常着迷，是我们超市零食区的销冠单品。', author: 'Jean-Pierre Dubois',
+                    role: '巴黎 · 亚洲食品超市店主' },
+                { stars: '★★★★★', text: '从询盘到下单再到收货，整个流程非常顺畅。客服响应迅速，物流追踪透明，是我合作过最专业的中式食品供应商。',
+                    author: 'Maria Gonzalez', role: '马德里 · 跨境电商采购负责人' },
+            ],
+            en: [
+                { stars: '★★★★★',
+                    text: 'I bought this marinated egg for the first time at a Chinese supermarket in Los Angeles, and one bite instantly took me back to China! Rich five-spice flavor, springy egg white, creamy yolk — I\'ve repurchased countless times. Highly recommended!',
+                    author: 'David Chen', role: 'Los Angeles · Chinese Supermarket Procurement Manager' },
+                { stars: '★★★★★',
+                    text: 'As a fitness enthusiast, high-protein portable snacks are a must for me. This marinated egg perfectly meets my needs — alcohol-free formula, individually vacuum-sealed. So satisfying after a workout!',
+                    author: 'Ahmed Al-Rashid', role: 'Dubai · Fitness Coach & Nutrition Consultant' },
+                { stars: '★★★★★',
+                    text: 'Our ramen chain has been sourcing your commercial soft-boiled marinated eggs. Consistent quality, timely delivery, and excellent customer feedback. Your professional B2B service team gives us peace of mind.',
+                    author: 'Tanaka Kenta', role: 'Tokyo · Chain Ramen Brand Operations Director' },
+                { stars: '★★★★☆',
+                    text: 'Singapore\'s hot and humid climate places extremely high demands on imported food. Your lock-fresh packaging technology is truly robust — the marinated eggs arrive at the port still maintaining optimal taste. A trustworthy partner.',
+                    author: 'Melissa Lim', role: 'Singapore · Food Import Trader' },
+                { stars: '★★★★★',
+                    text: 'The Sichuan spicy marinated eggs are selling like crazy in Paris! The French are absolutely fascinated by this complex spiced flavor — it\'s our supermarket\'s top-selling snack item.',
+                    author: 'Jean-Pierre Dubois', role: 'Paris · Asian Food Supermarket Owner' },
+                { stars: '★★★★★',
+                    text: 'From inquiry to order to delivery, the entire process is incredibly smooth. Customer service responds quickly and logistics tracking is transparent. The most professional Chinese food supplier I\'ve ever worked with.',
+                    author: 'Maria Gonzalez', role: 'Madrid · Cross-border E-commerce Procurement Lead' },
+            ]
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'zh';
+        let currentLeader = 'chairman';
+
+        function setLanguage(lang, animate = true) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+
+            if (lang === 'en') {
+                document.body.classList.add('lang-en');
+            } else {
+                document.body.classList.remove('lang-en');
+            }
+
+            document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+
+            const langSwitch = document.getElementById('langSwitch');
+            const langOptZh = document.getElementById('langOptZh');
+            const langOptEn = document.getElementById('langOptEn');
+
+            if (lang === 'en') {
+                langSwitch.classList.add('en-active');
+                langOptZh.classList.remove('active');
+                langOptEn.classList.add('active');
+            } else {
+                langSwitch.classList.remove('en-active');
+                langOptZh.classList.add('active');
+                langOptEn.classList.remove('active');
+            }
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang] && i18n[lang][key]) {
+                    if (key === 'hero.title' || key === 'about.heading') {
+                        el.innerHTML = i18n[lang][key];
+                    } else if (key === 'about.desc' || key === 'contact.networkDesc') {
+                        el.innerHTML = i18n[lang][key];
+                    } else {
+                        el.textContent = i18n[lang][key];
+                    }
+                }
+            });
+
+            renderTestimonials();
+            renderLeader(currentLeader);
+
+            document.title = lang === 'zh' ?
+                '国际卤蛋贸易有限公司 - International Marinated Egg Trading Co., Ltd' :
+                'International Marinated Egg Trading Co., Ltd - 国际卤蛋贸易有限公司';
+        }
+
+        function toggleLanguage() {
+            const newLang = currentLang === 'zh' ? 'en' : 'zh';
+            setLanguage(newLang);
+        }
+
+        function renderTestimonials() {
+            const grid = document.getElementById('testimonialsGrid');
+            const data = testimonialsData[currentLang] || testimonialsData['zh'];
+            grid.innerHTML = data.map((t, i) => `
+                    <div class="testimonial-card reveal reveal-delay-${(i % 4) + 1}">
+                        <div class="testimonial-stars">${t.stars}</div>
+                        <p class="testimonial-text">${t.text}</p>
+                        <p class="testimonial-author">${t.author}</p>
+                        <p class="testimonial-role">${t.role}</p>
+                    </div>
+                `).join('');
+            setTimeout(() => {
+                document.querySelectorAll('#testimonialsGrid .reveal').forEach(el => {
+                    if (!el.classList.contains('visible')) {
+                        const rect = el.getBoundingClientRect();
+                        if (rect.top < window.innerHeight - 40) {
+                            el.classList.add('visible');
+                        }
+                        revealObserver.observe(el);
+                    }
+                });
+            }, 100);
+        }
+
+        // ============ LEADER RENDER ============
+        function renderLeader(which) {
+            currentLeader = which;
+            const data = leadersData[which];
+            if (!data) return;
+
+            document.querySelectorAll('.leader-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.leader === which);
+            });
+
+            let payload;
+            if (data.isBilingual) {
+                payload = (currentLang === 'en' && data.en) ? data.en : data.zh;
+            } else {
+                payload = data.zh;
+            }
+
+            const html = `
+                <div class="leader-avatar-big">
+                    <img src="${data.avatar}" alt="${payload.name}"
+                         loading="lazy" decoding="async"
+                         onerror="this.style.display='none'">
+                </div>
+                <h2>👔 ${payload.name}</h2>
+                <p class="modal-title-sub">${payload.title}</p>
+                <div class="bio-content">${payload.bio}</div>
+            `;
+            document.getElementById('leaderContent').innerHTML = html;
+
+            const dialog = document.querySelector('#leaderModal .modal-dialog');
+            if (dialog) dialog.scrollTop = 0;
+        }
+
+        function switchLeader(which) {
+            renderLeader(which);
+        }
+
+        // ============ DEPARTMENTS RENDER ============
+        function renderDepartments() {
+            const grid = document.getElementById('departmentsGrid');
+            if (!grid) return;
+            grid.innerHTML = departmentsData.map((d, i) => `
+                <div class="dept-card reveal reveal-delay-${(i % 4) + 1}" onclick="openDeptModal('${d.id}')">
+                    <div class="dept-avatar">
+                        <img src="${d.photo}" alt="${d.name}"
+                             loading="lazy" decoding="async"
+                             onerror="this.style.display='none'">
+                    </div>
+                    <div class="dept-icon">${d.icon}</div>
+                    <div class="dept-name">${d.name}</div>
+                    <div class="dept-desc">${d.desc}</div>
+                    <div class="dept-meta">
+                        <div class="dept-meta-row"><strong>负责人</strong><span>${d.manager}</span></div>
+                        <div class="dept-meta-row"><strong>联系</strong><span>${d.contact}</span></div>
+                        <div class="dept-meta-row"><strong>人数</strong><span>${d.staff}</span></div>
+                        <div class="dept-meta-row"><strong>成立</strong><span>${d.founded}</span></div>
+                    </div>
+                </div>
+            `).join('');
+
+            setTimeout(() => {
+                document.querySelectorAll('#departmentsGrid .reveal').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight - 40) {
+                        el.classList.add('visible');
+                    }
+                    revealObserver.observe(el);
+                });
+            }, 100);
+        }
+
+        function openDeptModal(id) {
+            const d = departmentsData.find(x => x.id === id);
+            if (!d) return;
+            const html = `
+                <div class="dept-modal-avatar">
+                    <img src="${d.photo}" alt="${d.name}"
+                         loading="lazy" decoding="async"
+                         onerror="this.style.display='none'">
+                </div>
+                <div class="dept-modal-icon">${d.icon}</div>
+                <h2>${d.name}</h2>
+                <p class="modal-title-sub">${d.desc}</p>
+                <div class="dept-modal-info">
+                    <div class="dept-modal-info-item">
+                        <div class="label">负责人</div>
+                        <div class="value">${d.manager}</div>
+                    </div>
+                    <div class="dept-modal-info-item">
+                        <div class="label">联系方式</div>
+                        <div class="value">${d.contact}</div>
+                    </div>
+                    <div class="dept-modal-info-item">
+                        <div class="label">部门人数</div>
+                        <div class="value">${d.staff}</div>
+                    </div>
+                    <div class="dept-modal-info-item">
+                        <div class="label">成立年份</div>
+                        <div class="value">${d.founded}</div>
+                    </div>
+                </div>
+                <div class="dept-modal-section-title">部门简介</div>
+                <div class="dept-modal-desc"><p>${d.intro}</p></div>
+                <div class="dept-modal-section-title">主要职责</div>
+                <ul class="dept-modal-duties">
+                    ${d.duties.map(x => `<li>${x}</li>`).join('')}
+                </ul>
+            `;
+            document.getElementById('deptModalContent').innerHTML = html;
+            const modal = document.getElementById('deptModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            modal.querySelector('.modal-dialog').scrollTop = 0;
+        }
+
+        function closeDeptModal() {
+            document.getElementById('deptModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.getElementById('deptModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDeptModal();
+        });
+
+        // ============ NAVBAR SCROLL EFFECT ============
+        const navbar = document.getElementById('navbar');
+
+        let navTicking = false;
+        function updateNavbar() {
+            if (navTicking) return;
+            navTicking = true;
+            requestAnimationFrame(() => {
+                const scrollY = window.scrollY;
+                if (scrollY > 60) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                navTicking = false;
+            });
+        }
+        window.addEventListener('scroll', updateNavbar, { passive: true });
+        updateNavbar();
+
+        // ============ MOBILE MENU ============
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            mobileToggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('open')) {
+                    navLinks.classList.remove('open');
+                    mobileToggle.textContent = '☰';
+                }
+            });
+        });
+
+        // ============ LEADER MODAL ============
+        const leaderModal = document.getElementById('leaderModal');
+
+        function openLeaderModal() {
+            renderLeader('chairman');
+            leaderModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+                mobileToggle.textContent = '☰';
+            }
+        }
+
+        function closeLeaderModal() {
+            leaderModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        leaderModal.addEventListener('click', function(e) {
+            if (e.target === leaderModal) closeLeaderModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && leaderModal.classList.contains('active')) closeLeaderModal();
+            if (e.key === 'Escape' && document.getElementById('deptModal').classList.contains('active')) closeDeptModal();
+        });
+
+        // ============ REVEAL ON SCROLL ============
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        function observeRevealElements() {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (!el.classList.contains('visible')) {
+                    revealObserver.observe(el);
+                }
+            });
+        }
+        observeRevealElements();
+
+        // ============ PARTICLES ============
+        const particlesContainer = document.getElementById('particlesContainer');
+        const particleCount = 12;
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 6 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 6) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // ============ SMOOTH SCROLL ============
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ============ INITIALIZATION ============
+        document.addEventListener('DOMContentLoaded', () => {
+            setLanguage(currentLang, false);
+            renderLeader('chairman');
+            renderDepartments();
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight - 40 && !el.classList.contains('visible')) {
+                        el.classList.add('visible');
+                        revealObserver.unobserve(el);
+                    }
+                });
+            }, 150);
+        });
+
+        console.log('🥚 国际卤蛋贸易有限公司 - 官网已就绪 | International Marinated Egg Trading Co., Ltd');
+        console.log('   Language: ' + currentLang.toUpperCase() + ' | 切换语言点击导航栏按钮');
+        console.log('   Power By CloudFlare | QianWen | ChatGPT | DeepSeek');
+    </script>
+</body>
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/zhf by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:28 GMT -->
+</html>

@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/注册 by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:23 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>创建账户</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
+/* ===== Registration Form ===== */
+.register-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    padding: 40px 36px;
+    width: 420px;
+    max-width: 90vw;
+    position: relative;
+}
+
+.register-card h1 {
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 6px;
+    color: #1a1a1a;
+}
+
+.register-card .subtitle {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.required-star { color: #e74c3c; margin-left: 2px; }
+
+.gender-options {
+    display: flex;
+    gap: 10px;
+}
+
+.gender-btn {
+    flex: 1;
+    padding: 10px 0;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    color: #666;
+}
+
+.gender-btn.active {
+    border-color: #4a90d9;
+    color: #4a90d9;
+    background: rgba(74,144,217,0.06);
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-wrapper input:focus {
+    border-color: #4a90d9;
+}
+
+.input-wrapper input.error {
+    border-color: #e74c3c;
+}
+
+.input-wrapper input.success {
+    border-color: #27ae60;
+}
+
+.helper-text {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+.helper-text.error { color: #e74c3c; }
+.helper-text.success { color: #27ae60; }
+
+.check-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #27ae60;
+    font-size: 18px;
+    display: none;
+}
+
+.check-icon.show { display: block; }
+
+.register-btn {
+    width: 100%;
+    padding: 13px;
+    background: #4a90d9;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.register-btn:hover { background: #3a7bc8; }
+
+/* ===== Modal Overlay ===== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px 36px;
+    width: 440px;
+    max-width: 90vw;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+    animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.92) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-box h2 {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 14px;
+    color: #1a1a1a;
+}
+
+.modal-box .modal-desc {
+    font-size: 15px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.modal-box .modal-desc strong {
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.modal-input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.modal-input-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+.modal-input-row input:focus { border-color: #4a90d9; }
+
+.modal-input-row .confirm-btn {
+    padding: 10px 24px;
+    background: #4a90d9;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.modal-input-row .confirm-btn:hover { background: #3a7bc8; }
+
+.modal-feedback {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 13px;
+    min-height: 18px;
+}
+
+.modal-feedback.error { color: #e74c3c; }
+.modal-feedback.success { color: #27ae60; }
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-size: 22px;
+    color: #ccc;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* ===== Slider CAPTCHA ===== */
+.slider-container {
+    margin: 20px 0;
+}
+
+.slider-track {
+    height: 42px;
+    background: #f0f0f0;
+    border-radius: 21px;
+    position: relative;
+    overflow: hidden;
+}
+
+.slider-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a90d9, #5ba0e9);
+    border-radius: 21px 0 0 21px;
+    width: 0;
+    transition: width 0.1s;
+}
+
+.slider-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 42px;
+    height: 42px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #999;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 2;
+}
+
+.slider-handle:active { cursor: grabbing; }
+
+.slider-text {
+    text-align: center;
+    font-size: 13px;
+    color: #aaa;
+    margin-top: 10px;
+}
+
+/* ===== Soul Contract ===== */
+.contract-list {
+    list-style: none;
+    margin: 16px 0;
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 0 4px;
+}
+
+.contract-list li {
+    font-size: 13.5px;
+    color: #555;
+    line-height: 1.8;
+    padding: 6px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.contract-list li:last-child { border-bottom: none; }
+
+.contract-list li .num {
+    font-weight: 700;
+    color: #4a90d9;
+    margin-right: 6px;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+}
+
+.checkbox-row input {
+    width: 18px;
+    height: 18px;
+    accent-color: #4a90d9;
+}
+
+.full-btn {
+    width: 100%;
+    padding: 12px;
+    background: #4a90d9;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.full-btn:hover { background: #3a7bc8; }
+.full-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+/* ===== Progress Bar ===== */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a90d9, #5ba0e9);
+    border-radius: 4px;
+    width: 0;
+    transition: width 0.3s;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+}
+
+/* ===== Color Swatch ===== */
+.color-swatch {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    vertical-align: middle;
+    margin: 0 2px;
+}
+
+.colorblind-link {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #e74c3c;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.colorblind-link:hover { text-decoration: underline; }
+
+/* ===== Yes/No Buttons ===== */
+.yesno-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.yesno-btn {
+    padding: 10px 40px;
+    border: none;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.yesno-btn.yes {
+    background: #4a90d9;
+    color: #fff;
+}
+
+.yesno-btn.no {
+    background: #fff;
+    color: #666;
+    border: 1.5px solid #ddd;
+}
+
+.genshin-text {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 14px;
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+/* ===== Toast ===== */
+.toast {
+    display: none;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 36px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+    z-index: 2000;
+    align-items: center;
+    gap: 12px;
+    animation: toastIn 0.3s ease;
+}
+
+.toast.show { display: flex; }
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translate(-50%, -40%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.toast .toast-icon {
+    width: 28px;
+    height: 28px;
+    background: #27ae60;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.toast .toast-text {
+    font-size: 17px;
+    font-weight: 600;
+    color: #27ae60;
+}
+
+/* ===== Code Display ===== */
+.code-display {
+    text-align: center;
+    margin: 16px 0;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: #1a1a1a;
+    font-family: "Courier New", monospace;
+}
+
+/* ===== Pi Digits ===== */
+.pi-hint {
+    text-align: center;
+    font-size: 15px;
+    color: #888;
+    margin-bottom: 12px;
+}
+
+.pi-hint strong { color: #4a90d9; }
+
+/* ===== Equation Display ===== */
+.equation-display {
+    text-align: center;
+    margin: 10px 0 20px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+/* ===== Memory Number ===== */
+.memory-number {
+    text-align: center;
+    margin: 16px 0;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #1a1a1a;
+    font-family: "Courier New", monospace;
+}
+
+.memory-timer {
+    text-align: center;
+    font-size: 13px;
+    color: #e74c3c;
+}
+
+/* ===== Step Counter ===== */
+.step-indicator {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    font-size: 12px;
+    color: #ccc;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Registration Form ===== -->
+<div class="register-card" id="registerCard">
+    <h1>创建账户</h1>
+    <p class="subtitle">填写以下信息完成注册</p>
+
+    <div class="form-group">
+        <label>性别<span class="required-star">*</span></label>
+        <div class="gender-options">
+            <div class="gender-btn" data-gender="男" onclick="selectGender(this)">男</div>
+            <div class="gender-btn" data-gender="女" onclick="selectGender(this)">女</div>
+            <div class="gender-btn active" data-gender="其他" onclick="selectGender(this)">其他</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>用户名<span class="required-star">*</span></label>
+        <div class="input-wrapper">
+            <input type="text" id="username" placeholder="请输入用户名" oninput="checkUsername()">
+            <span class="check-icon" id="usernameCheck">✓</span>
+        </div>
+        <div class="helper-text" id="usernameHelper">请输入4-20位字符的用户名</div>
+    </div>
+
+    <div class="form-group">
+        <label>密码<span class="required-star">*</span></label>
+        <div class="input-wrapper">
+            <input type="password" id="password" placeholder="请输入密码" oninput="checkPassword()">
+            <span class="check-icon" id="passwordCheck">✓</span>
+        </div>
+        <div class="helper-text" id="passwordHelper">请输入6位以上包含大小写字母、数字及特殊字符的密码</div>
+    </div>
+
+    <div class="form-group">
+        <label>手机号<span class="required-star">*</span></label>
+        <div class="input-wrapper">
+            <input type="text" id="phone" placeholder="请输入11位手机号" maxlength="11" oninput="checkPhone()">
+            <span class="check-icon" id="phoneCheck">✓</span>
+        </div>
+        <div class="helper-text" id="phoneHelper">请输入有效的手机号码</div>
+    </div>
+
+    <button class="register-btn" onclick="startRegistration()">注册</button>
+</div>
+
+<!-- ===== Modal Container ===== -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox" style="position:relative;">
+        <span class="step-indicator" id="stepIndicator"></span>
+        <span class="modal-close" onclick="closeModal()">×</span>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast">
+    <div class="toast-icon">✓</div>
+    <div class="toast-text">注册成功</div>
+</div>
+
+<script>
+// ===== Gender Selection =====
+function selectGender(el) {
+    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+}
+
+// ===== Form Validation =====
+function checkUsername() {
+    const val = document.getElementById('username').value;
+    const helper = document.getElementById('usernameHelper');
+    const check = document.getElementById('usernameCheck');
+    const input = document.getElementById('username');
+    if (val.length >= 4 && val.length <= 20) {
+        input.classList.remove('error'); input.classList.add('success');
+        check.classList.add('show');
+        helper.className = 'helper-text success';
+        helper.textContent = '该用户名可用';
+    } else {
+        input.classList.remove('success'); input.classList.remove('error');
+        check.classList.remove('show');
+        helper.className = 'helper-text';
+        helper.textContent = '请输入4-20位字符的用户名';
+    }
+}
+
+function checkPassword() {
+    const val = document.getElementById('password').value;
+    const helper = document.getElementById('passwordHelper');
+    const check = document.getElementById('passwordCheck');
+    const input = document.getElementById('password');
+    const hasUpper = /[A-Z]/.test(val);
+    const hasLower = /[a-z]/.test(val);
+    const hasNum = /[0-9]/.test(val);
+    const hasSpecial = /[^A-Za-z0-9]/.test(val);
+    if (val.length >= 6 && hasUpper && hasLower && hasNum && hasSpecial) {
+        input.classList.remove('error'); input.classList.add('success');
+        check.classList.add('show');
+        helper.className = 'helper-text success';
+        helper.textContent = '该密码可用';
+    } else {
+        input.classList.remove('success');
+        check.classList.remove('show');
+        helper.className = 'helper-text';
+        helper.textContent = '请输入6位以上包含大小写字母、数字及特殊字符的密码';
+    }
+}
+
+function checkPhone() {
+    const val = document.getElementById('phone').value;
+    const helper = document.getElementById('phoneHelper');
+    const check = document.getElementById('phoneCheck');
+    const input = document.getElementById('phone');
+    if (val.length === 11) {
+        // Absurd: phone number segment is always "occupied"
+        input.classList.remove('success'); input.classList.add('error');
+        check.classList.remove('show');
+        helper.className = 'helper-text error';
+        helper.textContent = '该手机号段已被占用';
+    } else {
+        input.classList.remove('error'); input.classList.remove('success');
+        check.classList.remove('show');
+        helper.className = 'helper-text';
+        helper.textContent = '请输入有效的手机号码';
+    }
+}
+
+// ===== Registration Flow =====
+const steps = [
+    { title: '安全验证', type: 'slider' },
+    { title: '用户调研', type: 'genshin' },
+    { title: '灵魂绑定契约', type: 'contract' },
+    { title: '设置双因素认证 (2FA)', type: 'set2fa' },
+    { title: '验证双因素认证', type: 'verify2fa' },
+    { title: '安全提问', type: 'math1' },
+    { title: '系统审核中', type: 'progress' },
+    { title: '声纹验证', type: 'voiceprint' },
+    { title: '色彩辨别', type: 'color' },
+    { title: '记忆力测试', type: 'memory' },
+    { title: '时间验证', type: 'time' },
+    { title: '解方程', type: 'equation' },
+    { title: '圆周率记忆', type: 'pi' },
+    { title: '质数挑战', type: 'prime' },
+    { title: '简单算术', type: 'arithmetic' },
+    { title: '终极放弃', type: 'giveup' },
+];
+
+let currentStep = 0;
+let twoFACode = '';
+
+function startRegistration() {
+    currentStep = 0;
+    showStep();
+}
+
+function showStep() {
+    if (currentStep >= steps.length) {
+        showSuccess();
+        return;
+    }
+    const step = steps[currentStep];
+    document.getElementById('stepIndicator').textContent = `验证 ${currentStep + 1} / ${steps.length}`;
+    const content = document.getElementById('modalContent');
+    
+    switch(step.type) {
+        case 'slider': content.innerHTML = sliderHTML(); initSlider(); break;
+        case 'genshin': content.innerHTML = genshinHTML(); break;
+        case 'contract': content.innerHTML = contractHTML(); break;
+        case 'set2fa': content.innerHTML = set2faHTML(); break;
+        case 'verify2fa': content.innerHTML = verify2faHTML(); break;
+        case 'math1': content.innerHTML = math1HTML(); break;
+        case 'progress': content.innerHTML = progressHTML(); initProgress(); break;
+        case 'voiceprint': content.innerHTML = voiceprintHTML(); break;
+        case 'color': content.innerHTML = colorHTML(); break;
+        case 'memory': content.innerHTML = memoryHTML(); initMemory(); break;
+        case 'time': content.innerHTML = timeHTML(); break;
+        case 'equation': content.innerHTML = equationHTML(); break;
+        case 'pi': content.innerHTML = piHTML(); break;
+        case 'prime': content.innerHTML = primeHTML(); break;
+        case 'arithmetic': content.innerHTML = arithmeticHTML(); break;
+        case 'giveup': content.innerHTML = giveupHTML(); break;
+    }
+    
+    document.getElementById('modalOverlay').classList.add('show');
+}
+
+function nextStep() {
+    currentStep++;
+    setTimeout(() => {
+        document.getElementById('modalOverlay').classList.remove('show');
+        setTimeout(() => showStep(), 200);
+    }, 400);
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function showSuccess() {
+    document.getElementById('modalOverlay').classList.remove('show');
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2500);
+}
+
+// ===== Step HTML Generators =====
+
+function sliderHTML() {
+    return `
+        <h2>安全验证</h2>
+        <p class="modal-desc">请拖动滑块完成人机验证</p>
+        <div class="slider-container">
+            <div class="slider-track" id="sliderTrack">
+                <div class="slider-fill" id="sliderFill"></div>
+                <div class="slider-handle" id="sliderHandle">▶</div>
+            </div>
+            <div class="slider-text" id="sliderText">向右拖动滑块</div>
+        </div>
+    `;
+}
+
+function initSlider() {
+    const handle = document.getElementById('sliderHandle');
+    const fill = document.getElementById('sliderFill');
+    const track = document.getElementById('sliderTrack');
+    const text = document.getElementById('sliderText');
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+
+    handle.addEventListener('mousedown', startDrag);
+    handle.addEventListener('touchstart', startDrag);
+
+    function startDrag(e) {
+        isDragging = true;
+        startX = e.clientX || e.touches[0].clientX;
+        currentX = parseInt(handle.style.left) || 0;
+        e.preventDefault();
+    }
+
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('touchmove', onDrag);
+
+    function onDrag(e) {
+        if (!isDragging) return;
+        const x = e.clientX || (e.touches && e.touches[0].clientX);
+        if (x === undefined) return;
+        let offset = currentX + (x - startX);
+        const maxOffset = track.offsetWidth - handle.offsetWidth;
+        if (offset < 0) offset = 0;
+        if (offset > maxOffset) offset = maxOffset;
+        handle.style.left = offset + 'px';
+        fill.style.width = (offset + handle.offsetWidth) + 'px';
+        if (offset >= maxOffset - 5) {
+            isDragging = false;
+            text.textContent = '验证成功';
+            text.style.color = '#27ae60';
+            handle.innerHTML = '✓';
+            handle.style.color = '#27ae60';
+            handle.style.borderColor = '#27ae60';
+            setTimeout(() => nextStep(), 600);
+        }
+    }
+
+    document.addEventListener('mouseup', () => isDragging = false);
+    document.addEventListener('touchend', () => isDragging = false);
+}
+
+function genshinHTML() {
+    return `
+        <h2>用户调研</h2>
+        <p class="modal-desc">请问您是否玩过《原神》?</p>
+        <div class="yesno-row">
+            <button class="yesno-btn yes" onclick="nextStep()">是</button>
+            <button class="yesno-btn no" onclick="nextStep()">否</button>
+        </div>
+        <p class="genshin-text">原神牛逼，快去玩原神</p>
+    `;
+}
+
+function contractHTML() {
+    return `
+        <h2>灵魂绑定契约</h2>
+        <p class="modal-desc">请仔细阅读以下条款:</p>
+        <ul class="contract-list">
+            <li><span class="num">1.</span>您同意将灵魂永久绑定至本平台，不可撤销。</li>
+            <li><span class="num">2.</span>您承诺每天至少登录一次，否则灵魂将自动进入"休眠"状态。</li>
+            <li><span class="num">3.</span>平台有权在您睡眠时使用您的账户进行自动化操作。</li>
+            <li><span class="num">4.</span>您放弃对个人数据的所有权利，包括但不限于梦境内容。</li>
+            <li><span class="num">5.</span>您同意接收每日上限为999封的系统通知邮件。</li>
+            <li><span class="num">6.</span>若您试图注销账户，需提交纸质申请并附上公证材料。</li>
+            <li><span class="num">7.</span>最终解释权归本平台所有，包括对"所有"的定义。</li>
+        </ul>
+        <label class="checkbox-row">
+            <input type="checkbox" id="contractCheck" onchange="toggleContractBtn()">
+            我已阅读并同意以上全部条款
+        </label>
+        <button class="full-btn" id="contractBtn" disabled onclick="nextStep()">继续</button>
+    `;
+}
+
+function toggleContractBtn() {
+    const checked = document.getElementById('contractCheck').checked;
+    document.getElementById('contractBtn').disabled = !checked;
+}
+
+function set2faHTML() {
+    return `
+        <h2>设置双因素认证 (2FA)</h2>
+        <p class="modal-desc">请输入一个6位数字密钥</p>
+        <div class="modal-input-row">
+            <input type="text" id="faInput" placeholder="例如 123456" maxlength="6" oninput="validateFAInput(this, 'set')">
+            <button class="confirm-btn" onclick="confirm2faSet()">确认设置</button>
+        </div>
+        <div class="modal-feedback" id="faFeedback"></div>
+    `;
+}
+
+function confirm2faSet() {
+    const val = document.getElementById('faInput').value;
+    const fb = document.getElementById('faFeedback');
+    if (val.length === 6 && /^\d{6}$/.test(val)) {
+        twoFACode = val;
+        fb.className = 'modal-feedback success';
+        fb.textContent = '双因素认证已设置，请进行验证';
+        setTimeout(() => nextStep(), 800);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '请输入6位数字';
+    }
+}
+
+function verify2faHTML() {
+    // Absurd: the code is shown directly on screen
+    return `
+        <h2>验证双因素认证</h2>
+        <p class="modal-desc">当前动态码为：<strong style="font-size:24px;letter-spacing:4px;color:#4a90d9">${twoFACode || '888888'}</strong></p>
+        <div class="modal-input-row">
+            <input type="text" id="faVerifyInput" placeholder="输入动态码" maxlength="6" oninput="validateFAInput(this, 'verify')">
+            <button class="confirm-btn" onclick="confirm2faVerify()">验证</button>
+        </div>
+        <div class="modal-feedback" id="faVerifyFeedback"></div>
+    `;
+}
+
+function confirm2faVerify() {
+    const val = document.getElementById('faVerifyInput').value;
+    const fb = document.getElementById('faVerifyFeedback');
+    const code = twoFACode || '888888';
+    if (val === code) {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '验证成功';
+        setTimeout(() => nextStep(), 600);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '动态码不正确，请重新输入';
+    }
+}
+
+function math1HTML() {
+    return `
+        <h2>安全提问</h2>
+        <div class="equation-display">1 + 1 = ?</div>
+        <div class="modal-input-row">
+            <input type="text" id="math1Input" placeholder="请输入答案" oninput="validateMath1(this)">
+            <button class="confirm-btn" onclick="confirmMath1()">提交</button>
+        </div>
+        <div class="modal-feedback" id="math1Feedback"></div>
+    `;
+}
+
+function confirmMath1() {
+    const val = document.getElementById('math1Input').value.trim();
+    const fb = document.getElementById('math1Feedback');
+    if (val === '2') {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '回答正确';
+        setTimeout(() => nextStep(), 500);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '答案错误，请再想想';
+    }
+}
+
+function progressHTML() {
+    return `
+        <h2>系统审核中</h2>
+        <p class="modal-desc">正在审核您的注册信息...</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="progress-text" id="progressText">0%</p>
+    `;
+}
+
+function initProgress() {
+    let progress = 0;
+    const fill = document.getElementById('progressFill');
+    const text = document.getElementById('progressText');
+    const timer = setInterval(() => {
+        progress += Math.random() * 15 + 5;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(timer);
+            text.textContent = '审核完成';
+            text.style.color = '#27ae60';
+            setTimeout(() => nextStep(), 600);
+        }
+        fill.style.width = progress + '%';
+        text.textContent = Math.floor(progress) + '%';
+    }, 200);
+}
+
+function voiceprintHTML() {
+    return `
+        <h2>声纹验证</h2>
+        <p class="modal-desc">请朗读以下句子：</p>
+        <p class="modal-desc"><strong style="font-size:18px">我的声音是我唯一的身份证明</strong></p>
+        <div class="modal-input-row">
+            <input type="text" id="voiceInput" placeholder="请逐字输入上方句子" oninput="validateVoice(this)">
+            <button class="confirm-btn" onclick="confirmVoice()">确认</button>
+        </div>
+        <div class="modal-feedback" id="voiceFeedback"></div>
+    `;
+}
+
+function confirmVoice() {
+    const val = document.getElementById('voiceInput').value.trim();
+    const fb = document.getElementById('voiceFeedback');
+    if (val === '我的声音是我唯一的身份证明') {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '声纹验证通过';
+        setTimeout(() => nextStep(), 600);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '输入不一致，请逐字输入';
+    }
+}
+
+function colorHTML() {
+    const colors = [
+        { name: '红色', hex: '#FF4444' },
+        { name: '蓝色', hex: '#4444FF' },
+        { name: '绿色', hex: '#22AA22' },
+        { name: '黄色', hex: '#FFDD00' },
+        { name: '紫色', hex: '#8800CC' },
+    ];
+    const pick = colors[Math.floor(Math.random() * colors.length)];
+    return `
+        <h2>色彩辨别</h2>
+        <p class="modal-desc">当前显示的背景颜色为 <span class="color-swatch" style="background:${pick.hex}"></span> ，请输入颜色名称</p>
+        <div class="modal-input-row">
+            <input type="text" id="colorInput" placeholder="例如：红色" data-answer="${pick.name}">
+            <button class="confirm-btn" onclick="confirmColor()">确认</button>
+        </div>
+        <a class="colorblind-link" onclick="nextStep()">您是色盲吗？</a>
+        <div class="modal-feedback" id="colorFeedback"></div>
+    `;
+}
+
+function confirmColor() {
+    const val = document.getElementById('colorInput').value.trim();
+    const answer = document.getElementById('colorInput').dataset.answer;
+    const fb = document.getElementById('colorFeedback');
+    if (val === answer) {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '回答正确';
+        setTimeout(() => nextStep(), 500);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '颜色名称不正确';
+    }
+}
+
+function memoryHTML() {
+    const num = Math.floor(Math.random() * 900000000 + 100000000).toString();
+    return `
+        <h2>记忆力测试</h2>
+        <p class="modal-desc">记住这串数字：<strong id="memNum" data-num="${num}" style="font-size:28px;letter-spacing:4px;font-family:Courier New,monospace;color:#1a1a1a">${num}</strong></p>
+        <p class="memory-timer" id="memTimer">3秒后消失</p>
+        <div class="modal-input-row" id="memInputRow" style="display:none">
+            <input type="text" id="memInput" placeholder="请输入刚才的数字" data-answer="${num}">
+            <button class="confirm-btn" onclick="confirmMemory()">确认</button>
+        </div>
+        <div class="modal-feedback" id="memFeedback"></div>
+    `;
+}
+
+function initMemory() {
+    let count = 3;
+    const timer = setInterval(() => {
+        count--;
+        const timerEl = document.getElementById('memTimer');
+        if (count > 0) {
+            timerEl.textContent = count + '秒后消失';
+        } else {
+            clearInterval(timer);
+            document.getElementById('memNum').textContent = '???';
+            timerEl.textContent = '请输入刚才看到的数字';
+            document.getElementById('memInputRow').style.display = 'flex';
+        }
+    }, 1000);
+}
+
+function confirmMemory() {
+    const val = document.getElementById('memInput').value.trim();
+    const answer = document.getElementById('memInput').dataset.answer;
+    const fb = document.getElementById('memFeedback');
+    if (val === answer) {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '记忆力不错';
+        setTimeout(() => nextStep(), 500);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '数字不正确，正确答案是：' + answer;
+    }
+}
+
+function timeHTML() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const fixedTime = hh + ':' + mm;
+    return `
+        <h2>时间验证</h2>
+        <p class="modal-desc">现在几点？（格式HH:MM）</p>
+        <p class="modal-desc"><strong>提示：系统时间固定为${fixedTime}</strong></p>
+        <div class="modal-input-row">
+            <input type="text" id="timeInput" placeholder="例如 ${fixedTime}" data-answer="${fixedTime}">
+            <button class="confirm-btn" onclick="confirmTime()">确认</button>
+        </div>
+        <div class="modal-feedback" id="timeFeedback"></div>
+    `;
+}
+
+function confirmTime() {
+    const val = document.getElementById('timeInput').value.trim();
+    const answer = document.getElementById('timeInput').dataset.answer;
+    const fb = document.getElementById('timeFeedback');
+    if (val === answer) {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '时间正确';
+        setTimeout(() => nextStep(), 500);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '时间不正确，请看提示';
+    }
+}
+
+function equationHTML() {
+    // x² - 5x + 6 = 0, solutions: x=2 or x=3
+    return `
+        <h2>解方程</h2>
+        <p class="modal-desc">请解方程：<strong>x² - 5x + 6 = 0</strong>，输入x的一个解</p>
+        <div class="modal-input-row">
+            <input type="text" id="eqInput" placeholder="输入数字">
+            <button class="confirm-btn" onclick="confirmEquation()">确认</button>
+        </div>
+        <div class="modal-feedback" id="eqFeedback"></div>
+    `;
+}
+
+function confirmEquation() {
+    const val = document.getElementById('eqInput').value.trim();
+    const fb = document.getElementById('eqFeedback');
+    if (val === '2' || val === '3') {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '回答正确';
+        setTimeout(() => nextStep(), 500);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '答案不正确，提示：因式分解 (x-2)(x-3)=0';
+    }
+}
+
+function piHTML() {
+    // π = 3.14159265... positions 5-8: 9265
+    return `
+        <h2>圆周率记忆</h2>
+        <p class="pi-hint">π ≈ <strong>3.14159265...</strong></p>
+        <p class="modal-desc">请输入圆周率π小数点后第5到第8位</p>
+        <div class="modal-input-row">
+            <input type="text" id="piInput" placeholder="输入4位数字" maxlength="4" data-answer="9265">
+            <button class="confirm-btn" onclick="confirmPi()">确认</button>
+        </div>
+        <div class="modal-feedback" id="piFeedback"></div>
+    `;
+}
+
+function confirmPi() {
+    const val = document.getElementById('piInput').value.trim();
+    const fb = document.getElementById('piFeedback');
+    if (val === '9265') {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '回答正确';
+        setTimeout(() => nextStep(), 500);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '不正确，π小数点后第5到8位是 9265';
+    }
+}
+
+function primeHTML() {
+    return `
+        <h2>质数挑战</h2>
+        <p class="modal-desc">请输入1到100之间的一个质数</p>
+        <div class="modal-input-row">
+            <input type="text" id="primeInput" placeholder="例如 2">
+            <button class="confirm-btn" onclick="confirmPrime()">确认</button>
+        </div>
+        <div class="modal-feedback" id="primeFeedback"></div>
+    `;
+}
+
+function confirmPrime() {
+    const val = parseInt(document.getElementById('primeInput').value.trim());
+    const fb = document.getElementById('primeFeedback');
+    const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
+    if (primes.includes(val)) {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '回答正确';
+        setTimeout(() => nextStep(), 500);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '这不是质数，质数有：2, 3, 5, 7, 11...';
+    }
+}
+
+function arithmeticHTML() {
+    return `
+        <h2>简单算术</h2>
+        <p class="modal-desc">小明有3个苹果，小红给了小明5个苹果，请问小明现在有几个苹果？</p>
+        <div class="modal-input-row">
+            <input type="text" id="arithInput" placeholder="输入数字" value="5">
+            <button class="confirm-btn" onclick="confirmArithmetic()">确认</button>
+        </div>
+        <div class="modal-feedback error" id="arithFeedback">小学数学不及格</div>
+    `;
+}
+
+function confirmArithmetic() {
+    const val = document.getElementById('arithInput').value.trim();
+    const fb = document.getElementById('arithFeedback');
+    if (val === '8') {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '回答正确';
+        setTimeout(() => nextStep(), 500);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '小学数学不及格';
+    }
+}
+
+function giveupHTML() {
+    return `
+        <h2>终极放弃</h2>
+        <p class="modal-desc">最后一次机会，请输入<strong>'放弃'</strong>来通过</p>
+        <div class="modal-input-row">
+            <input type="text" id="giveupInput" placeholder="输入">
+            <button class="confirm-btn" onclick="confirmGiveup()">确认</button>
+        </div>
+        <div class="modal-feedback" id="giveupFeedback"></div>
+    `;
+}
+
+function confirmGiveup() {
+    const val = document.getElementById('giveupInput').value.trim();
+    const fb = document.getElementById('giveupFeedback');
+    if (val === '放弃') {
+        fb.className = 'modal-feedback success';
+        fb.textContent = '恭喜，您已放弃';
+        setTimeout(() => nextStep(), 600);
+    } else {
+        fb.className = 'modal-feedback error';
+        fb.textContent = '请输入"放弃"两个字';
+    }
+}
+
+// ===== Input Filters =====
+function validateFAInput(input, type) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+</script>
+
+</body>
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/注册 by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:23 GMT -->
+</html>

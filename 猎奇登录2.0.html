@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/猎奇登录2.0 by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:23 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账户注册 · 逆天验证系统</title>
+    <style>
+        :root {
+            --primary: #1a5fdc; --primary-hover: #1550b8; --danger: #d93025; --success: #188038;
+            --text: #202124; --text-secondary: #5f6368; --border: #dadce0; --bg: #f0f4f9;
+            --bg-white: #ffffff; --shadow-lg: 0 10px 25px rgba(0,0,0,0.1); --shadow-xl: 0 20px 50px rgba(0,0,0,0.15);
+            --radius: 8px; --radius-xl: 16px; --font: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:var(--font); background:var(--bg); min-height:100vh;
+            display:flex; align-items:center; justify-content:center; padding:20px;
+            -webkit-font-smoothing:antialiased; user-select:none; overflow-x:hidden;
+        }
+        body::before,body::after{content:'';position:fixed;pointer-events:none;z-index:0;
+            background:radial-gradient(ellipse at center,rgba(26,95,220,0.04) 0%,transparent 70%);
+        }
+        body::before{top:-30%;left:-10%;width:60%;height:70%;}
+        body::after{bottom:-25%;right:-8%;width:55%;height:65%;}
+
+        .register-card{
+            position:relative; z-index:1; background:var(--bg-white); border-radius:var(--radius-xl);
+            box-shadow:var(--shadow-lg); padding:40px 36px; width:100%; max-width:460px;
+            border:1px solid var(--border);
+        }
+        .card-header{text-align:center; margin-bottom:28px;}
+        .card-header h1{font-size:22px; font-weight:600; color:var(--text);}
+        .card-header p{font-size:13px; color:var(--text-secondary); margin-top:4px;}
+
+        .form-group{margin-bottom:18px;}
+        .form-group label{display:block; font-size:13px; font-weight:500; color:var(--text); margin-bottom:6px;}
+        .required{color:var(--danger); margin-left:2px;}
+
+        .gender-options{display:flex; gap:10px;}
+        .gender-option{flex:1; position:relative;}
+        .gender-option input[type="radio"]{position:absolute; opacity:0; pointer-events:none;}
+        .gender-option label{
+            display:flex; align-items:center; justify-content:center; gap:6px;
+            padding:10px 14px; border:1.5px solid var(--border); border-radius:var(--radius);
+            cursor:pointer; font-size:13px; font-weight:500; color:var(--text);
+            background:var(--bg-white); transition:all 0.2s;
+        }
+        .gender-option label:hover{border-color:#b0b8c1; background:#fafbfc;}
+        .gender-option input:checked+label{
+            border-color:var(--primary); background:#e8f0fe; color:var(--primary);
+            box-shadow:0 0 0 3px rgba(26,95,220,0.08); font-weight:600;
+        }
+        .gender-error-message{font-size:11px; color:var(--danger); margin-top:6px; display:none;}
+        .gender-error-message.show{display:block;}
+
+        .input-wrapper{position:relative;}
+        .input-wrapper input{
+            width:100%; padding:11px 14px; padding-right:40px; font-size:14px;
+            font-family:var(--font); border:1.5px solid var(--border); border-radius:var(--radius);
+            background:var(--bg-white); color:var(--text); transition:all 0.2s; outline:none;
+        }
+        .input-wrapper input:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(26,95,220,0.1);}
+        .input-wrapper input.input-error{border-color:var(--danger); background:#fffafa;}
+        .input-wrapper input.input-success{border-color:var(--success); background:#fafffb;}
+        .validation-icon{
+            position:absolute; right:12px; top:50%; transform:translateY(-50%);
+            width:20px; height:20px; display:none; align-items:center; justify-content:center;
+            font-size:14px; font-weight:700; pointer-events:none;
+        }
+        .validation-icon.show{display:flex;}
+        .validation-icon.error{color:var(--danger);}
+        .validation-icon.success{color:var(--success);}
+        .validation-message{font-size:11px; margin-top:5px; min-height:16px; font-weight:500;}
+        .validation-message.error{color:var(--danger);}
+        .validation-message.success{color:var(--success);}
+        .validation-message.info{color:#80868b;}
+
+        .btn-register{
+            width:100%; padding:12px 20px; font-size:15px; font-weight:600;
+            color:#fff; background:var(--primary); border:none; border-radius:var(--radius);
+            cursor:pointer; letter-spacing:0.3px; transition:all 0.2s;
+            box-shadow:0 2px 6px rgba(26,95,220,0.35); margin-top:6px;
+        }
+        .btn-register:hover{background:var(--primary-hover); transform:translateY(-1px);}
+        .btn-register:active{transform:translateY(0); background:#1348a0;}
+
+        .overlay{
+            position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55);
+            z-index:8000; display:none; align-items:center; justify-content:center;
+            backdrop-filter:blur(2px);
+        }
+        .overlay.active{display:flex;}
+
+        .captcha-modal,.intercept-modal,.generic-modal{
+            background:#fff; border-radius:var(--radius-xl); padding:28px 26px 22px;
+            box-shadow:var(--shadow-xl); width:90vw; max-width:460px; position:fixed;
+            z-index:8001; border:1px solid #e8eaed; text-align:center; display:none;
+        }
+        .captcha-title,.modal-title{font-size:15px; font-weight:600; color:var(--text); margin-bottom:6px;}
+        .captcha-subtitle,.modal-subtitle{font-size:12px; color:var(--text-secondary); margin-bottom:16px;}
+        .captcha-close,.modal-close{
+            position:absolute; top:14px; right:16px; width:30px; height:30px; border-radius:50%;
+            border:none; background:#f1f3f4; cursor:pointer; font-size:16px; color:#5f6368;
+            display:flex; align-items:center; justify-content:center; z-index:2;
+        }
+
+        .captcha-track{
+            background:#e8eaed; border-radius:25px; height:48px; position:relative;
+            margin:0 4px; border:1.5px solid #dadce0;
+        }
+        .captcha-track-fill{
+            height:100%; background:linear-gradient(135deg,#1a5fdc,#3b82f6);
+            border-radius:25px; width:0%; position:absolute; left:0; top:0; z-index:1;
+        }
+        .captcha-thumb{
+            position:absolute; top:2px; left:-2px; width:38px; height:42px; background:#fff;
+            border-radius:50%; cursor:grab; z-index:3; box-shadow:0 2px 8px rgba(0,0,0,0.18);
+            display:flex; align-items:center; justify-content:center; touch-action:none;
+        }
+        .captcha-thumb:active{cursor:grabbing;}
+        .captcha-thumb svg{width:18px; height:18px; fill:#5f6368;}
+        .captcha-thumb.captcha-done svg{fill:var(--success);}
+        .captcha-label{
+            position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+            font-size:12px; color:#80868b; z-index:2;
+        }
+        .captcha-label.hidden{opacity:0;}
+        .captcha-success-text{
+            display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+            font-size:13px; color:#fff; font-weight:600; z-index:4;
+        }
+        .captcha-success-text.show{display:block;}
+
+        .modal-body{
+            font-size:13px; color:var(--text); margin-bottom:16px; line-height:1.6;
+            text-align:left; max-height:200px; overflow-y:auto; padding-bottom:12px;
+            border-bottom:1px solid #e8eaed;
+        }
+        .contract-check{
+            display:flex; align-items:center; justify-content:center; gap:8px;
+            margin-bottom:14px; font-size:13px;
+        }
+        .contract-check input{width:16px; height:16px;}
+        .modal-actions{display:flex; gap:10px; justify-content:center;}
+        .btn{
+            padding:10px 22px; border-radius:20px; border:1.5px solid var(--border);
+            background:#fff; font-weight:600; font-size:13px; cursor:pointer; transition:all 0.2s;
+            font-family:var(--font);
+        }
+        .btn-primary{background:var(--primary); color:#fff; border-color:var(--primary);}
+        .btn-primary:hover{background:var(--primary-hover);}
+        .btn-primary:disabled{background:#b0b8c1; border-color:#b0b8c1; cursor:not-allowed;}
+        .btn-secondary{color:var(--text);}
+        .btn-secondary:hover{background:#f1f3f4;}
+        .feedback-text{font-size:12px; margin-top:10px; color:var(--danger); min-height:18px;}
+
+        .liveness-bar{width:100%; height:12px; background:#e8eaed; border-radius:10px; margin:15px 0; overflow:hidden;}
+        .liveness-fill{height:100%; width:0%; background:linear-gradient(90deg,#1a5fdc,#3b82f6); border-radius:10px;}
+
+        .surrender-flag{
+            position:fixed; bottom:30px; right:30px; z-index:10000; cursor:pointer;
+            display:none; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+        }
+        .surrender-flag.visible{display:block;}
+        .flag-tooltip{
+            position:absolute; top:-38px; left:50%; transform:translateX(-50%);
+            background:#333; color:#fff; font-size:11px; padding:6px 12px;
+            border-radius:14px; white-space:nowrap; opacity:0; transition:opacity 0.2s;
+        }
+        .surrender-flag:hover .flag-tooltip{opacity:1;}
+
+        .success-toast{
+            position:fixed; top:30px; left:50%; transform:translateX(-50%) translateY(-120px);
+            background:#fff; border-radius:12px; padding:14px 22px; box-shadow:var(--shadow-xl);
+            z-index:20000; display:flex; align-items:center; gap:10px; font-weight:600;
+            font-size:14px; color:var(--success); border:1px solid #c6e6c6;
+            transition:transform 0.5s;
+        }
+        .success-toast.show{transform:translateX(-50%) translateY(0);}
+        .toast-icon{width:26px; height:26px; background:var(--success); border-radius:50%;
+            display:flex; align-items:center; justify-content:center;}
+        .toast-icon svg{width:15px; height:15px; fill:#fff;}
+
+        @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+    </style>
+</head>
+<body>
+<div class="register-card">
+    <div class="card-header"><h1>创建账户</h1><p>填写以下信息完成注册</p></div>
+    <form autocomplete="off">
+        <div class="form-group"><label>性别 <span class="required">*</span></label>
+            <div class="gender-options">
+                <div class="gender-option"><input type="radio" name="gender" value="male" id="genderMale"><label for="genderMale">男</label></div>
+                <div class="gender-option"><input type="radio" name="gender" value="female" id="genderFemale"><label for="genderFemale">女</label></div>
+                <div class="gender-option"><input type="radio" name="gender" value="other" id="genderOther"><label for="genderOther">其他</label></div>
+            </div>
+            <div class="gender-error-message" id="genderErrorMessage">该性别已被占用，请选择其他</div>
+        </div>
+        <div class="form-group"><label for="username">用户名 <span class="required">*</span></label>
+            <div class="input-wrapper"><input type="text" id="username" placeholder="请输入用户名" maxlength="30"><span class="validation-icon error" id="usernameIconErr">✗</span><span class="validation-icon success" id="usernameIconOk">✓</span></div>
+            <div class="validation-message info" id="usernameMessage">请输入4-30位字符的用户名</div>
+        </div>
+        <div class="form-group"><label for="password">密码 <span class="required">*</span></label>
+            <div class="input-wrapper"><input type="password" id="password" placeholder="请输入密码" maxlength="40"><span class="validation-icon error" id="passwordIconErr">✗</span><span class="validation-icon success" id="passwordIconOk">✓</span></div>
+            <div class="validation-message info" id="passwordMessage">请输入8位以上包含大小写字母、数字及特殊字符的密码</div>
+        </div>
+        <div class="form-group"><label for="phone">手机号 <span class="required">*</span></label>
+            <div class="input-wrapper"><input type="tel" id="phone" placeholder="请输入11位手机号" maxlength="11"><span class="validation-icon error" id="phoneIconErr">✗</span><span class="validation-icon success" id="phoneIconOk">✓</span></div>
+            <div class="validation-message info" id="phoneMessage">请输入有效的手机号码</div>
+        </div>
+        <button type="button" class="btn-register" id="btnRegister">注 册</button>
+    </form>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- 滑块验证 -->
+<div class="captcha-modal" id="captchaModal">
+    <button class="captcha-close" id="captchaClose">&times;</button>
+    <div class="captcha-title">安全验证</div><div class="captcha-subtitle">请拖动滑块完成人机验证</div>
+    <div class="captcha-track" id="captchaTrack"><div class="captcha-track-fill" id="captchaTrackFill"></div><span class="captcha-label" id="captchaLabel">拖动滑块验证</span><span class="captcha-success-text" id="captchaSuccessText">验证通过</span>
+        <div class="captcha-thumb" id="captchaThumb"><svg viewBox="0 0 24 24"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5z"/></svg></div>
+    </div>
+</div>
+
+<!-- 通用弹窗 -->
+<div class="generic-modal" id="genericModal">
+    <div class="modal-title" id="genericTitle"></div>
+    <div class="modal-body" id="genericBody"></div>
+    <input type="text" class="confirm-input" id="genericInput" placeholder="">
+    <button class="btn btn-primary" id="genericBtn">确认</button>
+    <div class="feedback-text" id="genericFeedback"></div>
+</div>
+
+<!-- 其他特定弹窗 -->
+<div class="intercept-modal" id="huaweiModal"><div class="modal-title">设备检测</div><div class="modal-body" id="huaweiMessage"></div><div class="modal-actions"><button class="btn btn-primary" id="huaweiOk">确定</button></div></div>
+<div class="intercept-modal" id="genshinModal"><div class="modal-title">用户调研</div><div class="modal-body">请问您是否玩过《原神》？</div><div class="modal-actions"><button class="btn btn-primary" id="genshinYes">是</button><button class="btn btn-secondary" id="genshinNo">否</button></div><div class="feedback-text" id="genshinFeedback"></div></div>
+<div class="intercept-modal" id="blueArchiveModal"><div class="modal-title">用户调研</div><div class="modal-body">请问您是否玩过《蔚蓝档案》？</div><div class="modal-actions"><button class="btn btn-primary" id="blueYes">是</button><button class="btn btn-secondary" id="blueNo">否</button></div><div class="feedback-text" id="blueFeedback"></div></div>
+<div class="intercept-modal" id="soulContractModal"><div class="modal-title">灵魂绑定契约</div><div class="modal-body"><p><strong>请仔细阅读以下条款：</strong></p><p>1. 您同意将灵魂永久绑定至本平台，不可撤销。</p><p>2. 您承诺每天至少登录一次，否则灵魂将自动进入“休眠”状态。</p><p>3. 平台有权在您睡眠时使用您的账户进行自动化操作。</p><p>4. 您放弃对个人数据的所有权利，包括但不限于梦境内容。</p><p>5. 您同意接收每日上限为999封的系统通知邮件。</p><p>6. 若您试图注销账户，需提交纸质申请并附上公证材料。</p><p>7. 最终解释权归本平台所有，包括对“所有”的定义。</p></div><div class="contract-check"><input type="checkbox" id="contractAgree"><label for="contractAgree">我已阅读并同意以上全部条款</label></div><button class="btn btn-primary" id="contractConfirm" disabled>继 续</button><div class="feedback-text" id="contractFeedback"></div></div>
+<div class="intercept-modal" id="livenessModal"><div class="modal-title">活体检测</div><div class="modal-subtitle">请面对屏幕，跟随指示操作</div><div class="modal-body" style="text-align:center;"><p id="livenessInstruction">点击下方按钮开始检测</p><div class="liveness-bar"><div class="liveness-fill" id="livenessFill"></div></div><button class="btn btn-primary" id="livenessStartBtn">开始人脸识别</button></div><div class="feedback-text" id="livenessFeedback"></div></div>
+<div class="intercept-modal" id="twoFASetupModal"><div class="modal-title">设置双因素认证 (2FA)</div><div class="modal-subtitle">请输入一个6位数字密钥</div><input type="text" class="confirm-input" id="twoFAKeyInput" placeholder="例如 123456" maxlength="6"><button class="btn btn-primary" id="twoFAConfirmBtn">确认设置</button><div class="feedback-text" id="twoFAFeedback"></div></div>
+<div class="intercept-modal" id="twoFAVerifyModal"><div class="modal-title">验证双因素认证</div><div class="modal-subtitle">当前动态码为：<strong id="dynamicCodeDisplay">------</strong></div><input type="text" class="confirm-input" id="dynamicCodeInput" placeholder="请输入动态码" maxlength="6"><button class="btn btn-primary" id="verifyDynamicBtn">验证</button><div class="feedback-text" id="verifyDynamicFeedback"></div></div>
+<div class="intercept-modal" id="emailVerifyModal"><div class="modal-title">邮箱验证</div><div class="modal-subtitle">验证码已发送，测试码：888888</div><input type="text" class="confirm-input" id="emailCodeInput" placeholder="请输入邮箱验证码"><button class="btn btn-primary" id="verifyEmailBtn">验证</button><div class="feedback-text" id="emailFeedback"></div></div>
+<div class="intercept-modal" id="securityQuestionModal"><div class="modal-title">安全提问</div><div class="modal-body">1 + 1 = ?</div><input type="text" class="confirm-input" id="securityAnswerInput" placeholder="请输入答案"><button class="btn btn-primary" id="securityAnswerBtn">提交</button><div class="feedback-text" id="securityFeedback"></div></div>
+<div class="intercept-modal" id="auditModal"><div class="modal-title">系统审核中</div><div class="modal-body" style="text-align:center;"><p>正在审核您的注册信息...</p><div class="liveness-bar"><div class="liveness-fill" id="auditFill"></div></div></div></div>
+<div class="intercept-modal" id="finalConfirmModal"><div class="modal-title">最终确认</div><div class="modal-subtitle">请输入以下文字：</div><p style="font-weight:700;color:#d93025;margin-bottom:10px;">我自愿放弃所有权利并永远忠诚于本平台</p><input type="text" class="confirm-input" id="confirmInput" placeholder="请逐字输入"><button class="btn btn-primary" id="finalConfirmBtn" disabled>确认注册</button><div class="feedback-text" id="finalFeedback"></div></div>
+
+<div class="surrender-flag" id="surrenderFlag"><span class="flag-tooltip">点击此处投降</span><svg width="48" height="60" viewBox="0 0 48 60"><line x1="10" y1="6" x2="10" y2="56" stroke="#4a4a4a" stroke-width="3.5"/><circle cx="10" cy="56" r="3.5" fill="#4a4a4a"/><circle cx="10" cy="6" r="3" fill="#4a4a4a"/><polygon points="12,10 42,22 12,36" fill="#e53935" stroke="#c62828" stroke-width="1.5"/></svg></div>
+<div class="success-toast" id="successToast"><div class="toast-icon"><svg viewBox="0 0 24 24"><polygon points="9 16.2 4.8 12 3.4 13.4 9 19 21 7 19.6 5.6"/></svg></div><span>注册成功，欢迎加入</span></div>
+
+<script>
+    (function() {
+        // DOM 元素
+        const btnRegister = document.getElementById('btnRegister');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const phoneInput = document.getElementById('phone');
+        const usernameMessage = document.getElementById('usernameMessage');
+        const passwordMessage = document.getElementById('passwordMessage');
+        const phoneMessage = document.getElementById('phoneMessage');
+        const usernameIconErr = document.getElementById('usernameIconErr');
+        const usernameIconOk = document.getElementById('usernameIconOk');
+        const passwordIconErr = document.getElementById('passwordIconErr');
+        const passwordIconOk = document.getElementById('passwordIconOk');
+        const phoneIconErr = document.getElementById('phoneIconErr');
+        const phoneIconOk = document.getElementById('phoneIconOk');
+        const overlay = document.getElementById('overlay');
+        const captchaModal = document.getElementById('captchaModal');
+        const captchaTrack = document.getElementById('captchaTrack');
+        const captchaTrackFill = document.getElementById('captchaTrackFill');
+        const captchaThumb = document.getElementById('captchaThumb');
+        const captchaLabel = document.getElementById('captchaLabel');
+        const captchaSuccessText = document.getElementById('captchaSuccessText');
+        const captchaClose = document.getElementById('captchaClose');
+        const genericModal = document.getElementById('genericModal');
+        const genericTitle = document.getElementById('genericTitle');
+        const genericBody = document.getElementById('genericBody');
+        const genericInput = document.getElementById('genericInput');
+        const genericBtn = document.getElementById('genericBtn');
+        const genericFeedback = document.getElementById('genericFeedback');
+        const huaweiModal = document.getElementById('huaweiModal');
+        const huaweiMessage = document.getElementById('huaweiMessage');
+        const huaweiOk = document.getElementById('huaweiOk');
+        const genshinModal = document.getElementById('genshinModal');
+        const genshinYes = document.getElementById('genshinYes');
+        const genshinNo = document.getElementById('genshinNo');
+        const genshinFeedback = document.getElementById('genshinFeedback');
+        const blueArchiveModal = document.getElementById('blueArchiveModal');
+        const blueYes = document.getElementById('blueYes');
+        const blueNo = document.getElementById('blueNo');
+        const blueFeedback = document.getElementById('blueFeedback');
+        const soulContractModal = document.getElementById('soulContractModal');
+        const contractAgree = document.getElementById('contractAgree');
+        const contractConfirm = document.getElementById('contractConfirm');
+        const contractFeedback = document.getElementById('contractFeedback');
+        const livenessModal = document.getElementById('livenessModal');
+        const livenessStartBtn = document.getElementById('livenessStartBtn');
+        const livenessFill = document.getElementById('livenessFill');
+        const livenessInstruction = document.getElementById('livenessInstruction');
+        const twoFASetupModal = document.getElementById('twoFASetupModal');
+        const twoFAKeyInput = document.getElementById('twoFAKeyInput');
+        const twoFAConfirmBtn = document.getElementById('twoFAConfirmBtn');
+        const twoFAFeedback = document.getElementById('twoFAFeedback');
+        const twoFAVerifyModal = document.getElementById('twoFAVerifyModal');
+        const dynamicCodeDisplay = document.getElementById('dynamicCodeDisplay');
+        const dynamicCodeInput = document.getElementById('dynamicCodeInput');
+        const verifyDynamicBtn = document.getElementById('verifyDynamicBtn');
+        const verifyDynamicFeedback = document.getElementById('verifyDynamicFeedback');
+        const emailVerifyModal = document.getElementById('emailVerifyModal');
+        const emailCodeInput = document.getElementById('emailCodeInput');
+        const verifyEmailBtn = document.getElementById('verifyEmailBtn');
+        const emailFeedback = document.getElementById('emailFeedback');
+        const securityQuestionModal = document.getElementById('securityQuestionModal');
+        const securityAnswerInput = document.getElementById('securityAnswerInput');
+        const securityAnswerBtn = document.getElementById('securityAnswerBtn');
+        const securityFeedback = document.getElementById('securityFeedback');
+        const auditModal = document.getElementById('auditModal');
+        const auditFill = document.getElementById('auditFill');
+        const finalConfirmModal = document.getElementById('finalConfirmModal');
+        const confirmInput = document.getElementById('confirmInput');
+        const finalConfirmBtn = document.getElementById('finalConfirmBtn');
+        const finalFeedback = document.getElementById('finalFeedback');
+        const surrenderFlag = document.getElementById('surrenderFlag');
+        const successToast = document.getElementById('successToast');
+        const genderOther = document.getElementById('genderOther');
+        const genderMale = document.getElementById('genderMale');
+        const genderFemale = document.getElementById('genderFemale');
+        const genderErrorMessage = document.getElementById('genderErrorMessage');
+
+        // 状态变量
+        let captchaVerified = false, contractSigned = false, livenessPassed = false;
+        let twoFAKey = null, twoFASetupDone = false, twoFAVerified = false;
+        let emailVerified = false, securityPassed = false, auditPassed = false;
+        let genshinAnswered = false, blueArchiveAnswered = false;
+        let btnChasing = false, chaseAnimationId = null, mouseX = 0, mouseY = 0, btnChaseStarted = false;
+        let isDragging = false, dragStartX = 0, thumbStartLeft = 0, captchaPassed = false;
+        let trackWidth = 0, thumbWidth = 0, maxThumbLeft = 0;
+        let captchaModalInitialLeft = 0, captchaModalInitialTop = 0;
+        let currentExtraStep = 0;
+
+        // 额外的逆天步骤（已移除重力感应和数学难题）
+        const extraSteps = [
+            { title: "声纹验证", body: "请朗读以下句子：<br><b>我的声音是我唯一的身份证明</b>", placeholder: "请逐字输入上方句子", answer: "我的声音是我唯一的身份证明", error: "声纹不匹配，请重新朗读" },
+            { title: "色彩辨别", body: "当前显示的背景颜色为<span style='display:inline-block;width:20px;height:20px;background:#ff6347;vertical-align:middle;margin:0 5px;'></span>，请输入颜色名称", placeholder: "例如：红色", answer: "红色", error: "您是色盲吗？" },
+            { title: "记忆力测试", body: "记住这串数字：<b>173842905</b>（3秒后消失）", placeholder: "请输入刚才的数字", answer: "173842905", error: "记忆失败" },
+            { title: "暗号验证", body: "请输入进入系统的暗号", placeholder: "暗号是？", answer: "芝麻开门", error: "暗号错误" },
+            { title: "宠物验证", body: "你有宠物吗？如果有，请输入宠物名字；如果没有，请输入“我没有”", placeholder: "输入答案", answer: "我没有", error: "请认真回答" },
+            { title: "星座验证", body: "请输入你的星座（提示：蛇夫座）", placeholder: "星座名称", answer: "蛇夫座", error: "星座不符" },
+            { title: "时间验证", body: "现在几点？（格式HH:MM）<br><b>提示：系统时间固定为14:29</b>", placeholder: "例如 14:29", answer: "14:29", error: "时间错误" },
+            { title: "信仰考验", body: "你相信光吗？", placeholder: "回答", answer: "我相信", error: "你不相信？再试一次！",
+                nextStep: { title: "隐藏环节", body: "恭喜你发现了隐藏环节！请输入：<b>迪迦</b>", placeholder: "输入", answer: "迪迦", error: "不对，是迪迦！" } },
+            { title: "解方程", body: "请解方程：x² - 5x + 6 = 0，输入x的一个解", placeholder: "输入数字", answer: (val) => val === "2" || val === "3", error: "数学不过关啊" },
+            { title: "圆周率记忆", body: "请输入圆周率π小数点后第5到第8位", placeholder: "例如 9265", answer: "9265", error: "π都记不住？" },
+            { title: "用户名倒序", body: "请输入你的用户名 <b>" + (usernameInput?.value || "") + "</b> 的倒序", placeholder: "输入倒序字符串", answer: () => usernameInput.value.trim().split('').reverse().join(''), error: "倒序都不会？" },
+            { title: "朗读确认", body: "请大声朗读并输入：<b>本平台是最棒的</b>", placeholder: "输入", answer: "本平台是最棒的", error: "请认真朗读" },
+            { title: "哲学问题", body: "先有鸡还是先有蛋？输入你的答案", placeholder: "随便答", answer: () => true, error: "" },
+            { title: "质数挑战", body: "请输入1到100之间的一个质数", placeholder: "例如 2", answer: (val) => ["2","3","5","7","11","13","17","19","23","29","31","37","41","43","47","53","59","61","67","71","73","79","83","89","97"].includes(val), error: "这不是质数" },
+            { title: "机器人检测", body: "请确认你不是机器人：输入 '我不是机器人'", placeholder: "输入", answer: "我不是机器人", error: "你真的是机器人？" },
+            { title: "简单算术", body: "小明有3个苹果，小红给了小明5个苹果，请问小明现在有几个苹果？", placeholder: "数字", answer: "8", error: "小学数学不及格" },
+            { title: "反向操作", body: "请输入 '退出' 来继续注册", placeholder: "输入", answer: "退出", error: "我说退出！" },
+            { title: "年份确认", body: "请输入当前年份", placeholder: "2026", answer: "2026", error: "今年是哪年？" },
+            { title: "终极放弃", body: "最后一次机会，请输入 '放弃' 来通过", placeholder: "输入", answer: "放弃", error: "放弃吧！" }
+        ];
+
+        // 基础验证函数
+        const usernameBlacklist = new Set(['admin','administrator','root','user','test','guest','manager','supervisor','moderator','support','info','john','mary','david','alex','mike','jane','sarah','demo','default','master','owner','staff','sales','marketing','help','service','contact','office','webmaster','postmaster','hostmaster','noreply','user1','user2','test1','test2','admin1','admin2','hello','world','foo','bar','baz','sample','chen','wang','li','zhang','liu','yang','zhao','abc','abcd','abcde','qwerty','asdfgh']);
+        const phoneBlacklistPrefixes = ['130','131','132','133','134','135','136','137','138','139','150','151','152','153','155','156','157','158','159','170','176','177','178','180','181','182','183','184','185','186','187','188','189','198','199'];
+        function isLeopardPhone(p){return /(\d)\1{3,}/.test(p);}
+        function isSimpleUsername(u){const l=u.toLowerCase().trim();if(usernameBlacklist.has(l)||l.length<4)return true;if(/^[a-zA-Z]+$/.test(l)&&l.length<7)return true;if(/^[0-9]+$/.test(l))return true;if(/^[a-zA-Z]+[0-9]{1,3}$/.test(l)&&l.length<7)return true;for(const p of['user','test','admin','guest','name','pass'])if(l.includes(p)&&l.length<8)return true;return false;}
+        function isComplexPassword(pw){if(pw.length<8)return false;if([/[A-Z]/,/[a-z]/,/[0-9]/,/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/].filter(r=>r.test(pw)).length<3)return false;if(/(.)\1\1/.test(pw))return false;return true;}
+        function isPhoneBlocked(phone){if(phone.length!==11||!/^\d{11}$/.test(phone))return'invalid';if(isLeopardPhone(phone))return'ok';if(phoneBlacklistPrefixes.includes(phone.substring(0,3)))return'blocked';if(/^1(44|47|49|40|41|42|43|45|46|48)/.test(phone))return'blocked';return'ok';}
+        function validateField(input,icons,msgEl,validator,emptyMsg,errorMsg,successMsg){const val=input.value.trim();icons.forEach(i=>i.classList.remove('show'));input.classList.remove('input-error','input-success');if(!val){msgEl.textContent=emptyMsg;msgEl.className='validation-message info';return false;}const r=validator(val);if(r===false||r==='blocked'||r==='invalid'){msgEl.textContent=errorMsg;msgEl.className='validation-message error';input.classList.add('input-error');if(icons[0])icons[0].classList.add('show');return false;}msgEl.textContent=successMsg;msgEl.className='validation-message success';input.classList.add('input-success');if(icons[1])icons[1].classList.add('show');return true;}
+        function validateUsernameFull(){return validateField(usernameInput,[usernameIconErr,usernameIconOk],usernameMessage,v=>!isSimpleUsername(v),'请输入4-30位字符的用户名','该用户名已被占用','该用户名可用');}
+        function validatePasswordFull(){return validateField(passwordInput,[passwordIconErr,passwordIconOk],passwordMessage,isComplexPassword,'请输入8位以上包含大小写字母、数字及特殊字符的密码','该密码已被占用','该密码可用');}
+        function validatePhoneFull(){return validateField(phoneInput,[phoneIconErr,phoneIconOk],phoneMessage,v=>isPhoneBlocked(v)==='ok','请输入11位手机号码','该手机号段已被占用','该手机号可用');}
+        function getSelectedGender(){if(genderOther.checked)return'other';if(genderMale.checked)return'male';if(genderFemale.checked)return'female';return null;}
+        function isFormValid(){if(getSelectedGender()!=='other'){genderErrorMessage.classList.add('show');return false;}genderErrorMessage.classList.remove('show');return validateUsernameFull()&&validatePasswordFull()&&validatePhoneFull();}
+        usernameInput.addEventListener('input',validateUsernameFull);passwordInput.addEventListener('input',validatePasswordFull);phoneInput.addEventListener('input',validatePhoneFull);
+        genderMale.addEventListener('change',()=>{if(genderMale.checked){genderErrorMessage.classList.add('show');setTimeout(()=>{genderMale.checked=false;genderOther.checked=false;},100);}});
+        genderFemale.addEventListener('change',()=>{if(genderFemale.checked){genderErrorMessage.classList.add('show');setTimeout(()=>{genderFemale.checked=false;genderOther.checked=false;},100);}});
+        genderOther.addEventListener('change',()=>{genderErrorMessage.classList.remove('show');});
+
+        function showModal(modal){modal.style.display='block';overlay.classList.add('active');}
+        function hideAllModals(){captchaModal.style.display='none';huaweiModal.style.display='none';genshinModal.style.display='none';blueArchiveModal.style.display='none';soulContractModal.style.display='none';livenessModal.style.display='none';twoFASetupModal.style.display='none';twoFAVerifyModal.style.display='none';emailVerifyModal.style.display='none';securityQuestionModal.style.display='none';auditModal.style.display='none';finalConfirmModal.style.display='none';genericModal.style.display='none';overlay.classList.remove('active');}
+        function showToast(msg,isSuccess=true){const span=successToast.querySelector('span');if(span)span.textContent=msg;successToast.style.color=isSuccess?'var(--success)':'var(--danger)';successToast.classList.add('show');setTimeout(()=>successToast.classList.remove('show'),3500);}
+
+        // 滑块逻辑
+        function positionCaptchaModal(){const w=captchaModal.offsetWidth,h=captchaModal.offsetHeight;captchaModalInitialLeft=(window.innerWidth-w)/2;captchaModalInitialTop=(window.innerHeight-h)/2;captchaModal.style.left=captchaModalInitialLeft+'px';captchaModal.style.top=captchaModalInitialTop+'px';}
+        function showCaptcha(){captchaModal.style.display='block';overlay.classList.add('active');positionCaptchaModal();resetCaptcha();requestAnimationFrame(()=>{trackWidth=captchaTrack.clientWidth;thumbWidth=captchaThumb.offsetWidth;maxThumbLeft=trackWidth-thumbWidth;captchaThumb.style.left='-2px';captchaTrackFill.style.width='0%';});}
+        function hideCaptcha(){captchaModal.style.display='none';overlay.classList.remove('active');}
+        function resetCaptcha(){captchaPassed=false;captchaThumb.style.left='-2px';captchaTrackFill.style.width='0%';captchaLabel.classList.remove('hidden');captchaSuccessText.classList.remove('show');captchaThumb.classList.remove('captcha-done');captchaTrackFill.style.background='linear-gradient(135deg,#1a5fdc,#3b82f6)';captchaModal.style.left=captchaModalInitialLeft+'px';captchaModal.style.top=captchaModalInitialTop+'px';}
+        function updateCaptchaProgress(tl){const cl=Math.max(-2,Math.min(maxThumbLeft,tl));captchaThumb.style.left=cl+'px';const p=Math.max(0,Math.min(1,(cl+2)/(maxThumbLeft+2)));captchaTrackFill.style.width=(p*100)+'%';captchaModal.style.left=(captchaModalInitialLeft+p*Math.min(340,window.innerWidth*0.2))+'px';captchaModal.style.top=(captchaModalInitialTop-Math.sin(p*Math.PI)*18)+'px';if(p>=0.98&&!captchaPassed){captchaPassed=true;onCaptchaComplete();}}
+        function onCaptchaComplete(){captchaThumb.classList.add('captcha-done');captchaLabel.classList.add('hidden');captchaSuccessText.classList.add('show');captchaTrackFill.style.background='linear-gradient(135deg,#188038,#34a853)';captchaTrackFill.style.width='100%';captchaThumb.style.left=maxThumbLeft+'px';captchaModal.style.left=(captchaModalInitialLeft+Math.min(340,window.innerWidth*0.2))+'px';captchaVerified=true;setTimeout(hideCaptcha,1200);}
+        function getEventX(e){return e.touches?.length>0?e.touches[0].clientX:e.changedTouches?.length>0?e.changedTouches[0].clientX:e.clientX;}
+        captchaThumb.addEventListener('mousedown',(e)=>{if(captchaPassed)return;e.preventDefault();isDragging=true;dragStartX=getEventX(e);thumbStartLeft=parseFloat(captchaThumb.style.left)||-2;captchaThumb.style.transition='none';captchaTrackFill.style.transition='none';captchaModal.style.transition='none';});
+        captchaThumb.addEventListener('touchstart',(e)=>{if(captchaPassed)return;isDragging=true;dragStartX=getEventX(e);thumbStartLeft=parseFloat(captchaThumb.style.left)||-2;captchaThumb.style.transition='none';captchaTrackFill.style.transition='none';captchaModal.style.transition='none';},{passive:false});
+        document.addEventListener('mousemove',(e)=>{if(!isDragging||captchaPassed)return;updateCaptchaProgress(thumbStartLeft+(getEventX(e)-dragStartX));});
+        document.addEventListener('touchmove',(e)=>{if(!isDragging||captchaPassed)return;updateCaptchaProgress(thumbStartLeft+(getEventX(e)-dragStartX));},{passive:false});
+        document.addEventListener('mouseup',()=>{if(!isDragging)return;isDragging=false;captchaThumb.style.transition='left 0.4s';captchaTrackFill.style.transition='width 0.4s';captchaModal.style.transition='left 0.4s,top 0.4s';if(!captchaPassed){captchaThumb.style.left='-2px';captchaTrackFill.style.width='0%';captchaModal.style.left=captchaModalInitialLeft+'px';captchaModal.style.top=captchaModalInitialTop+'px';}});
+        document.addEventListener('touchend',()=>{if(!isDragging)return;isDragging=false;captchaThumb.style.transition='left 0.4s';captchaTrackFill.style.transition='width 0.4s';captchaModal.style.transition='left 0.4s,top 0.4s';if(!captchaPassed){captchaThumb.style.left='-2px';captchaTrackFill.style.width='0%';captchaModal.style.left=captchaModalInitialLeft+'px';captchaModal.style.top=captchaModalInitialTop+'px';}});
+        captchaClose.addEventListener('click',()=>{if(!isDragging){hideCaptcha();resetCaptcha();}});
+
+        // 通用弹窗展示
+        function showGenericStep(step) {
+            genericTitle.textContent = step.title;
+            genericBody.innerHTML = step.body;
+            genericInput.value = '';
+            genericInput.placeholder = step.placeholder;
+            genericFeedback.textContent = '';
+            genericBtn.onclick = () => {
+                const val = genericInput.value.trim();
+                let correct = false;
+                if (typeof step.answer === 'function') {
+                    correct = step.answer(val);
+                } else {
+                    correct = val === step.answer;
+                }
+                if (correct) {
+                    if (step.nextStep) {
+                        hideAllModals();
+                        showGenericStep(step.nextStep);
+                    } else {
+                        hideAllModals();
+                        currentExtraStep++;
+                        proceedAfterExtraStep();
+                    }
+                } else {
+                    genericFeedback.textContent = step.error || '答案错误';
+                }
+            };
+            showModal(genericModal);
+            genericInput.focus();
+        }
+
+        // 流程控制
+        function proceedAfterBlueArchive(){if(!contractSigned)showSoulContract();else proceedAfterContract();}
+        function proceedAfterContract(){if(!livenessPassed)showLiveness();else proceedAfterLiveness();}
+        function proceedAfterLiveness(){if(!twoFASetupDone)showTwoFASetup();else if(!twoFAVerified)showTwoFAVerify();else proceedAfter2FA();}
+        function proceedAfter2FA(){if(!emailVerified)showEmailVerify();else proceedAfterEmail();}
+        function proceedAfterEmail(){if(!securityPassed)showSecurityQuestion();else proceedAfterSecurity();}
+        function proceedAfterSecurity(){if(!auditPassed)showAudit();else proceedAfterAudit();}
+        function proceedAfterAudit(){if(currentExtraStep < extraSteps.length) showGenericStep(extraSteps[currentExtraStep]); else if(!btnChaseStarted) startBtnChase();}
+        function proceedAfterExtraStep(){if(currentExtraStep < extraSteps.length) showGenericStep(extraSteps[currentExtraStep]); else if(!btnChaseStarted) startBtnChase();}
+
+        // 特定弹窗
+        function isHuaweiDevice(){return/Huawei|Honor|HW|HarmonyOS/i.test(navigator.userAgent||'');}
+        function showHuawei(){huaweiMessage.textContent='华为好，华为美。华为给我增智慧。目前鸿蒙系统正在稳扎稳打，步步落实注册功能~';showModal(huaweiModal);}
+        huaweiOk.addEventListener('click',()=>{hideAllModals();showToast('注册成功');});
+        function showGenshin(){genshinFeedback.textContent='';genshinAnswered=false;showModal(genshinModal);}
+        genshinYes.addEventListener('click',()=>{genshinAnswered=true;hideAllModals();showBlueArchive();});
+        genshinNo.addEventListener('click',()=>{genshinFeedback.textContent='原神牛逼，快去玩原神';});
+        function showBlueArchive(){blueFeedback.textContent='';blueArchiveAnswered=false;showModal(blueArchiveModal);}
+        blueYes.addEventListener('click',()=>{blueFeedback.textContent='你个萝莉控。直接给我电。';blueArchiveAnswered=true;setTimeout(()=>{hideAllModals();proceedAfterBlueArchive();},1500);});
+        blueNo.addEventListener('click',()=>{blueFeedback.textContent='这都没玩过，赶紧去玩。';blueArchiveAnswered=true;setTimeout(()=>{hideAllModals();proceedAfterBlueArchive();},1500);});
+        function showSoulContract(){contractAgree.checked=false;contractConfirm.disabled=true;contractFeedback.textContent='';showModal(soulContractModal);}
+        contractAgree.addEventListener('change',()=>{contractConfirm.disabled=!contractAgree.checked;});
+        contractConfirm.addEventListener('click',()=>{if(!contractAgree.checked){contractFeedback.textContent='请先勾选同意条款';return;}contractSigned=true;hideAllModals();proceedAfterContract();});
+        function showLiveness(){livenessFill.style.width='0%';livenessStartBtn.disabled=false;livenessInstruction.textContent='点击下方按钮开始检测';livenessPassed=false;showModal(livenessModal);}
+        livenessStartBtn.addEventListener('click',()=>{livenessStartBtn.disabled=true;livenessInstruction.textContent='请张张嘴...';let progress=0;const interval=setInterval(()=>{progress+=5;livenessFill.style.width=progress+'%';if(progress>=100){clearInterval(interval);livenessInstruction.textContent='活体检测通过';livenessPassed=true;setTimeout(()=>{hideAllModals();proceedAfterLiveness();},800);}},80);});
+        function showTwoFASetup(){twoFAKeyInput.value='';twoFAFeedback.textContent='';showModal(twoFASetupModal);}
+        twoFAConfirmBtn.addEventListener('click',()=>{const key=twoFAKeyInput.value.trim();if(!/^\d{6}$/.test(key)){twoFAFeedback.textContent='请输入6位数字密钥';return;}twoFAKey=key;twoFASetupDone=true;hideAllModals();showTwoFAVerify();});
+        function showTwoFAVerify(){dynamicCodeDisplay.textContent=twoFAKey;dynamicCodeInput.value='';verifyDynamicFeedback.textContent='';showModal(twoFAVerifyModal);}
+        verifyDynamicBtn.addEventListener('click',()=>{if(dynamicCodeInput.value.trim()!==twoFAKey){verifyDynamicFeedback.textContent='动态码错误';return;}twoFAVerified=true;hideAllModals();proceedAfter2FA();});
+        function showEmailVerify(){emailCodeInput.value='';emailFeedback.textContent='';showModal(emailVerifyModal);}
+        verifyEmailBtn.addEventListener('click',()=>{if(emailCodeInput.value.trim()!=='888888'){emailFeedback.textContent='验证码错误';return;}emailVerified=true;hideAllModals();proceedAfterEmail();});
+        function showSecurityQuestion(){securityAnswerInput.value='';securityFeedback.textContent='';showModal(securityQuestionModal);}
+        securityAnswerBtn.addEventListener('click',()=>{if(securityAnswerInput.value.trim()!=='3'){securityFeedback.textContent='答案错误！但没关系...';setTimeout(()=>{securityPassed=true;hideAllModals();proceedAfterSecurity();},1000);}else{securityFeedback.textContent='正确，继续';setTimeout(()=>{securityPassed=true;hideAllModals();proceedAfterSecurity();},800);}});
+        function showAudit(){auditFill.style.width='0%';showModal(auditModal);let progress=0;const interval=setInterval(()=>{progress+=2;auditFill.style.width=progress+'%';if(progress>=100){clearInterval(interval);auditPassed=true;setTimeout(()=>{hideAllModals();proceedAfterAudit();},600);}},100);}
+        function showFinalConfirm(){confirmInput.value='';finalConfirmBtn.disabled=true;finalFeedback.textContent='';showModal(finalConfirmModal);}
+        confirmInput.addEventListener('input',()=>{finalConfirmBtn.disabled=confirmInput.value.trim()!=='我自愿放弃所有权利并永远忠诚于本平台';});
+        finalConfirmBtn.addEventListener('click',()=>{if(confirmInput.value.trim()!=='我自愿放弃所有权利并永远忠诚于本平台'){finalFeedback.textContent='请逐字输入';return;}hideAllModals();showToast('注册成功');});
+
+        // 按钮追逐
+        function startBtnChase(){if(btnChaseStarted)return;btnChaseStarted=true;btnChasing=true;const rect=btnRegister.getBoundingClientRect();btnRegister.style.position='fixed';btnRegister.style.top=rect.top+'px';btnRegister.style.left=rect.left+'px';btnRegister.style.width=rect.width+'px';btnRegister.style.margin='0';btnRegister.classList.add('chasing');btnRegister.style.transition='top 0.6s,left 0.08s,opacity 0.3s';btnRegister.style.top=Math.max(30,rect.top-160)+'px';setTimeout(()=>{btnRegister.style.transition='top 0.08s,left 0.08s,opacity 0.3s';btnRegister.style.pointerEvents='none';btnRegister.style.opacity='0.8';surrenderFlag.classList.add('visible');chaseMouse();},650);}
+        function chaseMouse(){if(!btnChasing)return;btnRegister.style.left=Math.max(5,Math.min(window.innerWidth-btnRegister.offsetWidth-5,mouseX+40))+'px';btnRegister.style.top=Math.max(5,Math.min(window.innerHeight-btnRegister.offsetHeight-5,mouseY+35))+'px';chaseAnimationId=requestAnimationFrame(chaseMouse);}
+        function stopBtnChase(){btnChasing=false;if(chaseAnimationId)cancelAnimationFrame(chaseAnimationId);btnRegister.classList.remove('chasing');btnRegister.style.position='';btnRegister.style.top='';btnRegister.style.left='';btnRegister.style.width='';btnRegister.style.margin='';btnRegister.style.transition='';btnRegister.style.pointerEvents='';btnRegister.style.opacity='';btnChaseStarted=false;surrenderFlag.classList.remove('visible');}
+        surrenderFlag.addEventListener('click',(e)=>{e.stopPropagation();if(!btnChaseStarted)return;stopBtnChase();setTimeout(showFinalConfirm,400);});
+        document.addEventListener('mousemove',(e)=>{mouseX=e.clientX;mouseY=e.clientY;});
+        document.addEventListener('touchmove',(e)=>{if(e.touches?.length){mouseX=e.touches[0].clientX;mouseY=e.touches[0].clientY;}},{passive:true});
+
+        // 主按钮
+        btnRegister.addEventListener('click',()=>{
+            const phone=phoneInput.value.trim();
+            if(phone.length===11&&/^\d{11}$/.test(phone)&&isLeopardPhone(phone)){
+                showToast('天亮了');
+                return;
+            }
+            if(btnChasing)return;
+            if(!captchaVerified){
+                if(!isFormValid()){
+                    if(!getSelectedGender()||getSelectedGender()!=='other')genderErrorMessage.classList.add('show');
+                    if(!validateUsernameFull()){usernameInput.focus();usernameInput.style.animation='shake 0.5s';setTimeout(()=>usernameInput.style.animation='',500);}
+                    else if(!validatePasswordFull()){passwordInput.focus();passwordInput.style.animation='shake 0.5s';setTimeout(()=>passwordInput.style.animation='',500);}
+                    else if(!validatePhoneFull()){phoneInput.focus();phoneInput.style.animation='shake 0.5s';setTimeout(()=>phoneInput.style.animation='',500);}
+                    return;
+                }
+                showCaptcha();
+            }else{
+                if(isHuaweiDevice()){showHuawei();}
+                else if(!genshinAnswered){showGenshin();}
+                else if(!blueArchiveAnswered){showBlueArchive();}
+                else if(!contractSigned){showSoulContract();}
+                else if(!livenessPassed){showLiveness();}
+                else if(!twoFASetupDone){showTwoFASetup();}
+                else if(!twoFAVerified){showTwoFAVerify();}
+                else if(!emailVerified){showEmailVerify();}
+                else if(!securityPassed){showSecurityQuestion();}
+                else if(!auditPassed){showAudit();}
+                else if(currentExtraStep < extraSteps.length){showGenericStep(extraSteps[currentExtraStep]);}
+                else if(!btnChaseStarted){startBtnChase();}
+            }
+        });
+
+        window.addEventListener('resize',()=>{if(captchaModal.style.display==='block'&&!captchaPassed)positionCaptchaModal();});
+        document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&captchaModal.style.display==='block'&&!isDragging){hideCaptcha();resetCaptcha();}});
+    })();
+</script>
+</body>
+
+<!-- Mirrored from https://daohang-s6k.pages.dev/猎奇登录2.0 by HTTrack Website Copier/3.x [XR&CO], Fri, 18 Sep 2026 11:46:23 GMT -->
+</html>
