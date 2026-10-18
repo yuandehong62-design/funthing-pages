@@ -5,63 +5,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShareMore 公开投稿墙</title>
 <style>
-    :root { --bg: #0a0e1a; --border: rgba(0, 212, 255, 0.15); --accent: #00d4ff; --text: #e2e8f0; }
+    :root { 
+        --bg: #0a0e1a; 
+        --border: rgba(0, 212, 255, 0.15); 
+        --accent: #00d4ff; 
+        --text: #e2e8f0; 
+    }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px 16px; }
+    body { font-family: 'Segoe UI', 'PingFang SC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px 16px; }
     .wrap { max-width: 1000px; margin: 0 auto; }
-    .topbar { text-align: center; margin-bottom: 20px; }
-    .title { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #00d4ff, #7b2ffc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
+    .topbar { text-align: center; margin-bottom: 24px; }
+    .title { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #00d4ff, #7b2ffc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color:#aaa; font-size:0.8rem; margin-top:6px; }
+
     /* 上传区 */
-    .upload-box { background: rgba(20, 26, 42, 0.72); border: 1px dashed var(--border); border-radius: 16px; padding: 30px; text-align: center; margin-bottom: 20px; transition: 0.3s; cursor: pointer; }
+    .upload-box { 
+        background: rgba(20, 26, 42, 0.72); 
+        border: 1px dashed var(--border); 
+        border-radius: 16px; 
+        padding: 30px; 
+        text-align: center; 
+        margin-bottom: 30px; 
+        transition: 0.3s; 
+        cursor: pointer; 
+    }
     .upload-box:hover { border-color: var(--accent); background: rgba(0, 212, 255, 0.05); }
     .upload-box input[type="file"] { display: none; }
     .upload-icon { font-size: 3rem; margin-bottom: 10px; opacity: 0.7; }
     .upload-text { font-size: 0.9rem; color: rgba(255,255,255,0.5); }
+    
     .progress { margin-top: 15px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; display: none; }
     .bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.2s; }
-    #result { margin-top: 10px; color: #6ee7b7; font-size: 0.85rem; word-break: break-all; }
+    #result { margin-top: 15px; color: #6ee7b7; font-size: 0.9rem; word-break: break-all; }
+    #result a { color: var(--accent); text-decoration: none; font-weight: bold; margin-left: 5px; border-bottom: 1px solid transparent; transition: 0.2s; }
+    #result a:hover { border-bottom-color: var(--accent); }
 
-    /* 提示 */
-    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1a1e2a; padding: 10px 20px; border-radius: 20px; border: 1px solid var(--border); opacity: 0; transition: 0.3s; pointer-events: none; z-index: 9999; }
-    .toast.show { opacity: 1; }
+    /* 画廊列表 */
+    .gallery-title { font-size: 1.1rem; color: #fff; margin-bottom: 15px; padding-left: 10px; border-left: 3px solid var(--accent); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .file-card { background: rgba(20, 26, 42, 0.72); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
+    .file-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,212,255,0.1); }
+    
+    .preview-box { width: 100%; height: 140px; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .preview-box .icon { font-size: 3rem; opacity: 0.5; }
+    
+    .file-info { padding: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .file-name { font-size: 0.85rem; color: #fff; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-meta { font-size: 0.72rem; color: #888; }
+    .file-link { margin-top: auto; display: block; text-align: center; padding: 6px; background: rgba(0,212,255,0.1); color: var(--accent); text-decoration: none; border-radius: 6px; font-size: 0.8rem; font-weight: bold; }
+    .file-link:hover { background: var(--accent); color: #000; }
+    
+    .empty-tip { text-align: center; color: #666; font-size: 0.9rem; padding: 30px 0; display: none; }
 </style>
 </head>
 <body>
 <div class="wrap">
     <div class="topbar">
         <div class="title">✦ ShareMore 投稿墙 ✦</div>
-        <p style="color:#aaa; font-size:0.8rem; margin-top:6px;">支持照片、视频及普通文件（限 50MB）</p>
+        <p class="subtitle">支持照片、视频及普通文件（限 50MB）</p>
     </div>
 
+    <!-- 上传区域 -->
+    <!-- onclick 绑在最外层，方便点击任意位置选文件 -->
     <div class="upload-box" onclick="document.getElementById('fileInput').click()">
         <div class="upload-icon">📤</div>
         <div class="upload-text">点击这里选择文件上传</div>
         <input type="file" id="fileInput" onchange="uploadFile(this.files)">
         <div class="progress" id="progBox"><div class="bar" id="progBar"></div></div>
-        <div id="result"></div>
+        <!-- 提示区域 -->
+        <div id="result" onclick="event.stopPropagation()"></div>
     </div>
+
+    <!-- 画廊展示区域 -->
+    <div class="gallery-title">📂 我上传的文件</div>
+    <div class="grid" id="fileGrid"></div>
+    <div class="empty-tip" id="emptyTip">暂无记录，快去传个文件试试吧~</div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-// 👇【注意】你是华南空间，这里是对的，不用改
-const QINIU_UPLOAD_URL = 'https://upload-z2.qiniup.com';
-// 👇【注意】把引号里的内容换成你在七牛云的“测试域名”
-const DOMAIN = "tn3b3bcgf.hn-bkt.clouddn.com"; 
+const QINIU_UPLOAD_URL = 'https://upload-z2.qiniup.com'; // 华南区上传地址
 
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+// 👇👇👇 【必须修改这里】换成你的七牛云测试域名（不要带斜杠 /） 👇👇👇
+const DOMAIN = "http://你的测试域名.hn-bkt.clouddn.com"; 
+// 👆👆👆 【必须修改这里】换成你的七牛云测试域名 👆👆👆
+
+// 渲染历史记录（存在浏览器本地）
+function renderGallery() {
+    const grid = document.getElementById('fileGrid');
+    const tip = document.getElementById('emptyTip');
+    let history = JSON.parse(localStorage.getItem('my_upload_history') || '[]');
+    
+    if (history.length === 0) {
+        tip.style.display = 'block';
+        grid.innerHTML = '';
+        return;
+    }
+    
+    tip.style.display = 'none';
+    grid.innerHTML = history.map(item => {
+        let preview = '';
+        if (item.type.startsWith('image/')) {
+            preview = `<img src="${item.url}" loading="lazy">`;
+        } else if (item.type.startsWith('video/')) {
+            preview = `<div class="icon">🎬</div>`;
+        } else {
+            preview = `<div class="icon">📄</div>`;
+        }
+        
+        return `
+            <div class="file-card">
+                <div class="preview-box">${preview}</div>
+                <div class="file-info">
+                    <div class="file-name" title="${item.originalName}">${item.originalName}</div>
+                    <div class="file-meta">${new Date(item.time).toLocaleString()}</div>
+                    <a href="${item.url}" target="_blank" class="file-link">查看 / 下载</a>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
+// 处理上传
 async function uploadFile(files) {
     if (!files.length) return;
     const file = files[0];
-    if (file.size > 50 * 1024 * 1024) return showToast("文件超过 50MB");
+    if (file.size > 50 * 1024 * 1024) return alert("文件超过 50MB");
 
     const progBox = document.getElementById('progBox');
     const progBar = document.getElementById('progBar');
@@ -69,59 +139,84 @@ async function uploadFile(files) {
     
     progBox.style.display = 'block';
     progBar.style.width = '0%';
-    result.innerHTML = '获取通行证中...';
+    result.innerHTML = '获取上传凭证中...';
 
     try {
-        // 1. 拿 Token
-       const res = await fetch('/api/qiniu-token', { method: 'POST' });
-const text = await res.text(); // 先拿纯文本，看看后端到底吐出了什么
-if (!text) {
-    throw new Error('后端返回了空内容！请检查 functions/api/qiniu-token.js 是否存在且没有报错。');
-}
-let data;
-try {
-    data = JSON.parse(text);
-} catch (e) {
-    throw new Error('后端返回的不是JSON：' + text.substring(0, 50));
-}
-        if (data.error) throw new Error(data.error);
+        const res = await fetch('/api/qiniu-token', { method: 'POST' });
+        const text = await res.text(); 
+        
+        if (!text) throw new Error('后端返回空内容，请检查 Functions 路由是否生效。');
+        
+        let data;
+        try { data = JSON.parse(text); } 
+        catch (e) { throw new Error('解析失败：' + text.substring(0, 50)); }
+        
+        if (data.error) throw new Error('后端报错: ' + data.error);
 
-        // 2. 准备数据
         const formData = new FormData();
         formData.append('token', data.token);
         formData.append('file', file);
         
-        // 随机文件名
+        // 生成随机文件名
         const ext = file.name.split('.').pop();
         const key = Date.now() + '_' + Math.floor(Math.random()*10000) + '.' + ext;
         formData.append('key', key);
 
-        result.innerHTML = '正在上传...';
+        result.innerHTML = '正在上传到七牛云...';
 
-        // 3. 直传七牛
         const xhr = new XMLHttpRequest();
         xhr.open('POST', QINIU_UPLOAD_URL, true);
+        
         xhr.upload.onprogress = function(e) {
-            if (e.lengthComputable) {
-                progBar.style.width = (e.loaded / e.total) * 100 + '%';
-            }
+            if (e.lengthComputable) progBar.style.width = (e.loaded / e.total) * 100 + '%';
         };
+        
         xhr.onload = function() {
             if (xhr.status === 200) {
-                result.innerHTML = `上传成功！<br><a href="${DOMAIN}/${key}" target="_blank" style="color:#00d4ff;">点击这里查看文件</a>`;
+                // 拼接完整的文件链接
+                const fileUrl = `${DOMAIN}/${key}`;
+                
+                // 🎯 关键修复：加了 onclick="event.stopPropagation()"，防止点链接触发上传框
+                result.innerHTML = `✅ 上传成功！<a href="${fileUrl}" target="_blank" onclick="event.stopPropagation()">点击这里查看文件</a>`;
                 progBox.style.display = 'none';
+                document.getElementById('fileInput').value = ''; // 清空输入
+
+                // 保存到浏览器本地，方便刷新后查看
+                let history = JSON.parse(localStorage.getItem('my_upload_history') || '[]');
+                history.unshift({
+                    originalName: file.name,
+                    url: fileUrl,
+                    type: file.type,
+                    time: Date.now()
+                });
+                // 只保留最近 20 条
+                if (history.length > 20) history.pop(); 
+                localStorage.setItem('my_upload_history', JSON.stringify(history));
+                
+                // 重新渲染画廊
+                renderGallery();
+
             } else {
-                result.innerHTML = '上传失败：' + xhr.responseText;
+                result.innerHTML = '❌ 七牛云报错：' + xhr.responseText;
                 progBox.style.display = 'none';
             }
         };
+        
+        xhr.onerror = function() {
+            result.innerHTML = '❌ 网络错误，上传失败';
+            progBox.style.display = 'none';
+        };
+        
         xhr.send(formData);
 
     } catch (err) {
-        result.innerHTML = '出错啦：' + err.message;
+        result.innerHTML = '❌ 出错啦：' + err.message;
         progBox.style.display = 'none';
     }
 }
+
+// 页面加载时，渲染一次画廊
+window.onload = renderGallery;
 </script>
 </body>
 </html>
