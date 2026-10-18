@@ -109,7 +109,7 @@
             line-height: 1.2;
         }
 
-        /* 标题下划线改为静态渐变（去掉无限动画） */
+        /* 标题下划线改为静态渐变 */
         .main-title::after {
             content: '';
             position: absolute;
@@ -151,7 +151,6 @@
             background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), transparent);
         }
 
-        /* 钻石改为静态 */
         .divider .diamond {
             width: 8px;
             height: 8px;
@@ -171,11 +170,10 @@
             margin: 2rem 0 3.5rem 0;
         }
 
-        /* ===== 单个卡片（去 backdrop-filter，加 contain） ===== */
+        /* ===== 单个卡片 ===== */
         .nav-card {
             flex: 0 1 180px;
             min-height: 190px;
-            /* 用半深色背景替代 backdrop-filter，视觉几乎一致，性能好很多 */
             background: rgba(20, 26, 42, 0.72);
             border: 1px solid rgba(0, 212, 255, 0.15);
             border-radius: 24px;
@@ -195,11 +193,9 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             cursor: pointer;
             user-select: none;
-            /* 关键：每张卡片独立绘制，hover 时不影响其他卡片 */
             contain: layout style paint;
         }
 
-        /* 卡片静态光晕 */
         .nav-card::before {
             content: '';
             position: absolute;
@@ -258,7 +254,6 @@
             line-height: 1.2;
         }
 
-        /* ===== 卡片悬停效果 ===== */
         .nav-card:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: rgba(0, 212, 255, 0.6);
@@ -266,10 +261,7 @@
             background: rgba(28, 36, 56, 0.78);
         }
 
-        .nav-card:hover .card-icon {
-            transform: scale(1.15) rotate(-6deg);
-        }
-
+        .nav-card:hover .card-icon { transform: scale(1.15) rotate(-6deg); }
         .nav-card:hover .card-title {
             background: linear-gradient(135deg, #00d4ff, #a855f7);
             -webkit-background-clip: text;
@@ -278,40 +270,19 @@
         }
 
         .nav-card.card-dance { border-color: rgba(0, 212, 255, 0.2); }
-        .nav-card.card-dance:hover {
-            border-color: #00d4ff;
-            box-shadow: 0 16px 60px rgba(0, 212, 255, 0.2), 0 0 80px rgba(0, 212, 255, 0.06);
-        }
+        .nav-card.card-dance:hover { border-color: #00d4ff; box-shadow: 0 16px 60px rgba(0, 212, 255, 0.2), 0 0 80px rgba(0, 212, 255, 0.06); }
         .nav-card.card-trade { border-color: rgba(123, 47, 252, 0.2); }
-        .nav-card.card-trade:hover {
-            border-color: #a855f7;
-            box-shadow: 0 16px 60px rgba(123, 47, 252, 0.2), 0 0 80px rgba(123, 47, 252, 0.06);
-        }
+        .nav-card.card-trade:hover { border-color: #a855f7; box-shadow: 0 16px 60px rgba(123, 47, 252, 0.2), 0 0 80px rgba(123, 47, 252, 0.06); }
         .nav-card.card-cloud { border-color: rgba(251, 191, 36, 0.2); }
-        .nav-card.card-cloud:hover {
-            border-color: #fbbf24;
-            box-shadow: 0 16px 60px rgba(251, 191, 36, 0.2), 0 0 80px rgba(251, 191, 36, 0.06);
-        }
+        .nav-card.card-cloud:hover { border-color: #fbbf24; box-shadow: 0 16px 60px rgba(251, 191, 36, 0.2), 0 0 80px rgba(251, 191, 36, 0.06); }
         .nav-card.card-register { border-color: rgba(239, 68, 68, 0.25); }
-        .nav-card.card-register:hover {
-            border-color: #ef4444;
-            box-shadow: 0 16px 60px rgba(239, 68, 68, 0.2), 0 0 80px rgba(239, 68, 68, 0.06);
-        }
+        .nav-card.card-register:hover { border-color: #ef4444; box-shadow: 0 16px 60px rgba(239, 68, 68, 0.2), 0 0 80px rgba(239, 68, 68, 0.06); }
         .nav-card.card-exam { border-color: rgba(52, 211, 153, 0.25); }
-        .nav-card.card-exam:hover {
-            border-color: #34d399;
-            box-shadow: 0 16px 60px rgba(52, 211, 153, 0.2), 0 0 80px rgba(52, 211, 153, 0.06);
-        }
+        .nav-card.card-exam:hover { border-color: #34d399; box-shadow: 0 16px 60px rgba(52, 211, 153, 0.2), 0 0 80px rgba(52, 211, 153, 0.06); }
         .nav-card.card-login { border-color: rgba(236, 72, 153, 0.25); }
-        .nav-card.card-login:hover {
-            border-color: #ec4899;
-            box-shadow: 0 16px 60px rgba(236, 72, 153, 0.2), 0 0 80px rgba(236, 72, 153, 0.06);
-        }
+        .nav-card.card-login:hover { border-color: #ec4899; box-shadow: 0 16px 60px rgba(236, 72, 153, 0.2), 0 0 80px rgba(236, 72, 153, 0.06); }
         .nav-card.card-ai { border-color: rgba(0, 212, 255, 0.25); }
-        .nav-card.card-ai:hover {
-            border-color: #00d4ff;
-            box-shadow: 0 16px 60px rgba(0, 212, 255, 0.25), 0 0 80px rgba(0, 212, 255, 0.1);
-        }
+        .nav-card.card-ai:hover { border-color: #00d4ff; box-shadow: 0 16px 60px rgba(0, 212, 255, 0.25), 0 0 80px rgba(0, 212, 255, 0.1); }
 
         /* ===== 底部 ===== */
         .footer {
@@ -346,14 +317,8 @@
             letter-spacing: 0.1em;
             transition: color 0.3s ease;
         }
-
         .footer .power-item:hover { color: rgba(0, 212, 255, 0.8); }
-
-        .footer .power-item .highlight {
-            color: rgba(0, 212, 255, 0.6);
-            font-weight: 600;
-        }
-
+        .footer .power-item .highlight { color: rgba(0, 212, 255, 0.6); font-weight: 600; }
         .footer .power-item .highlight:hover { color: #00d4ff; }
 
         .footer-extra {
@@ -385,11 +350,7 @@
             border-bottom: 1px solid transparent;
             transition: color 0.3s ease, border-color 0.3s ease;
         }
-
-        .footer-link:hover {
-            color: rgba(0, 212, 255, 0.9);
-            border-bottom-color: rgba(0, 212, 255, 0.3);
-        }
+        .footer-link:hover { color: rgba(0, 212, 255, 0.9); border-bottom-color: rgba(0, 212, 255, 0.3); }
 
         /* ===== 动画定义 ===== */
         @keyframes fadeIn {
@@ -399,28 +360,17 @@
 
         /* ===== 响应式 ===== */
         @media (max-width: 1024px) {
-            .nav-card {
-                flex: 0 1 170px;
-                min-height: 170px;
-                padding: 1.5rem 1rem;
-            }
+            .nav-card { flex: 0 1 170px; min-height: 170px; padding: 1.5rem 1rem; }
             .card-title { font-size: 0.9rem; }
         }
-
         @media (max-width: 820px) {
             .nav-card { flex: 0 1 200px; min-height: 160px; }
         }
-
         @media (max-width: 640px) {
             .container { padding: 1.5rem 1rem 2.5rem; }
             .title-wrap { margin-top: 3.5rem; }
             .nav-grid { gap: 1.2rem; margin: 1.5rem 0 2.5rem; }
-            .nav-card {
-                flex: 0 1 100%;
-                min-height: 130px;
-                padding: 1.2rem 1rem;
-                border-radius: 18px;
-            }
+            .nav-card { flex: 0 1 100%; min-height: 130px; padding: 1.2rem 1rem; border-radius: 18px; }
             .card-icon { font-size: 2rem; }
             .card-title { font-size: 1rem; }
             .main-title::after { width: 60%; left: 20%; }
@@ -428,57 +378,32 @@
             .footer .power-item { font-size: 1rem; }
             .footer-credit { font-size: 0.75rem; }
             .footer-link { font-size: 0.85rem; }
-
-            body {
-                overflow-y: auto !important;
-                height: auto !important;
-                min-height: 100vh;
-                min-height: 100dvh;
-            }
+            body { overflow-y: auto !important; height: auto !important; min-height: 100vh; min-height: 100dvh; }
         }
-
         @media (max-width: 400px) {
             .container { padding: 1rem 0.8rem 2rem; }
             .title-wrap { margin-bottom: 2rem; }
-            .nav-card {
-                min-height: 110px;
-                padding: 1rem 0.8rem;
-                border-radius: 14px;
-            }
+            .nav-card { min-height: 110px; padding: 1rem 0.8rem; border-radius: 14px; }
             .card-icon { font-size: 1.6rem; }
             .card-title { font-size: 0.85rem; }
         }
 
-        /* ===== 鼠标跟随光晕（translate3d + 触摸设备隐藏） ===== */
+        /* ===== 鼠标跟随光晕 ===== */
         .glow-follow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 600px;
-            height: 600px;
-            margin: -300px 0 0 -300px;
-            border-radius: 50%;
+            position: fixed; top: 0; left: 0; width: 600px; height: 600px;
+            margin: -300px 0 0 -300px; border-radius: 50%;
             background: radial-gradient(circle, rgba(0, 212, 255, 0.05), transparent 70%);
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; z-index: 0;
             transform: translate3d(-9999px, -9999px, 0);
-            will-change: transform;
-            backface-visibility: hidden;
+            will-change: transform; backface-visibility: hidden;
         }
-        @media (pointer: coarse) {
-            .glow-follow { display: none; }
-        }
+        @media (pointer: coarse) { .glow-follow { display: none; } }
 
         /* ===== 卡片角落装饰 ===== */
         .nav-card .corner-deco {
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            border-color: rgba(0, 212, 255, 0.08);
-            border-style: solid;
-            border-width: 0;
-            pointer-events: none;
-            transition: border-color 0.4s ease;
+            position: absolute; width: 18px; height: 18px;
+            border-color: rgba(0, 212, 255, 0.08); border-style: solid; border-width: 0;
+            pointer-events: none; transition: border-color 0.4s ease;
         }
         .nav-card .corner-deco.tl { top: 10px; left: 10px; border-top-width: 2px; border-left-width: 2px; border-radius: 4px 0 0 0; }
         .nav-card .corner-deco.tr { top: 10px; right: 10px; border-top-width: 2px; border-right-width: 2px; border-radius: 0 4px 0 0; }
@@ -493,162 +418,103 @@
         .nav-card.card-login:hover .corner-deco { border-color: rgba(236, 72, 153, 0.4); }
         .nav-card.card-ai:hover .corner-deco { border-color: rgba(0, 212, 255, 0.5); }
 
-        /* ===== 自定义模态框（弹窗） ===== */
+        /* ===== 自定义模态框 ===== */
         .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: rgba(0, 0, 0, 0.75);
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.25s ease;
-            padding: 20px;
+            display: none; position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0, 0, 0, 0.75); justify-content: center; align-items: center;
+            animation: fadeIn 0.25s ease; padding: 20px;
         }
         .modal-overlay.active { display: flex; }
 
         .modal-box {
-            background: #1a1e2a;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 28px;
-            padding: 32px 28px;
-            max-width: 480px;
-            width: 100%;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-            text-align: center;
-            position: relative;
-            max-height: 88vh;
-            overflow-y: auto;
+            background: #1a1e2a; border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 28px; padding: 32px 28px; max-width: 480px; width: 100%;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); text-align: center;
+            position: relative; max-height: 88vh; overflow-y: auto;
         }
-
-        .modal-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 6px;
-            letter-spacing: 1px;
-        }
-        .modal-sub {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 20px;
-        }
-        .modal-options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .modal-title { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 6px; letter-spacing: 1px; }
+        .modal-sub { font-size: 0.9rem; color: rgba(255, 255, 255, 0.6); margin-bottom: 20px; }
+        .modal-options { display: flex; flex-direction: column; gap: 12px; }
+        
         .modal-option-btn {
-            padding: 14px 20px;
-            border-radius: 16px;
-            border: 1.5px solid rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.04);
-            color: #e2e8f0;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-family: inherit;
+            padding: 14px 20px; border-radius: 16px; border: 1.5px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.04); color: #e2e8f0; font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 10px; font-family: inherit;
         }
-        .modal-option-btn:hover {
-            background: rgba(0, 212, 255, 0.12);
-            border-color: #00d4ff;
-            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.15);
-        }
+        .modal-option-btn:hover { background: rgba(0, 212, 255, 0.12); border-color: #00d4ff; box-shadow: 0 8px 30px rgba(0, 212, 255, 0.15); }
         .modal-option-btn .icon { font-size: 1.3rem; }
-
         .modal-close-btn {
-            margin-top: 18px;
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: color 0.3s;
-            padding: 6px 14px;
-            font-family: inherit;
+            margin-top: 18px; background: none; border: none; color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem; cursor: pointer; transition: color 0.3s; padding: 6px 14px; font-family: inherit;
         }
         .modal-close-btn:hover { color: #fff; }
-
-        .modal-option-btn.primary {
-            background: linear-gradient(135deg, #7b2ffc, #4f46e5);
-            border-color: transparent;
-            color: #fff;
-        }
-        .modal-option-btn.primary:hover {
-            box-shadow: 0 8px 30px rgba(123, 47, 252, 0.4);
-        }
+        .modal-option-btn.primary { background: linear-gradient(135deg, #7b2ffc, #4f46e5); border-color: transparent; color: #fff; }
+        .modal-option-btn.primary:hover { box-shadow: 0 8px 30px rgba(123, 47, 252, 0.4); }
         .modal-option-btn.secondary { border-color: rgba(255, 255, 255, 0.2); }
         .modal-option-btn.secondary:hover { border-color: #a855f7; }
 
-        /* ===== 证书 / 日志 弹窗专用 ===== */
-        .cert-img-wrap {
-            margin-top: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
-        }
+        .cert-img-wrap { margin-top: 12px; display: flex; justify-content: center; align-items: center; min-height: 200px; }
         .cert-img-wrap img {
-            width: 100%;
-            max-height: 62vh;
-            object-fit: contain;
-            border-radius: 12px;
-            display: block;
-            border: 1px solid rgba(0, 212, 255, 0.25);
-            box-shadow: 0 0 24px rgba(0, 212, 255, 0.18);
+            width: 100%; max-height: 62vh; object-fit: contain; border-radius: 12px;
+            display: block; border: 1px solid rgba(0, 212, 255, 0.25); box-shadow: 0 0 24px rgba(0, 212, 255, 0.18);
         }
-        .log-content-wrap {
-            text-align: left;
-            margin-top: 12px;
-            max-height: 58vh;
-            overflow-y: auto;
-            padding: 4px 8px 4px 4px;
-        }
+        .log-content-wrap { text-align: left; margin-top: 12px; max-height: 58vh; overflow-y: auto; padding: 4px 8px 4px 4px; }
         .log-content-wrap pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', monospace;
-            color: #c8d8f0;
-            line-height: 1.85;
-            margin: 0;
-            font-size: 0.92rem;
+            white-space: pre-wrap; word-wrap: break-word; font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', monospace;
+            color: #c8d8f0; line-height: 1.85; margin: 0; font-size: 0.92rem;
         }
-        .modal-hint {
-            color: #7f93b5;
-            text-align: center;
-            padding: 40px 0;
-            font-size: 0.9rem;
-        }
+        .modal-hint { color: #7f93b5; text-align: center; padding: 40px 0; font-size: 0.9rem; }
         .modal-hint.error { color: #b88a8a; }
 
-        /* 注册与登录组合标识 */
         .combo-badge {
-            display: inline-block;
-            font-size: 0.5rem;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 0.1rem 0.5rem;
-            border-radius: 10px;
-            margin-top: 0.1rem;
-            background: rgba(255, 255, 255, 0.02);
+            display: inline-block; font-size: 0.5rem; letter-spacing: 1px; color: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.06); padding: 0.1rem 0.5rem; border-radius: 10px;
+            margin-top: 0.1rem; background: rgba(255, 255, 255, 0.02);
         }
-        .combo-badge.highlight {
-            border-color: rgba(239, 68, 68, 0.2);
-            color: rgba(239, 68, 68, 0.5);
+        .combo-badge.highlight { border-color: rgba(239, 68, 68, 0.2); color: rgba(239, 68, 68, 0.5); }
+        .combo-badge.highlight2 { border-color: rgba(236, 72, 153, 0.2); color: rgba(236, 72, 153, 0.5); }
+
+        /* ===== 音乐播放按钮 ===== */
+        .music-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(10, 14, 26, 0.85);
+            border: 1px solid rgba(0, 212, 255, 0.35);
+            color: #00d4ff;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
-        .combo-badge.highlight2 {
-            border-color: rgba(236, 72, 153, 0.2);
-            color: rgba(236, 72, 153, 0.5);
+        .music-toggle:hover {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            transform: scale(1.1);
+        }
+        .music-toggle.playing {
+            animation: spin 4s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
+
+    <!-- ===== 音乐控制按钮 & 音频标签 ===== -->
+    <audio id="bgMusic" src="bgm.mp3" loop></audio>
+    <button class="music-toggle" id="musicBtn" onclick="toggleMusic()" title="播放/暂停音乐">🎵</button>
 
     <!-- ===== 左上角模块 ===== -->
     <div class="top-modules">
@@ -664,7 +530,6 @@
 
     <!-- ===== 主内容 ===== -->
     <div class="container">
-
         <!-- 标题 -->
         <div class="title-wrap">
             <h1 class="main-title">✦ Funthing Pages ✦</h1>
@@ -680,13 +545,9 @@
 
         <!-- 导航卡片 -->
         <div class="nav-grid">
-
             <!-- 卡片 1：棍涛舞团 -->
             <a href="https://guntaodance.cc.cd/" target="_blank" rel="noopener noreferrer" class="nav-card card-dance">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🕺</div>
                     <div class="card-title">棍涛舞团</div>
@@ -696,10 +557,7 @@
 
             <!-- 卡片 2：国际卤蛋贸易有限公司 -->
             <div class="nav-card card-trade" onclick="showTradeModal()">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🌐</div>
                     <div class="card-title">国际卤蛋贸易有限公司</div>
@@ -709,10 +567,7 @@
 
             <!-- 卡片 3：Ninety-One 网盘 -->
             <a href="%e7%bd%91%e7%9b%98.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">☁️</div>
                     <div class="card-title">Ninety-One 网盘</div>
@@ -722,10 +577,7 @@
 
             <!-- 卡片 4：反人类注册 -->
             <a href="%e6%b3%a8%e5%86%8c.html" target="_blank" rel="noopener noreferrer" class="nav-card card-register">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🤯</div>
                     <div class="card-title">来一场酣畅淋漓的注册吧</div>
@@ -736,10 +588,7 @@
 
             <!-- 卡片 5：猎奇登录2.0 -->
             <a href="%e7%8c%8e%e5%a5%87%e7%99%bb%e5%bd%952.0.html" target="_blank" rel="noopener noreferrer" class="nav-card card-login">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🔥</div>
                     <div class="card-title">比上一个更刺激的登录全新升级震撼来袭</div>
@@ -750,10 +599,7 @@
 
             <!-- 卡片 6：预测你的中考成绩 -->
             <a href="%e4%b8%ad%e8%80%83%e6%88%90%e7%bb%a9%e6%9f%a5%e8%af%a2.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">📊</div>
                     <div class="card-title">预测你的中考成绩</div>
@@ -763,10 +609,7 @@
 
             <!-- 卡片 8：从政模拟器 -->
             <a href="%e4%bb%8e%e6%94%bf%e6%a8%a1%e6%8b%9f%e5%99%a8/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-dance">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🏛️</div>
                     <div class="card-title">从政模拟器</div>
@@ -776,10 +619,7 @@
 
             <!-- 卡片 9：股市离线 -->
             <a href="%e8%82%a1%e5%b8%82%e7%a6%bb%e7%ba%bf/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">📉</div>
                     <div class="card-title">股市离线</div>
@@ -789,10 +629,7 @@
 
             <!-- 卡片 10：扣帽子模拟器 -->
             <a href="%e6%89%a3%e5%b8%bd%e5%ad%90/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-register">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🧢</div>
                     <div class="card-title">扣帽子模拟器</div>
@@ -802,10 +639,7 @@
 
             <!-- 卡片 11：猎奇复杂登录 -->
             <a href="%e7%8c%8e%e5%a5%87%e5%a4%8d%e6%9d%82%e7%99%bb%e5%bd%95/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-login">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🔐</div>
                     <div class="card-title">猎奇复杂登录</div>
@@ -815,10 +649,7 @@
 
             <!-- 卡片 12：牛来模拟器 -->
             <a href="%e6%89%ad%e6%9d%a5/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🌀</div>
                     <div class="card-title">牛来模拟器</div>
@@ -828,10 +659,7 @@
 
             <!-- 卡片 13：起早贪黑模拟器 -->
             <a href="%e8%b5%b7%e6%97%a9%e8%b4%aa%e9%bb%91/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🌅</div>
                     <div class="card-title">起早贪黑模拟器</div>
@@ -841,10 +669,7 @@
 
             <!-- 卡片 14：双人游戏 -->
             <a href="%e5%8f%8c%e4%ba%ba%e6%b8%b8%e6%88%8f/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-ai">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">👥</div>
                     <div class="card-title">双人游戏</div>
@@ -854,10 +679,7 @@
 
             <!-- 卡片 15：外卖员模拟器 -->
             <a href="%e5%a4%96%e5%8d%96%e5%91%98/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🛵</div>
                     <div class="card-title">外卖员模拟器</div>
@@ -867,10 +689,7 @@
 
             <!-- 卡片 16：股市在线 -->
             <a href="%e8%82%a1%e5%b8%82%e5%9c%a8%e7%ba%bf/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-dance">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">📈</div>
                     <div class="card-title">股市在线</div>
@@ -880,10 +699,7 @@
 
             <!-- 卡片 17：伪愤怒的小鸟 -->
             <a href="%e4%bc%aa%e6%84%a4%e6%80%92%e7%9a%84%e5%b0%8f%e9%b8%9f/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🐦</div>
                     <div class="card-title">伪愤怒的小鸟</div>
@@ -893,10 +709,7 @@
 
             <!-- 卡片 18：奶娃打球 -->
             <a href="%e5%a5%b6%e5%a8%83%e6%89%93%e7%90%83/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🏀</div>
                     <div class="card-title">奶娃打球</div>
@@ -906,10 +719,7 @@
 
             <!-- 卡片 19：植物大战僵尸 -->
             <a href="%e6%a4%8d%e7%89%a9%e5%a4%a7%e6%88%98%e5%83%b5%e5%b0%b8/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🌻</div>
                     <div class="card-title">植物大战僵尸</div>
@@ -919,10 +729,7 @@
 
             <!-- 卡片 20：AI 智能助手 -->
             <a href="ai-chat.html" target="_blank" rel="noopener noreferrer" class="nav-card card-ai">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🤖</div>
                     <div class="card-title">AI 智能助手</div>
@@ -932,10 +739,7 @@
 
             <!-- 卡片 21：游戏合集 -->
             <a href="%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🎮</div>
                     <div class="card-title">游戏合集</div>
@@ -945,10 +749,7 @@
 
             <!-- 卡片 22：Sharewall 分享墙 -->
             <a href="sharewall.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🖼️</div>
                     <div class="card-title">Sharewall 分享墙</div>
@@ -958,10 +759,7 @@
 
             <!-- 卡片 23：一掷千金 -->
             <a href="%e4%b8%80%e6%8e%b7%e5%8d%83%e9%87%91/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
-                <span class="corner-deco tl"></span>
-                <span class="corner-deco tr"></span>
-                <span class="corner-deco bl"></span>
-                <span class="corner-deco br"></span>
+                <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🎲</div>
                     <div class="card-title">一掷千金</div>
@@ -981,7 +779,6 @@
                     <span class="highlight">☁</span> Power by <span class="highlight">Cloudflare</span>
                 </span>
             </div>
-
             <div class="footer-extra">
                 <span class="footer-credit">
                     Some of the original files of these webpages come from Bilibili UP: Lingbudao Bilibili homepage
@@ -990,10 +787,8 @@
                     🎬 Ling不道的主页
                 </a>
             </div>
-
             <p>© 2026 Wonderful Pages/Funthing Pages · Ninety-one Navigation</p>
         </div>
-
     </div>
 
     <!-- ===== 自定义弹窗：国际卤蛋 ===== -->
@@ -1033,6 +828,67 @@
 
     <script>
         // ============================================================
+        //  背景音乐逻辑
+        // ============================================================
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isMusicPlaying = false;
+
+        // 更新按钮状态
+        function updateMusicUI(playing) {
+            isMusicPlaying = playing;
+            if (playing) {
+                musicBtn.classList.add('playing');
+                musicBtn.innerHTML = '🎵';
+                musicBtn.title = '暂停音乐';
+            } else {
+                musicBtn.classList.remove('playing');
+                musicBtn.innerHTML = '🔇';
+                musicBtn.title = '播放音乐';
+            }
+        }
+
+        // 切换播放状态（供按钮调用）
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                updateMusicUI(false);
+            } else {
+                bgMusic.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(e => {
+                    console.log('播放失败', e);
+                });
+            }
+        }
+
+        // 尝试自动播放
+        function tryAutoPlay() {
+            bgMusic.volume = 0.4; // 设置音量，防止太吵
+            bgMusic.play().then(() => {
+                // 播放成功
+                updateMusicUI(true);
+            }).catch(err => {
+                // 被浏览器拦截了，显示静音状态
+                console.log('浏览器拦截了自动播放，需要用户点击。');
+                updateMusicUI(false);
+                
+                // 当用户第一次点击页面任意位置时，尝试播放
+                document.body.addEventListener('click', function autoPlayOnce() {
+                    bgMusic.play().then(() => {
+                        updateMusicUI(true);
+                    }).catch(e => {});
+                    // 移除监听，避免每次点击都触发
+                    document.body.removeEventListener('click', autoPlayOnce);
+                }, { once: true });
+            });
+        }
+
+        // 页面加载完成后尝试播放
+        window.addEventListener('DOMContentLoaded', tryAutoPlay);
+
+
+        // ============================================================
         //  1. 粒子系统（性能优化：减量 + 距离平方判断 + 后台暂停）
         // ============================================================
         (function initParticles() {
@@ -1040,7 +896,7 @@
             const ctx = canvas.getContext('2d');
             let width, height;
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
-            const PARTICLE_COUNT = isMobile ? 15 : 35;   // 原 90
+            const PARTICLE_COUNT = isMobile ? 15 : 35;
             const CONNECT_DIST = 140;
             const CONNECT_DIST_SQ = CONNECT_DIST * CONNECT_DIST;
             const MAX_SPEED = 0.5;
@@ -1072,7 +928,6 @@
                 if (!running) { rafId = null; return; }
                 ctx.clearRect(0, 0, width, height);
 
-                // 更新 + 绘制
                 for (let i = 0; i < particles.length; i++) {
                     const p = particles[i];
                     p.x += p.vx;
@@ -1086,7 +941,6 @@
                     ctx.fill();
                 }
 
-                // 连线：用距离平方比较，避免每次开方
                 for (let i = 0; i < particles.length; i++) {
                     const pi = particles[i];
                     for (let j = i + 1; j < particles.length; j++) {
@@ -1105,12 +959,10 @@
                         }
                     }
                 }
-
                 rafId = requestAnimationFrame(step);
             }
             rafId = requestAnimationFrame(step);
 
-            // 切到后台 / 不可见时暂停，回来时恢复
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
                     running = false;
@@ -1123,18 +975,14 @@
                 }
             });
 
-            // 窗口 resize 时只改 canvas 尺寸，粒子保留，避免重排
-            window.addEventListener('resize', () => {
-                resize();
-            }, { passive: true });
+            window.addEventListener('resize', () => { resize(); }, { passive: true });
         })();
 
 
         // ============================================================
-        //  2. 鼠标跟随光晕（translate3d + 触摸设备禁用 + 后台暂停）
+        //  2. 鼠标跟随光晕
         // ============================================================
         (function glowFollow() {
-            // 触摸设备、减少动态效果 直接跳过
             if (window.matchMedia('(pointer: coarse)').matches) return;
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
