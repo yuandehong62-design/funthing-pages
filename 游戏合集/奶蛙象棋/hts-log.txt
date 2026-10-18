@@ -1,0 +1,12 @@
+HTTrack3.50-2 launched on Sun, 18 Oct 2026 23:12:10 at https://b23.tv/lOiLhSc +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2%f#f -F "Mozilla/5.0 (compatible; HTTrack; +https://www.httrack.com/)" -%F "<!-- Mirrored from {url} by HTTrack Website Copier/3.x [XR&CO], {date} -->" -%l "zh, en, *" https://b23.tv/lOiLhSc -O1 "C:\My Websites\naiwaxiangqi" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+23:12:12	Error: 	"Not Found" (404) at link https://www.bilibili.com/fingerPrint.js (from s1.hdslb.com/bfs/seed/jinkela/short/reporter-pb/index.js)
+
+HTTrack Website Copier/3.50-2 mirror complete in 2 seconds : 6 links scanned, 4 files written (333498 bytes overall) [107764 bytes received at 53882 bytes/sec], 339228 bytes transferred using HTTP compression in 6 files, ratio 29%, 1.4 requests per connection
+(1 errors, 0 warnings, 0 messages)

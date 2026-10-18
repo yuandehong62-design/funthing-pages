@@ -1,0 +1,5 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+.bilibili.com	TRUE	/	FALSE	1999999999	buvid3	657B072B-6E26-AE28-B10E-2B775FF8AA2959087infoc
+.bilibili.com	TRUE	/	FALSE	1999999999	b_nut	1792335459
+

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <!-- 站点图标：src/assets/logo.ico，构建时由 Vite 打包并改写路径。
+         bilibili 版例外：平台包体校验不收 .ico，构建时（vite.config.js 的 iconEditionPlugin）
+         整条标签换成同目录的 logo.png——**两个图标文件都要留着** -->
+    <link rel="icon" type="image/x-icon" href="./assets/logo-dhOfYAbX.ico">
+    <!-- 移动端：禁止双指/双击缩放（游戏内手势与缩放冲突），适配刘海屏安全区 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- 品牌底色（与 Electron / 安卓状态栏同源，见 electron/main.cjs 与 android colors.xml） -->
+    <meta name="theme-color" content="#140c22">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>一掷千金</title>
+
+    <!-- ===================== 启动兜底（老内核兼容第 ⑤ 层）=====================
+         为什么必须有：老内核上的故障几乎全是「安静地什么都不发生」——产物里的新语法让
+         整包解析失败（SyntaxError）时，控制台一行报错都没有，玩家只看到一片 #140c22 深紫底，
+         连「找谁反馈」都无从说起。这一段是唯一的可见出口。
+
+         改这里必须同时满足三条，缺一条兜底就等于不存在：
+           1. 全部内联：不 import、不依赖任何构建产物（产物坏了它得照样能显示）；
+              Vite **不会**处理 index.html 里的内联 <style>/<script>，
+              所以这里不能用组件里那些变量，`inset` 这类新写法也必须展开成四边声明。
+           2. 取节点必须**惰性**：本脚本在 <head> 执行时 <body> 还没解析，
+              此刻 document.getElementById('xxx') 恒为 null，写成顶层赋值会让兜底静默失效。
+              本实现干脆不去取 #app，改用 <html data-boot> 标记判活。
+           3. 必须真的测过一次：把产物 index.html 的主脚本 src 改成不存在的文件，
+              确认失败提示与「重新加载」按钮真的弹出来（验证步骤见 README「老内核兼容」）。
+         ==================================================================== -->
+    <style>#boot-fail{z-index:2147483647;color:#f3ead2;text-align:center;background:#140c22;flex-direction:column;justify-content:center;align-items:center;padding:0 32px;font-family:Microsoft YaHei,PingFang SC,system-ui,sans-serif;display:none;position:fixed;top:0;bottom:0;left:0;right:0}#boot-fail.boot-fail-on{display:flex}#boot-fail h1{color:#e8c36a;margin:0 0 10px;font-size:20px;font-weight:700}#boot-fail p{color:rgba(243,234,210,.55);max-width:22em;margin:0 0 22px;font-size:14px;line-height:1.7}#boot-fail button{color:#e8c36a;cursor:pointer;background:rgba(232,195,106,.12);border:1px solid rgba(232,195,106,.55);border-radius:999px;padding:12px 34px;font-family:inherit;font-size:16px}</style>
+    <script>
+      (function () {
+        var TIMEOUT_MS = 8000
+        var root = document.documentElement
+        var timer = null
+        var failed = false
+
+        // 失败出口。函数名带 __ 前缀是构建门禁 scripts/check-build-compat.mjs 的识别标记
+        function __bootFail(reason) {
+          if (failed) return
+          failed = true
+          if (timer) {
+            clearTimeout(timer)
+            timer = null
+          }
+          root.setAttribute('data-boot', 'fail')
+          var box = document.getElementById('boot-fail')
+          if (!box) return
+          var why = document.getElementById('boot-fail-why')
+          if (why && reason) why.textContent = reason
+          box.className = 'boot-fail-on'
+        }
+        window.__bootFail = __bootFail
+
+        // 挂载成功由 src/main.js 在 app.mount() 之后回调
+        window.__bootOk = function () {
+          if (failed) return
+          if (timer) {
+            clearTimeout(timer)
+            timer = null
+          }
+          root.setAttribute('data-boot', 'ok')
+        }
+
+        root.setAttribute('data-boot', 'pending')
+
+        // ① 资源加载失败。资源的 error 事件**不冒泡**，必须用捕获阶段监听。
+        //    标了 data-optional 的外部脚本（B站 SDK 等）失败不算致命，只留一条 warning。
+        window.addEventListener(
+          'error',
+          function (e) {
+            var t = e.target
+            if (!t || t === window || t === document || !t.tagName) return
+            if (t.tagName === 'SCRIPT' && t.hasAttribute('data-optional')) {
+              console.warn('[boot] 可选脚本加载失败（不影响启动）：' + t.src)
+              return
+            }
+            if (t.tagName === 'SCRIPT' || t.tagName === 'LINK') {
+              __bootFail('必需的脚本或样式没能加载。请检查网络后重试。')
+            }
+          },
+          true,
+        )
+
+        // ② 超时仍未挂载。老引擎的语法/兼容问题多半表现为「安静地什么都不发生」，
+        //    所以超时这一条是主路径，不是兜底的兜底
+        timer = setTimeout(function () {
+          if (root.getAttribute('data-boot') !== 'ok') {
+            __bootFail('加载超时。若反复出现，请更新系统 WebView 或换用新版浏览器。')
+          }
+        }, TIMEOUT_MS)
+
+        // ③「重新加载」按钮：同样惰性绑定
+        document.addEventListener('DOMContentLoaded', function () {
+          var btn = document.getElementById('boot-fail-retry')
+          if (btn) {
+            btn.addEventListener('click', function () {
+              location.reload()
+            })
+          }
+        })
+      })()
+    </script>
+    <script type="module" crossorigin src="./assets/index-CNqKvEk8.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-C9TSe3Yn.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- 启动兜底提示（默认 display:none，见上方内联样式）。放在 #app 之后：
+         它 position:fixed 不参与文档流，正常路径下完全不可见、不影响任何布局 -->
+    <div id="boot-fail" role="alert">
+      <h1>游戏加载失败</h1>
+      <p id="boot-fail-why">资源没能加载完成。请检查网络后重试。</p>
+      <button id="boot-fail-retry" type="button">重新加载</button>
+    </div>
+  </body>
+</html>
