@@ -10,12 +10,12 @@ export async function onRequestPost(context) {
       throw new Error('环境变量未读取到');
     }
 
-    const putPolicy = {
+    const putPolicy = JSON.stringify({
       scope: BUCKET,
       deadline: Math.floor(Date.now() / 1000) + 3600
-    };
+    });
 
-    const encodedPutPolicy = btoa(JSON.stringify(putPolicy))
+    const encodedPutPolicy = btoa(putPolicy)
       .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
     const encoder = new TextEncoder();
