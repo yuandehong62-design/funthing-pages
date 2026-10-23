@@ -66,3 +66,55 @@ SOFTWARE.
 1.云岭猴园
 2.网站图片预览（啥服务器要我90一个月？还是2核心 2GB 宽带50MBPS）
 
+2026.10.11 完结更新日志
+域名列表
+1.导航页所归域名
+1.1 https://ninety-one.cc.cd
+1.2 https://funthing.me
+2.棍涛舞团
+2.1 https://guntaodance.cc.cd
+2.2 csy个人show https://guntaodance.cc.cd/csy
+3.国际卤蛋贸易有限公司
+3.1 https://zhfld.dpdns.org
+4.详细更新日志可前往导航页查看
+5.在访问csy个人show时可能会自动播放音乐，在访问前请确定终端音量
+6.ICP被驳回了
+2026.10.24更新
+1.受于政策影响以及经济支持，日后更新重心将逐渐偏向csy的网站
+2.新增CHANE结构
+2.1 https://music.guntaodance.cc.cd Folid网页部署（不知道的可以自己搜一下）
+2.2 https://api.guntaodance.cc.cd Folid api 接口
+3.棍涛舞团-蔡顺毅-个人show
+3.1 修复了一些bug，增强流畅度
+3.2 新增字幕（Developer Beta）
+3.3 内嵌Folia
+3.4取消M13-M15的链接跳转改为本地读取
+3.5新增朝鲜模块
+3.5.1增加朝鲜阅兵图片
+3.5.2增加''你的盐，我的醋，~~~~万岁
+3.5.3修复冲突问题
+3.6优化播放机制，添加自动播放下一首功能
+3.7取消跳转的Developer限制
+3.8跳转部分新增Folia跳转入口
+3.9首次引入Vercel代理服务而不是Cloudflare
+3.10引入字幕文件LRC
+4.给DNSHE续了个命
+5.补档（2026.10.18更新）
+5.1新增sharehall功能
+5.2重金购入七牛云对象储存服务器
+5.3前后端初步构建完成
+6.由于某些原因，开源协议将变更为LGPL（Lesser GPL）而不是 MIT 在此造成不便
+// Copyright (C) <2026> <DehongYuan>
+//
+// This library is free software; you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation; either version 2.1 of the License, or
+// (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this library; if not, see <https://www.gnu.org/licenses/>
