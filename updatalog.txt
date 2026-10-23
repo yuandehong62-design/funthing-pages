@@ -103,6 +103,7 @@ SOFTWARE.
 5.1新增sharehall功能
 5.2重金购入七牛云对象储存服务器
 5.3前后端初步构建完成
+5.4新增yxy霸总图片
 6.由于某些原因，开源协议将变更为LGPL（Lesser GPL）而不是 MIT 在此造成不便
 // Copyright (C) <2026> <DehongYuan>
 //
