@@ -68,18 +68,16 @@
     </div>
 
     <!-- 上传区域 -->
-    <!-- onclick 绑在最外层，方便点击任意位置选文件 -->
     <div class="upload-box" onclick="document.getElementById('fileInput').click()">
         <div class="upload-icon">📤</div>
         <div class="upload-text">点击这里选择文件上传</div>
         <input type="file" id="fileInput" onchange="uploadFile(this.files)">
         <div class="progress" id="progBox"><div class="bar" id="progBar"></div></div>
-        <!-- 提示区域 -->
         <div id="result" onclick="event.stopPropagation()"></div>
     </div>
 
     <!-- 画廊展示区域 -->
-    <div class="gallery-title">📂 我上传的文件</div>
+    <div class="gallery-title">📂 所有人的投稿</div>
     <div class="grid" id="fileGrid"></div>
     <div class="empty-tip" id="emptyTip">暂无记录，快去传个文件试试吧~</div>
 </div>
@@ -87,44 +85,72 @@
 <script>
 const QINIU_UPLOAD_URL = 'https://upload-z2.qiniup.com'; // 华南区上传地址
 
-// 👇👇👇 【必须修改这里】换成你的七牛云测试域名（不要带斜杠 /） 👇👇👇
-const DOMAIN = "http://你的测试域名.hn-bkt.clouddn.com"; 
-// 👆👆👆 【必须修改这里】换成你的七牛云测试域名 👆👆👆
+// 文件下载/预览统一走同域代理 /api/sharewall-file?key=xxx
+// （服务端已配好七牛域名，避免 HTTP 测试域名在 HTTPS 页面被浏览器拦截）
 
-// 渲染历史记录（存在浏览器本地）
-function renderGallery() {
+// 从云端拉取所有人上传的文件列表
+async function renderGallery() {
     const grid = document.getElementById('fileGrid');
     const tip = document.getElementById('emptyTip');
-    let history = JSON.parse(localStorage.getItem('my_upload_history') || '[]');
-    
-    if (history.length === 0) {
+
+    let items;
+    try {
+        const res = await fetch('/api/sharewall-list');
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        items = data.items || [];
+    } catch (err) {
         tip.style.display = 'block';
+        tip.textContent = '列表加载失败：' + err.message;
         grid.innerHTML = '';
         return;
     }
-    
+
+    if (items.length === 0) {
+        tip.style.display = 'block';
+        tip.textContent = '暂无记录，快去传个文件试试吧~';
+        grid.innerHTML = '';
+        return;
+    }
+
     tip.style.display = 'none';
-    grid.innerHTML = history.map(item => {
+    grid.innerHTML = items.map(item => {
+        const fileUrl = '/api/sharewall-file?key=' + encodeURIComponent(item.key);
+        const isImage = (item.mimeType || '').startsWith('image/');
+        const isVideo = (item.mimeType || '').startsWith('video/');
         let preview = '';
-        if (item.type.startsWith('image/')) {
-            preview = `<img src="${item.url}" loading="lazy">`;
-        } else if (item.type.startsWith('video/')) {
+        if (isImage) {
+            preview = `<img src="${fileUrl}" loading="lazy" onerror="imgFallback(this)">`;
+        } else if (isVideo) {
             preview = `<div class="icon">🎬</div>`;
         } else {
             preview = `<div class="icon">📄</div>`;
         }
-        
+
         return `
             <div class="file-card">
                 <div class="preview-box">${preview}</div>
                 <div class="file-info">
-                    <div class="file-name" title="${item.originalName}">${item.originalName}</div>
-                    <div class="file-meta">${new Date(item.time).toLocaleString()}</div>
-                    <a href="${item.url}" target="_blank" class="file-link">查看 / 下载</a>
+                    <div class="file-name" title="${item.key}">${item.key}</div>
+                    <div class="file-meta">${formatSize(item.size)} · ${new Date(item.putTime / 10000).toLocaleString()}</div>
+                    <a href="${fileUrl}" target="_blank" class="file-link">查看 / 下载</a>
                 </div>
             </div>
         `;
     }).join('');
+}
+
+// 图片加载失败时，替换为图标占位
+function imgFallback(img) {
+    img.outerHTML = '<div class="icon">🖼️</div>';
+}
+
+function formatSize(bytes) {
+    bytes = bytes || 0;
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+    return (bytes / 1073741824).toFixed(1) + ' GB';
 }
 
 // 处理上传
@@ -173,27 +199,14 @@ async function uploadFile(files) {
         
         xhr.onload = function() {
             if (xhr.status === 200) {
-                // 拼接完整的文件链接
-                const fileUrl = `${DOMAIN}/${key}`;
+                // 统一走同域代理，避免 HTTP 测试域名被 HTTPS 页面拦截
+                const fileUrl = '/api/sharewall-file?key=' + encodeURIComponent(key);
                 
-                // 🎯 关键修复：加了 onclick="event.stopPropagation()"，防止点链接触发上传框
                 result.innerHTML = `✅ 上传成功！<a href="${fileUrl}" target="_blank" onclick="event.stopPropagation()">点击这里查看文件</a>`;
                 progBox.style.display = 'none';
                 document.getElementById('fileInput').value = ''; // 清空输入
 
-                // 保存到浏览器本地，方便刷新后查看
-                let history = JSON.parse(localStorage.getItem('my_upload_history') || '[]');
-                history.unshift({
-                    originalName: file.name,
-                    url: fileUrl,
-                    type: file.type,
-                    time: Date.now()
-                });
-                // 只保留最近 20 条
-                if (history.length > 20) history.pop(); 
-                localStorage.setItem('my_upload_history', JSON.stringify(history));
-                
-                // 重新渲染画廊
+                // 从云端重新拉取列表（所有人可见）
                 renderGallery();
 
             } else {
