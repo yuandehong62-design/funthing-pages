@@ -1,12 +1,16 @@
-/* 棍涛舞团 · 统一管理后台 API（Cloudflare Pages Functions）
+/* FunThing 导航页 · 统一管理后台 API（Cloudflare Pages Functions）
    路由: /api/admin（POST JSON，需请求头 X-Admin-Password）
-   环境变量（在 Cloudflare 后台 → guntaodance 项目 → Settings → Environment variables 添加）:
+   环境变量（在 Cloudflare 后台 → funthing-pages 项目 → Settings → Environment variables 添加）:
      ADMIN_PASSWORD  — 管理密码（必填，未配置时后台整体停用）
-     QINIU_AK / QINIU_SK / QINIU_BUCKET — 七牛云密钥（投稿墙管理用，与导航页项目一致）
+     QINIU_AK / QINIU_SK / QINIU_BUCKET — 七牛云密钥（投稿墙管理用）
      QINIU_DOMAIN    — 七牛下载域名（可选，默认 tn3b3bcgf.hn-bkt.clouddn.com）
+   KV 绑定:
+     MESSAGES — 留言（msg:*）
+     COUNTERS — 余票（key ticket_stock，与 guntaodance 购票页共用同一命名空间）
    功能:
      留言管理  listMessages / editMessage(改昵称/改内容) / deleteMessage —— 存 KV 绑定 MESSAGES
-     投稿墙    listFiles / renameFile(改名) / deleteFile —— 调七牛云 rs 管理接口 */
+     投稿墙    listFiles / renameFile(改名) / deleteFile —— 调七牛云 rs 管理接口
+     余票管理  getStock / setStock —— 存 KV 绑定 COUNTERS */
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -64,6 +68,8 @@ export async function onRequest(context) {
       case 'listFiles': return await listFiles(env);
       case 'renameFile': return await renameFile(env, body);
       case 'deleteFile': return await deleteFile(env, body);
+      case 'getStock': return await getStock(env);
+      case 'setStock': return await setStock(env, body);
       default: return json({ ok: false, error: '未知操作: ' + action }, 400);
     }
   } catch (err) {
@@ -105,6 +111,61 @@ async function deleteMessage(env, body) {
   return json({ ok: true });
 }
 
+/* ================= 余票管理（KV: COUNTERS，key ticket_stock） ================= */
+
+const TICKET_TYPES = ['normal', 'premium', 'vip'];
+const STOCK_KEY = 'ticket_stock';
+const DEFAULT_STOCK = 80;
+
+function normalizeStock(stock) {
+  const out = {};
+  if (stock && typeof stock === 'object') {
+    for (const [id, t] of Object.entries(stock)) {
+      if (!t || typeof t !== 'object') continue;
+      out[id] = {
+        normal: Math.max(0, parseInt(t.normal, 10) || 0),
+        premium: Math.max(0, parseInt(t.premium, 10) || 0),
+        vip: Math.max(0, parseInt(t.vip, 10) || 0),
+      };
+    }
+  }
+  return out;
+}
+
+async function readStock(env) {
+  let raw = null;
+  try { raw = await env.COUNTERS.get(STOCK_KEY, 'json'); } catch (e) { raw = null; }
+  return normalizeStock(raw);
+}
+
+async function getStock(env) {
+  return json({ ok: true, stock: await readStock(env), default: DEFAULT_STOCK });
+}
+
+async function setStock(env, body) {
+  const showId = String(body.showId || '').trim();
+  if (!showId) return json({ ok: false, error: '缺少场次 id' }, 400);
+  const stock = await readStock(env);
+  if (!stock[showId]) {
+    stock[showId] = { normal: DEFAULT_STOCK, premium: DEFAULT_STOCK, vip: DEFAULT_STOCK };
+  }
+
+  // 允许单独设置某票种余量，也允许整体重设
+  let changed = false;
+  for (const type of TICKET_TYPES) {
+    if (body[type] === undefined) continue;
+    let n = parseInt(body[type], 10);
+    if (!Number.isFinite(n)) return json({ ok: false, error: '余票必须是数字' }, 400);
+    n = Math.max(0, Math.min(99999, n));
+    stock[showId][type] = n;
+    changed = true;
+  }
+  if (!changed) return json({ ok: false, error: '没有要修改的票种' }, 400);
+
+  await env.COUNTERS.put(STOCK_KEY, JSON.stringify(stock));
+  return json({ ok: true, stock, show: stock[showId] });
+}
+
 /* ================= 投稿墙管理（七牛云 rs 接口） ================= */
 
 function qiniuEnv(env) {
@@ -112,7 +173,7 @@ function qiniuEnv(env) {
   const SK = (env.QINIU_SK || '').trim();
   const BUCKET = (env.QINIU_BUCKET || '').trim();
   if (!AK || !SK || !BUCKET) {
-    const err = new Error('七牛云环境变量未配置：请在 Cloudflare 后台给 guntaodance 项目添加 QINIU_AK / QINIU_SK / QINIU_BUCKET（与导航页项目一致）后重新部署');
+    const err = new Error('七牛云环境变量未配置：请在 Cloudflare 后台给 funthing-pages 项目添加 QINIU_AK / QINIU_SK / QINIU_BUCKET 后重新部署');
     err.status = 500;
     throw err;
   }
