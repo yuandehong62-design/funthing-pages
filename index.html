@@ -284,6 +284,234 @@
         .nav-card.card-ai { border-color: rgba(0, 212, 255, 0.25); }
         .nav-card.card-ai:hover { border-color: #00d4ff; box-shadow: 0 16px 60px rgba(0, 212, 255, 0.25), 0 0 80px rgba(0, 212, 255, 0.1); }
 
+        /* ===== 新功能：工具栏 / 搜索 / 分类 ===== */
+        .nav-toolbar {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto 1.6rem;
+            max-width: 980px;
+            padding: 0 12px;
+        }
+        .nav-search {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 1 1 260px;
+            max-width: 340px;
+            background: rgba(20, 26, 42, 0.72);
+            border: 1px solid rgba(0, 212, 255, 0.22);
+            border-radius: 999px;
+            padding: 0 12px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .nav-search:focus-within {
+            border-color: rgba(0, 212, 255, 0.7);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.12);
+        }
+        .nav-search .ns-icon { font-size: 0.9rem; opacity: 0.7; }
+        .nav-search input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #e2e8f0;
+            font-family: inherit;
+            font-size: 0.85rem;
+            padding: 9px 8px;
+            min-width: 0;
+        }
+        .nav-search input::placeholder { color: rgba(226, 232, 240, 0.35); }
+        .ns-clear {
+            background: transparent;
+            border: none;
+            color: rgba(226, 232, 240, 0.4);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 4px;
+            display: none;
+        }
+        .nav-search.has-text .ns-clear { display: block; }
+        .ns-clear:hover { color: #00d4ff; }
+
+        .cat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .chip {
+            font-family: inherit;
+            font-size: 0.72rem;
+            letter-spacing: 0.05em;
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(20, 26, 42, 0.6);
+            color: rgba(226, 232, 240, 0.65);
+            cursor: pointer;
+            transition: all 0.28s ease;
+            white-space: nowrap;
+        }
+        .chip:hover { border-color: rgba(0, 212, 255, 0.45); color: #bae6fd; }
+        .chip.active {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.22), rgba(123, 47, 252, 0.22));
+            border-color: rgba(0, 212, 255, 0.65);
+            color: #f0f9ff;
+            box-shadow: 0 0 18px rgba(0, 212, 255, 0.18);
+        }
+
+        .dice-btn, .theme-btn {
+            font-family: inherit;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(251, 191, 36, 0.35);
+            background: rgba(251, 191, 36, 0.08);
+            color: #fbbf24;
+            cursor: pointer;
+            transition: all 0.28s ease;
+            white-space: nowrap;
+        }
+        .dice-btn:hover { background: rgba(251, 191, 36, 0.18); box-shadow: 0 0 22px rgba(251, 191, 36, 0.25); transform: translateY(-2px); }
+        .dice-btn.rolling { animation: diceShake 0.5s ease; }
+        @keyframes diceShake {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-14deg) scale(1.12); }
+            50% { transform: rotate(12deg) scale(1.08); }
+            75% { transform: rotate(-8deg) scale(1.04); }
+        }
+        .theme-btn {
+            border-color: rgba(168, 85, 247, 0.4);
+            background: rgba(168, 85, 247, 0.1);
+            color: #c4b5fd;
+            padding: 8px 12px;
+        }
+        .theme-btn:hover { background: rgba(168, 85, 247, 0.2); transform: translateY(-2px); }
+
+        /* 最近访问 */
+        .recent-strip {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 980px;
+            margin: 0 auto 1.2rem;
+            padding: 10px 14px;
+            background: rgba(20, 26, 42, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+        }
+        .rs-label { font-size: 0.7rem; color: rgba(226, 232, 240, 0.45); letter-spacing: 0.08em; white-space: nowrap; }
+        .rs-list { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+        .rs-item {
+            font-size: 0.7rem;
+            padding: 4px 11px;
+            border-radius: 999px;
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.22);
+            color: #bae6fd;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+        .rs-item:hover { background: rgba(0, 212, 255, 0.2); transform: translateY(-1px); }
+        .rs-clear {
+            font-family: inherit;
+            font-size: 0.66rem;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: transparent;
+            color: rgba(248, 113, 113, 0.85);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .rs-clear:hover { background: rgba(239, 68, 68, 0.16); }
+
+        .nav-empty {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 3rem 1rem;
+            color: rgba(226, 232, 240, 0.4);
+            font-size: 0.9rem;
+        }
+
+        /* 收藏星标 + 隐藏卡片 */
+        .fav-star {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 5;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.25);
+            background: rgba(10, 14, 26, 0.5);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            opacity: 0;
+        }
+        .nav-card:hover .fav-star { opacity: 1; }
+        .fav-star:hover { color: #fbbf24; transform: scale(1.18); background: rgba(251, 191, 36, 0.16); }
+        .fav-star.on { opacity: 1; color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.7); }
+        .nav-card.card-hidden { display: none !important; }
+        @media (pointer: coarse) {
+            .fav-star { opacity: 1; }
+        }
+        .nav-card.hit { animation: cardHit 0.6s ease; }
+        @keyframes cardHit {
+            0%, 100% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
+            40% { box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.8), 0 16px 60px rgba(0, 212, 255, 0.35); }
+        }
+
+        /* ===== 浅色主题 ===== */
+        body.theme-light {
+            background: #eef3fb;
+            color: #2b3346;
+        }
+        body.theme-light #particleCanvas { opacity: 0.35; }
+        body.theme-light .main-title {
+            background: linear-gradient(135deg, #1e5fa8, #7b2ffc);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        body.theme-light .sub-title { color: rgba(43, 51, 70, 0.62); }
+        body.theme-light .nav-card {
+            background: rgba(255, 255, 255, 0.86);
+            border-color: rgba(95, 143, 208, 0.28);
+            box-shadow: 0 8px 26px rgba(95, 143, 208, 0.16);
+            color: #2b3346;
+        }
+        body.theme-light .nav-card:hover { background: #ffffff; }
+        body.theme-light .card-title {
+            background: linear-gradient(135deg, #1e5fa8, #5b21b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        body.theme-light .card-tag { color: rgba(43, 51, 70, 0.5); border-color: rgba(43, 51, 70, 0.12); background: rgba(43, 51, 70, 0.04); }
+        body.theme-light .nav-search, body.theme-light .chip, body.theme-light .recent-strip {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(95, 143, 208, 0.28);
+        }
+        body.theme-light .nav-search input { color: #2b3346; }
+        body.theme-light .nav-search input::placeholder { color: rgba(43, 51, 70, 0.38); }
+        body.theme-light .chip { color: rgba(43, 51, 70, 0.7); }
+        body.theme-light .top-module-btn, body.theme-light .music-toggle {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(95, 143, 208, 0.35);
+            color: #1e5fa8;
+        }
+        body.theme-light .footer { color: rgba(43, 51, 70, 0.5); }
+        body.theme-light .fav-star { background: rgba(255, 255, 255, 0.75); color: rgba(43, 51, 70, 0.28); }
+        body.theme-light .modal-box { background: #ffffff; color: #2b3346; }
+
         /* ===== 底部 ===== */
         .footer {
             margin-top: 1.5rem;
@@ -543,10 +771,37 @@
             <span class="line"></span>
         </div>
 
+        <!-- ===== 新功能：搜索 / 分类 / 随机 / 主题 ===== -->
+        <div class="nav-toolbar" id="navToolbar">
+            <div class="nav-search">
+                <span class="ns-icon">🔍</span>
+                <input type="text" id="navSearchInput" placeholder="搜索站点…（按 / 或 Ctrl+K 聚焦）" autocomplete="off">
+                <button class="ns-clear" id="nsClear" onclick="clearNavSearch()" title="清空">✕</button>
+            </div>
+            <div class="cat-chips" id="catChips">
+                <button class="chip active" data-cat="all" onclick="filterCards('all',this)">全部</button>
+                <button class="chip" data-cat="game" onclick="filterCards('game',this)">🎮 游戏</button>
+                <button class="chip" data-cat="tool" onclick="filterCards('tool',this)">🛠 工具</button>
+                <button class="chip" data-cat="site" onclick="filterCards('site',this)">🌐 站点</button>
+                <button class="chip" data-cat="fav" onclick="filterCards('fav',this)">⭐ 收藏</button>
+            </div>
+            <button class="dice-btn" onclick="rollRandomCard()" title="随机打开一个站点">🎲 随便逛逛</button>
+            <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="切换主题">🌙</button>
+        </div>
+
+        <!-- 最近访问 -->
+        <div class="recent-strip" id="recentStrip" style="display:none;">
+            <span class="rs-label">🕘 最近访问</span>
+            <div class="rs-list" id="recentList"></div>
+            <button class="rs-clear" onclick="clearRecent()" title="清空记录">清空</button>
+        </div>
+
+        <div class="nav-empty" id="navEmpty" style="display:none;">没有匹配的站点，换个关键词试试～</div>
+
         <!-- 导航卡片 -->
         <div class="nav-grid">
             <!-- 卡片 1：棍涛舞团 -->
-            <a href="https://guntaodance.cc.cd/" target="_blank" rel="noopener noreferrer" class="nav-card card-dance">
+            <a href="https://guntaodance.cc.cd/" target="_blank" rel="noopener noreferrer" class="nav-card card-dance" data-cat="site" data-name="棍涛舞团">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🕺</div>
@@ -556,7 +811,7 @@
             </a>
 
             <!-- 卡片 2：国际卤蛋贸易有限公司 -->
-            <div class="nav-card card-trade" onclick="showTradeModal()">
+            <div class="nav-card card-trade" data-cat="site" data-name="国际卤蛋贸易有限公司" onclick="showTradeModal()">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🌐</div>
@@ -566,7 +821,7 @@
             </div>
 
             <!-- 卡片 3：Ninety-One 网盘 -->
-            <a href="%e7%bd%91%e7%9b%98.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
+            <a href="%e7%bd%91%e7%9b%98.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud" data-cat="tool" data-name="Ninety-One 网盘">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">☁️</div>
@@ -576,7 +831,7 @@
             </a>
 
             <!-- 卡片 4：反人类注册 -->
-            <a href="%e6%b3%a8%e5%86%8c.html" target="_blank" rel="noopener noreferrer" class="nav-card card-register">
+            <a href="%e6%b3%a8%e5%86%8c.html" target="_blank" rel="noopener noreferrer" class="nav-card card-register" data-cat="game" data-name="来一场酣畅淋漓的注册吧">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🤯</div>
@@ -587,7 +842,7 @@
             </a>
 
             <!-- 卡片 5：猎奇登录2.0 -->
-            <a href="%e7%8c%8e%e5%a5%87%e7%99%bb%e5%bd%952.0.html" target="_blank" rel="noopener noreferrer" class="nav-card card-login">
+            <a href="%e7%8c%8e%e5%a5%87%e7%99%bb%e5%bd%952.0.html" target="_blank" rel="noopener noreferrer" class="nav-card card-login" data-cat="game" data-name="猎奇登录 2.0">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🔥</div>
@@ -598,7 +853,7 @@
             </a>
 
             <!-- 卡片 6：预测你的中考成绩 -->
-            <a href="%e4%b8%ad%e8%80%83%e6%88%90%e7%bb%a9%e6%9f%a5%e8%af%a2.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
+            <a href="%e4%b8%ad%e8%80%83%e6%88%90%e7%bb%a9%e6%9f%a5%e8%af%a2.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam" data-cat="tool" data-name="预测你的中考成绩">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">📊</div>
@@ -608,7 +863,7 @@
             </a>
 
             <!-- 卡片 8：从政模拟器 -->
-            <a href="%e4%bb%8e%e6%94%bf%e6%a8%a1%e6%8b%9f%e5%99%a8/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-dance">
+            <a href="%e4%bb%8e%e6%94%bf%e6%a8%a1%e6%8b%9f%e5%99%a8/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-dance" data-cat="game" data-name="从政模拟器">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🏛️</div>
@@ -618,7 +873,7 @@
             </a>
 
             <!-- 卡片 9：股市离线 -->
-            <a href="%e8%82%a1%e5%b8%82%e7%a6%bb%e7%ba%bf/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
+            <a href="%e8%82%a1%e5%b8%82%e7%a6%bb%e7%ba%bf/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam" data-cat="game" data-name="股市离线">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">📉</div>
@@ -628,7 +883,7 @@
             </a>
 
             <!-- 卡片 10：扣帽子模拟器 -->
-            <a href="%e6%89%a3%e5%b8%bd%e5%ad%90/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-register">
+            <a href="%e6%89%a3%e5%b8%bd%e5%ad%90/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-register" data-cat="game" data-name="扣帽子模拟器">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🧢</div>
@@ -638,7 +893,7 @@
             </a>
 
             <!-- 卡片 11：猎奇复杂登录 -->
-            <a href="%e7%8c%8e%e5%a5%87%e5%a4%8d%e6%9d%82%e7%99%bb%e5%bd%95/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-login">
+            <a href="%e7%8c%8e%e5%a5%87%e5%a4%8d%e6%9d%82%e7%99%bb%e5%bd%95/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-login" data-cat="game" data-name="猎奇复杂登录">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🔐</div>
@@ -648,7 +903,7 @@
             </a>
 
             <!-- 卡片 12：牛来模拟器 -->
-            <a href="%e6%89%ad%e6%9d%a5/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade">
+            <a href="%e6%89%ad%e6%9d%a5/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade" data-cat="game" data-name="牛来模拟器">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🌀</div>
@@ -658,7 +913,7 @@
             </a>
 
             <!-- 卡片 13：起早贪黑模拟器 -->
-            <a href="%e8%b5%b7%e6%97%a9%e8%b4%aa%e9%bb%91/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
+            <a href="%e8%b5%b7%e6%97%a9%e8%b4%aa%e9%bb%91/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud" data-cat="game" data-name="起早贪黑模拟器">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🌅</div>
@@ -668,7 +923,7 @@
             </a>
 
             <!-- 卡片 14：双人游戏 -->
-            <a href="%e5%8f%8c%e4%ba%ba%e6%b8%b8%e6%88%8f/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-ai">
+            <a href="%e5%8f%8c%e4%ba%ba%e6%b8%b8%e6%88%8f/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-ai" data-cat="game" data-name="双人游戏">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">👥</div>
@@ -678,7 +933,7 @@
             </a>
 
             <!-- 卡片 15：外卖员模拟器 -->
-            <a href="%e5%a4%96%e5%8d%96%e5%91%98/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
+            <a href="%e5%a4%96%e5%8d%96%e5%91%98/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam" data-cat="game" data-name="外卖员模拟器">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🛵</div>
@@ -688,7 +943,7 @@
             </a>
 
             <!-- 卡片 16：股市在线 -->
-            <a href="%e8%82%a1%e5%b8%82%e5%9c%a8%e7%ba%bf/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-dance">
+            <a href="%e8%82%a1%e5%b8%82%e5%9c%a8%e7%ba%bf/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-dance" data-cat="game" data-name="股市在线">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">📈</div>
@@ -698,7 +953,7 @@
             </a>
 
             <!-- 卡片 17：伪愤怒的小鸟 -->
-            <a href="%e4%bc%aa%e6%84%a4%e6%80%92%e7%9a%84%e5%b0%8f%e9%b8%9f/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
+            <a href="%e4%bc%aa%e6%84%a4%e6%80%92%e7%9a%84%e5%b0%8f%e9%b8%9f/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam" data-cat="game" data-name="伪愤怒的小鸟">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🐦</div>
@@ -708,7 +963,7 @@
             </a>
 
             <!-- 卡片 18：奶娃打球 -->
-            <a href="%e5%a5%b6%e5%a8%83%e6%89%93%e7%90%83/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade">
+            <a href="%e5%a5%b6%e5%a8%83%e6%89%93%e7%90%83/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade" data-cat="game" data-name="奶娃打球">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🏀</div>
@@ -718,7 +973,7 @@
             </a>
 
             <!-- 卡片 19：植物大战僵尸 -->
-            <a href="%e6%a4%8d%e7%89%a9%e5%a4%a7%e6%88%98%e5%83%b5%e5%b0%b8/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
+            <a href="%e6%a4%8d%e7%89%a9%e5%a4%a7%e6%88%98%e5%83%b5%e5%b0%b8/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud" data-cat="game" data-name="植物大战僵尸">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🌻</div>
@@ -728,7 +983,7 @@
             </a>
 
             <!-- 卡片 20：AI 智能助手 -->
-            <a href="ai-chat.html" target="_blank" rel="noopener noreferrer" class="nav-card card-ai">
+            <a href="ai-chat.html" target="_blank" rel="noopener noreferrer" class="nav-card card-ai" data-cat="tool" data-name="AI 智能助手">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🤖</div>
@@ -738,7 +993,7 @@
             </a>
 
             <!-- 卡片 21：游戏合集 -->
-            <a href="%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam">
+            <a href="%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-exam" data-cat="game" data-name="游戏合集">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🎮</div>
@@ -748,7 +1003,7 @@
             </a>
 
             <!-- 卡片 22：Sharewall 分享墙 -->
-            <a href="sharewall.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade">
+            <a href="sharewall.html" target="_blank" rel="noopener noreferrer" class="nav-card card-trade" data-cat="tool" data-name="Sharewall 分享墙">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🖼️</div>
@@ -758,7 +1013,7 @@
             </a>
 
             <!-- 卡片 23：一掷千金 -->
-            <a href="%e4%b8%80%e6%8e%b7%e5%8d%83%e9%87%91/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud">
+            <a href="%e4%b8%80%e6%8e%b7%e5%8d%83%e9%87%91/index.html" target="_blank" rel="noopener noreferrer" class="nav-card card-cloud" data-cat="game" data-name="一掷千金">
                 <span class="corner-deco tl"></span><span class="corner-deco tr"></span><span class="corner-deco bl"></span><span class="corner-deco br"></span>
                 <div class="card-content">
                     <div class="card-icon">🎲</div>
@@ -1144,6 +1399,228 @@
             if (certModal.classList.contains('active')) closeCertModal();
             if (logModal.classList.contains('active')) closeLogModal();
         });
+        // ============================================================
+        //  7. 新功能：搜索 / 分类 / 随机 / 收藏 / 主题 / 最近访问
+        // ============================================================
+        (function navEnhance() {
+            const cards = Array.from(document.querySelectorAll('.nav-card'));
+            const searchInput = document.getElementById('navSearchInput');
+            const searchBox = document.querySelector('.nav-search');
+            const emptyTip = document.getElementById('navEmpty');
+            const recentStrip = document.getElementById('recentStrip');
+            const recentList = document.getElementById('recentList');
+
+            const FAV_KEY = 'fun_favs';
+            const RECENT_KEY = 'fun_recent';
+            const THEME_KEY = 'fun_theme';
+
+            let curCat = 'all';
+            let curQuery = '';
+
+            // ---------- 工具 ----------
+            function getList(key) {
+                try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { return []; }
+            }
+            function setList(key, arr) {
+                try { localStorage.setItem(key, JSON.stringify(arr)); } catch (e) {}
+            }
+            function cardName(card) { return card.dataset.name || ''; }
+            function cardHref(card) {
+                if (card.tagName === 'A') return card.getAttribute('href') || '';
+                return 'modal:' + (card.getAttribute('onclick') || '');
+            }
+
+            // ---------- 收藏星标（动态注入） ----------
+            cards.forEach(card => {
+                const star = document.createElement('span');
+                star.className = 'fav-star';
+                star.textContent = '★';
+                star.title = '收藏';
+                star.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleFavCard(star);
+                });
+                card.appendChild(star);
+            });
+
+            window.toggleFavCard = function (star) {
+                const card = star.closest('.nav-card');
+                const name = cardName(card);
+                const favs = getList(FAV_KEY);
+                const i = favs.indexOf(name);
+                if (i >= 0) {
+                    favs.splice(i, 1);
+                    star.classList.remove('on');
+                } else {
+                    favs.push(name);
+                    star.classList.add('on');
+                }
+                setList(FAV_KEY, favs);
+                applyFilters();
+            };
+
+            function syncFavStars() {
+                const favs = getList(FAV_KEY);
+                cards.forEach(card => {
+                    const star = card.querySelector('.fav-star');
+                    if (star) star.classList.toggle('on', favs.indexOf(cardName(card)) >= 0);
+                });
+            }
+
+            // ---------- 筛选（搜索 + 分类 + 收藏） ----------
+            function applyFilters() {
+                const favs = getList(FAV_KEY);
+                let shown = 0;
+                cards.forEach(card => {
+                    const name = cardName(card);
+                    const cat = card.dataset.cat || '';
+                    let ok = true;
+                    if (curCat === 'fav') ok = favs.indexOf(name) >= 0;
+                    else if (curCat !== 'all') ok = cat === curCat;
+                    if (ok && curQuery) ok = name.toLowerCase().indexOf(curQuery) >= 0;
+                    card.classList.toggle('card-hidden', !ok);
+                    if (ok) shown++;
+                });
+                if (emptyTip) emptyTip.style.display = shown === 0 ? 'block' : 'none';
+            }
+
+            window.filterCards = function (cat, btn) {
+                curCat = cat;
+                document.querySelectorAll('#catChips .chip').forEach(b => b.classList.remove('active'));
+                if (btn) btn.classList.add('active');
+                applyFilters();
+            };
+
+            window.clearNavSearch = function () {
+                curQuery = '';
+                if (searchInput) searchInput.value = '';
+                if (searchBox) searchBox.classList.remove('has-text');
+                applyFilters();
+            };
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    curQuery = this.value.trim().toLowerCase();
+                    if (searchBox) searchBox.classList.toggle('has-text', this.value.length > 0);
+                    applyFilters();
+                });
+                searchInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') { clearNavSearch(); this.blur(); }
+                    if (e.key === 'Enter') {
+                        const first = cards.find(c => !c.classList.contains('card-hidden'));
+                        if (first) first.click();
+                    }
+                });
+            }
+
+            // ---------- 随机逛逛 ----------
+            window.rollRandomCard = function () {
+                const btn = document.querySelector('.dice-btn');
+                const pool = cards.filter(c => !c.classList.contains('card-hidden'));
+                if (!pool.length) return;
+                if (btn) { btn.classList.add('rolling'); setTimeout(() => btn.classList.remove('rolling'), 520); }
+                cards.forEach(c => c.classList.remove('hit'));
+                let n = 0;
+                const timer = setInterval(() => {
+                    cards.forEach(c => c.classList.remove('hit'));
+                    const pick = pool[Math.floor(Math.random() * pool.length)];
+                    pick.classList.add('hit');
+                    pick.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    if (++n >= 8) {
+                        clearInterval(timer);
+                        setTimeout(() => { pick.click(); }, 320);
+                    }
+                }, 90);
+            };
+
+            // ---------- 最近访问 ----------
+            function recordRecent(card) {
+                const name = cardName(card);
+                const href = cardHref(card);
+                if (!name) return;
+                let list = getList(RECENT_KEY).filter(x => x.name !== name);
+                list.unshift({ name: name, href: href, at: Date.now() });
+                list = list.slice(0, 6);
+                setList(RECENT_KEY, list);
+                renderRecent();
+            }
+
+            function renderRecent() {
+                const list = getList(RECENT_KEY);
+                if (!recentStrip || !recentList) return;
+                if (!list.length) { recentStrip.style.display = 'none'; return; }
+                recentStrip.style.display = 'flex';
+                recentList.innerHTML = list.map((x, i) => {
+                    const safe = String(x.name).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+                    if (x.href && x.href.indexOf('modal:') === 0) {
+                        return `<span class="rs-item" style="cursor:pointer" onclick="jumpRecentByIndex(${i})">${safe}</span>`;
+                    }
+                    const h = String(x.href || '').replace(/"/g, '%22');
+                    return `<a class="rs-item" href="${h}" target="_blank" rel="noopener noreferrer">${safe}</a>`;
+                }).join('');
+            }
+
+            window.jumpRecentByIndex = function (i) {
+                const list = getList(RECENT_KEY);
+                const item = list[i];
+                if (!item) return;
+                const card = cards.find(c => cardName(c) === item.name);
+                if (card) card.click();
+            };
+
+            window.clearRecent = function () {
+                setList(RECENT_KEY, []);
+                renderRecent();
+            };
+
+            cards.forEach(card => {
+                card.addEventListener('click', function (e) {
+                    if (e.target && e.target.closest && e.target.closest('.fav-star')) return;
+                    recordRecent(card);
+                }, true);
+            });
+
+            // ---------- 主题切换 ----------
+            function applyTheme(theme) {
+                const light = theme === 'light';
+                document.body.classList.toggle('theme-light', light);
+                const btn = document.getElementById('themeBtn');
+                if (btn) btn.textContent = light ? '☀️' : '🌙';
+                try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+            }
+
+            window.toggleTheme = function () {
+                let cur = 'dark';
+                try { cur = localStorage.getItem(THEME_KEY) || 'dark'; } catch (e) {}
+                applyTheme(cur === 'light' ? 'dark' : 'light');
+            };
+
+            let savedTheme = 'dark';
+            try { savedTheme = localStorage.getItem(THEME_KEY) || 'dark'; } catch (e) {}
+            applyTheme(savedTheme);
+
+            // ---------- 全局快捷键 ----------
+            document.addEventListener('keydown', function (e) {
+                const tag = (e.target.tagName || '').toLowerCase();
+                const typing = tag === 'input' || tag === 'textarea';
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                    e.preventDefault();
+                    if (searchInput) { searchInput.focus(); searchInput.select(); }
+                    return;
+                }
+                if (e.key === '/' && !typing) {
+                    e.preventDefault();
+                    if (searchInput) searchInput.focus();
+                }
+            });
+
+            // ---------- 初始化 ----------
+            syncFavStars();
+            renderRecent();
+            applyFilters();
+        })();
+
     </script>
 
 </body>
