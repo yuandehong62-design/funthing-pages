@@ -81,6 +81,29 @@
   .stock-save:hover{opacity:.9}
   .stock-reset{padding:8px 12px;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--sub);cursor:pointer;font-size:12px}
   .stock-reset:hover{border-color:var(--warn);color:var(--warn)}
+
+  /* 音乐管理 */
+  .music-note{color:var(--sub);font-size:13px;margin-bottom:14px;line-height:1.7}
+  .music-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .music-tools .btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+  .track{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;flex-wrap:wrap}
+  .track.dragging{opacity:.4}
+  .track.dragover{border-color:var(--acc);border-style:dashed}
+  .track .idx{width:34px;text-align:center;color:var(--acc);font-weight:600;font-size:14px;flex:none}
+  .track .handle{cursor:grab;color:var(--sub);font-size:16px;flex:none;user-select:none}
+  .track .handle:active{cursor:grabbing}
+  .track .names{flex:1;min-width:180px;display:flex;flex-direction:column;gap:3px}
+  .track .tname{font-size:14px;word-break:break-word}
+  .track .tartist{color:var(--sub);font-size:12px}
+  .track .src{font-size:11px;color:var(--sub);background:var(--card2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;flex:none}
+  .track .src.qiniu{color:var(--acc2);border-color:var(--acc2)}
+  .track .ops{display:flex;gap:6px;flex-wrap:wrap}
+  .track .ops .btn{padding:5px 9px;font-size:12px}
+  .track .ops .btn[disabled]{opacity:.35;cursor:not-allowed}
+  .up-row{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+  .up-progress{flex:1;min-width:160px;height:6px;background:var(--card2);border-radius:3px;overflow:hidden}
+  .up-progress i{display:block;height:100%;width:0;background:var(--acc);transition:width .2s}
+  .up-text{font-size:12px;color:var(--sub);min-width:90px}
 </style>
 </head>
 <body>
@@ -100,6 +123,7 @@
       <button class="tab active" data-tab="msg">💬 留言管理</button>
       <button class="tab" data-tab="file">🖼️ 投稿墙管理</button>
       <button class="tab" data-tab="stock">🎟️ 余票管理</button>
+      <button class="tab" data-tab="music">🎵 音乐管理</button>
     </div>
     <div class="spacer"></div>
     <button class="btn" id="refreshBtn">🔄 刷新</button>
@@ -110,6 +134,7 @@
     <div id="msgPanel"></div>
     <div id="filePanel" class="hidden"></div>
     <div id="stockPanel" class="hidden"></div>
+    <div id="musicPanel" class="hidden"></div>
   </main>
 </div>
 
@@ -201,6 +226,7 @@ document.querySelectorAll('.tab').forEach(btn => {
     $('#msgPanel').classList.toggle('hidden', currentTab !== 'msg');
     $('#filePanel').classList.toggle('hidden', currentTab !== 'file');
     $('#stockPanel').classList.toggle('hidden', currentTab !== 'stock');
+    $('#musicPanel').classList.toggle('hidden', currentTab !== 'music');
     refresh();
   };
 });
@@ -212,6 +238,7 @@ async function refresh(){
   $('#countLine').textContent = '';
   if (currentTab === 'msg') await loadMessages();
   else if (currentTab === 'file') await loadFiles();
+  else if (currentTab === 'music') await loadMusic();
   else await loadStock();
 }
 
@@ -394,6 +421,321 @@ async function stockOp(btn){
   }
 }
 
+/* ---- 音乐管理 ---- */
+let musicTracks = [];       // 当前编辑中的歌单（本地副本，改动后才推到云端）
+let musicUpdatedAt = null;
+let musicMax = 300;
+let musicDirty = false;
+
+/* 网站内置歌单（csy.html 里的 SONG_NAMES / SONG_ARTISTS），
+   云端还没建歌单时用它当种子，方便直接排序/编辑后就保存 */
+const BUILTIN_MUSIC = [
+  ['海屿你',''],['朋友的酒',''],['红色高跟鞋',''],['雨爱',''],['忘情牛肉面',''],
+  ['你若三冬',''],['花海',''],['爱情讯息',''],['甲乙丙丁',''],['心墙',''],
+  ['DreamFunk',''],['我来同你玩纯享版',''],
+  ['泡沫','G.E.M.邓紫棋'],['我走后','小咪'],['特别的人','方大同'],['我们俩','郭顶'],['越来越不懂','蔡健雅'],
+  ['NIGHT DANCER','imase'],['悬溺','葛东琪'],['Letting Go','蔡健雅'],['红色高跟鞋','蔡健雅'],['青衣','尘ah.'],
+  ['バケモノの唄','Shino'],['怪咖','薛之谦'],['琵琶曲','郑浩Z-Hao'],['如果可以','DJ大大怪'],['花海','粉白噪音'],
+  ['无人之岛','任然'],['其实','薛之谦'],['心墙','郭静'],['离开我的依赖','王艳薇'],['把回忆拼好给你','王贰浪'],
+  ['第57次取消发送','菲菲公主'],['爱情讯息','郭静'],['雨爱','杨丞琳'],['海屿你','马也_Crabbit'],
+  ['3Strikes(苹果进行曲)',''],['Die for you',''],['Ticking Away',''],['Wake','']
+].map((v, i) => ({
+  id: 'repo-' + (i + 1),
+  name: v[0],
+  artist: v[1],
+  src: (i + 1) + '.mp3',
+  type: 'repo',
+  lrc: (i + 1) + '.lrc'
+}));
+
+function markMusicDirty(){ musicDirty = true; }
+
+async function loadMusic(){
+  const p = $('#musicPanel');
+  p.innerHTML = '<div class="loading">加载中…</div>';
+  try {
+    const d = await api('getMusic');
+    musicTracks = (d.tracks || []).map(t => ({
+      id: t.id, name: t.name, artist: t.artist || '',
+      src: t.src, type: t.type || 'repo', lrc: t.lrc || ''
+    }));
+    musicUpdatedAt = d.updatedAt || null;
+    musicMax = d.max || 300;
+    musicDirty = false;
+    if (!musicTracks.length) {
+      // 云端还没歌单 → 用网站当前的内置歌单当草稿
+      musicTracks = BUILTIN_MUSIC.map(t => Object.assign({}, t));
+    }
+    renderMusic();
+  } catch(e){
+    p.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>';
+  }
+}
+
+function renderMusic(){
+  const p = $('#musicPanel');
+  const total = musicTracks.length;
+  $('#countLine').textContent = '共 ' + total + ' 首' + (musicDirty ? '（有未保存的改动）' : '');
+
+  let html = '<div class="music-note">'
+    + '这里管理棍涛舞团点播页（csy.html）的曲目表：可拖动排序、改名/歌手、删除，或上传新音乐。'
+    + '改动点「保存到云端」后立即对全部访客生效，无需重新部署。'
+    + (musicUpdatedAt ? '<br>上次保存：' + esc(fmtTime(musicUpdatedAt)) : '<br>云端还没有歌单，下面列出的是网站当前内置的曲目（直接改完保存即可接管）。')
+    + '</div>';
+
+  html += '<div class="music-tools">'
+    + '<button class="btn primary" id="musicSaveBtn">💾 保存到云端</button>'
+    + '<button class="btn" id="musicAddBtn">➕ 添加一首（手动填路径）</button>'
+    + '<button class="btn" id="musicUpBtn">⬆️ 上传音乐（七牛云）</button>'
+    + '<button class="btn" id="musicResetBtn">↩️ 放弃改动</button>'
+    + '</div><div id="musicUpArea"></div>';
+
+  if (!total) {
+    html += '<div class="empty">歌单为空。<br>点「上传音乐」传一首，或「添加一首」手动填一个已存在的文件路径。</div>';
+    p.innerHTML = html;
+    bindMusicTools();
+    return;
+  }
+
+  html += musicTracks.map((t, i) => {
+    const isQ = t.type === 'qiniu';
+    return '<div class="track" draggable="true" data-i="' + i + '">'
+      + '<span class="handle" title="拖动排序">⠿</span>'
+      + '<div class="idx">' + String(i + 1).padStart(2, '0') + '</div>'
+      + '<div class="names">'
+      + '<span class="tname">' + esc(t.name || '(未命名)') + '</span>'
+      + '<span class="tartist">' + (t.artist ? esc(t.artist) : '未填歌手') + '</span>'
+      + '</div>'
+      + '<span class="src ' + (isQ ? 'qiniu' : '') + '">' + (isQ ? '☁️ 七牛' : '📁 站内') + '</span>'
+      + '<div class="ops">'
+      + '<button class="btn" data-mop="up" data-i="' + i + '"' + (i === 0 ? ' disabled' : '') + '>↑</button>'
+      + '<button class="btn" data-mop="down" data-i="' + i + '"' + (i === total - 1 ? ' disabled' : '') + '>↓</button>'
+      + '<button class="btn" data-mop="edit" data-i="' + i + '">✏️ 编辑</button>'
+      + '<button class="btn" data-mop="try" data-i="' + i + '">▶️ 试听</button>'
+      + '<button class="btn danger" data-mop="del" data-i="' + i + '">🗑️ 删除</button>'
+      + '</div></div>';
+  }).join('');
+
+  p.innerHTML = html;
+  bindMusicTools();
+  bindTrackDrag();
+}
+
+function bindMusicTools(){
+  const save = $('#musicSaveBtn');
+  if (save) save.onclick = saveMusic;
+  const add = $('#musicAddBtn');
+  if (add) add.onclick = addTrackManual;
+  const up = $('#musicUpBtn');
+  if (up) up.onclick = showUploadArea;
+  const rs = $('#musicResetBtn');
+  if (rs) rs.onclick = () => { if (!musicDirty) { toast('没有改动'); return; } if (confirm('放弃所有未保存的改动？')) loadMusic(); };
+  document.querySelectorAll('#musicPanel [data-mop]').forEach(btn => {
+    btn.onclick = () => trackOp(btn.dataset.mop, parseInt(btn.dataset.i, 10));
+  });
+}
+
+/* 拖动排序 */
+function bindTrackDrag(){
+  const rows = document.querySelectorAll('#musicPanel .track');
+  let dragFrom = -1;
+  rows.forEach(row => {
+    row.addEventListener('dragstart', e => {
+      dragFrom = parseInt(row.dataset.i, 10);
+      row.classList.add('dragging');
+      try { e.dataTransfer.setData('text/plain', String(dragFrom)); } catch(_) {}
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', () => {
+      row.classList.remove('dragging');
+      document.querySelectorAll('#musicPanel .track').forEach(r => r.classList.remove('dragover'));
+    });
+    row.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      row.classList.add('dragover');
+    });
+    row.addEventListener('dragleave', () => row.classList.remove('dragover'));
+    row.addEventListener('drop', e => {
+      e.preventDefault();
+      row.classList.remove('dragover');
+      const to = parseInt(row.dataset.i, 10);
+      let from = dragFrom;
+      try { const s = e.dataTransfer.getData('text/plain'); if (s !== '' && !isNaN(parseInt(s,10))) from = parseInt(s,10); } catch(_) {}
+      if (isNaN(from) || from === to || from < 0) return;
+      moveTrack(from, to);
+    });
+  });
+}
+
+function moveTrack(from, to){
+  if (from === to || from < 0 || to < 0 || from >= musicTracks.length || to >= musicTracks.length) return;
+  const t = musicTracks.splice(from, 1)[0];
+  musicTracks.splice(to, 0, t);
+  markMusicDirty();
+  renderMusic();
+}
+
+function trackOp(op, i){
+  const t = musicTracks[i];
+  if (!t) return;
+  if (op === 'up') { moveTrack(i, i - 1); return; }
+  if (op === 'down') { moveTrack(i, i + 1); return; }
+  if (op === 'edit') {
+    const name = prompt('曲目名（显示在卡片上）：', t.name || '');
+    if (name === null) return;
+    const artist = prompt('歌手（可留空）：', t.artist || '');
+    if (artist === null) return;
+    t.name = name.trim().slice(0, 120) || t.name;
+    t.artist = artist.trim().slice(0, 120);
+    markMusicDirty();
+    renderMusic();
+    return;
+  }
+  if (op === 'try') {
+    // 站内文件在棍涛舞团站点根目录，七牛文件走它自己的音频代理
+    const realUrl = t.type === 'qiniu'
+      ? ('https://guntaodance.pages.dev/api/music-file?key=' + encodeURIComponent(t.src))
+      : ('https://guntaodance.pages.dev/' + t.src);
+    window.open(realUrl, '_blank');
+    return;
+  }
+  if (op === 'del') {
+    let alsoCloud = false;
+    if (t.type === 'qiniu') {
+      alsoCloud = confirm('确定从歌单里删除「' + (t.name || t.src) + '」吗？\n\n点「确定」= 同时删除七牛云上的文件（省存储）\n点「取消」= 只从歌单移除，云端文件保留');
+    } else {
+      if (!confirm('确定从歌单里删除「' + (t.name || t.src) + '」吗？（站内文件不会被删除）')) return;
+    }
+    musicTracks.splice(i, 1);
+    markMusicDirty();
+    renderMusic();
+    if (alsoCloud) {
+      api('deleteMusic', { key: t.src })
+        .then(() => toast('已从歌单移除，并删除了云端文件', 'ok'))
+        .catch(e => toast('歌单已移除，但云端文件删除失败：' + e.message, 'err'));
+    }
+    return;
+  }
+}
+
+function addTrackManual(){
+  const src = prompt('文件路径（站内文件如 41.mp3，或七牛 key 如 music/xxx.mp3）：', '');
+  if (src === null) return;
+  const clean = src.trim();
+  if (!clean) return;
+  const name = prompt('曲目名：', '');
+  if (name === null) return;
+  const artist = prompt('歌手（可留空）：', '');
+  if (artist === null) return;
+  const isQ = clean.indexOf('music/') === 0;
+  musicTracks.push({
+    id: 'k' + Date.now().toString(36),
+    name: (name.trim() || clean).slice(0, 120),
+    artist: (artist.trim()).slice(0, 120),
+    src: clean,
+    type: isQ ? 'qiniu' : 'repo',
+    lrc: isQ ? '' : (clean.replace(/\.[^.]+$/, '') + '.lrc')
+  });
+  markMusicDirty();
+  renderMusic();
+  toast('已添加到列表，记得点「保存到云端」', 'ok');
+}
+
+/* 上传到七牛 */
+function showUploadArea(){
+  const area = $('#musicUpArea');
+  if (!area) return;
+  if (area.dataset.open === '1') { area.innerHTML = ''; area.dataset.open = '0'; return; }
+  area.dataset.open = '1';
+  area.innerHTML = '<div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px">'
+    + '<div style="font-size:13px;color:var(--sub);margin-bottom:10px;line-height:1.7">'
+    + '选择要上传的音频文件（mp3 / flac / m4a / wav 等），会传到七牛云并自动加进歌单。<br>'
+    + '文件名会作为曲目名初稿，稍后可编辑。上传完成后记得点「保存到云端」。</div>'
+    + '<input type="file" id="musicFileInput" accept="audio/*,.mp3,.flac,.m4a,.wav,.ogg,.aac" multiple>'
+    + '<div class="up-row"><div class="up-progress"><i id="upBar"></i></div><span class="up-text" id="upText">等待选择</span></div>'
+    + '</div>';
+  $('#musicFileInput').onchange = e => doUpload(Array.from(e.target.files || []));
+}
+
+async function doUpload(files){
+  if (!files.length) return;
+  for (let k = 0; k < files.length; k++) {
+    const file = files[k];
+    if (!file) continue;
+    const bar = $('#upBar'), txt = $('#upText');
+    if (txt) txt.textContent = '(' + (k + 1) + '/' + files.length + ') ' + file.name;
+    try {
+      const safeName = (file.name || 'audio.mp3').replace(/[^\w.\-]+/g, '_').slice(-60);
+      const tk = await api('musicToken', { name: safeName });
+      if (!tk || !tk.ok) throw new Error('取上传凭证失败');
+      await putToQiniu(tk, file, pct => {
+        if (bar) bar.style.width = (pct * 100).toFixed(1) + '%';
+        if (txt) txt.textContent = '(' + (k + 1) + '/' + files.length + ') ' + file.name + ' · ' + Math.round(pct * 100) + '%';
+      });
+      const baseName = file.name.replace(/\.[^.]+$/, '');
+      musicTracks.push({
+        id: 'k' + Date.now().toString(36) + Math.floor(Math.random() * 1000),
+        name: baseName.slice(0, 120),
+        artist: '',
+        src: tk.key,
+        type: 'qiniu',
+        lrc: ''
+      });
+      markMusicDirty();
+    } catch(e){
+      toast('「' + file.name + '」上传失败：' + e.message, 'err');
+    }
+  }
+  const bar = $('#upBar'), txt = $('#upText');
+  if (bar) bar.style.width = '100%';
+  if (txt) txt.textContent = '上传完成，请点「保存到云端」';
+  renderMusic();
+  toast('上传完成，请点「保存到云端」生效', 'ok');
+}
+
+function putToQiniu(tk, file, onProgress){
+  return new Promise((resolve, reject) => {
+    const fd = new FormData();
+    fd.append('token', tk.token);
+    fd.append('key', tk.key);
+    fd.append('file', file);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', tk.uploadUrl || 'https://upload-z2.qiniup.com', true);
+    xhr.upload.onprogress = e => { if (e.lengthComputable && onProgress) onProgress(e.loaded / e.total); };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) resolve();
+      else reject(new Error('七牛返回 ' + xhr.status + ' ' + (xhr.responseText || '').slice(0, 120)));
+    };
+    xhr.onerror = () => reject(new Error('网络错误'));
+    xhr.ontimeout = () => reject(new Error('超时'));
+    xhr.send(fd);
+  });
+}
+
+async function saveMusic(){
+  const save = $('#musicSaveBtn');
+  if (save) { save.disabled = true; save.textContent = '保存中…'; }
+  try {
+    const payload = musicTracks.map((t, i) => ({
+      id: t.id || ('k' + i),
+      name: t.name || ('曲目' + (i + 1)),
+      artist: t.artist || '',
+      src: t.src,
+      type: t.type === 'qiniu' ? 'qiniu' : 'repo',
+      lrc: t.lrc || ''
+    }));
+    const d = await api('setMusic', { tracks: payload });
+    musicUpdatedAt = (d && d.updatedAt) || new Date().toISOString();
+    musicDirty = false;
+    toast('歌单已保存到云端，全部访客立即生效', 'ok');
+    renderMusic();
+  } catch(e){
+    toast('保存失败：' + e.message, 'err');
+  } finally {
+    if (save) { save.disabled = false; save.textContent = '💾 保存到云端'; }
+  }
+}
 /* ---- 启动 ---- */
 if (pwd) {
   api('ping').then(() => {

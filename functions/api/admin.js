@@ -45,7 +45,7 @@ export async function onRequest(context) {
   if (!pwd) {
     return json({
       ok: false,
-      error: '管理密码未配置：请在 Cloudflare 后台 → Workers & Pages → guntaodance → Settings → Environment variables → Production 添加 ADMIN_PASSWORD（以及 QINIU_AK / QINIU_SK / QINIU_BUCKET 用于投稿墙管理）后重新部署。',
+      error: '管理密码未配置：请在 Cloudflare 后台 → Workers & Pages → funthing-pages → Settings → Environment variables → Production 添加 ADMIN_PASSWORD（以及 QINIU_AK / QINIU_SK / QINIU_BUCKET 用于投稿墙与音乐上传）后重新部署。',
       setup: true,
     }, 503);
   }
@@ -70,6 +70,10 @@ export async function onRequest(context) {
       case 'deleteFile': return await deleteFile(env, body);
       case 'getStock': return await getStock(env);
       case 'setStock': return await setStock(env, body);
+      case 'getMusic': return await getMusic(env);
+      case 'setMusic': return await setMusic(env, body);
+      case 'musicToken': return await musicToken(env, body);
+      case 'deleteMusic': return await deleteMusic(env, body);
       default: return json({ ok: false, error: '未知操作: ' + action }, 400);
     }
   } catch (err) {
@@ -164,6 +168,122 @@ async function setStock(env, body) {
 
   await env.COUNTERS.put(STOCK_KEY, JSON.stringify(stock));
   return json({ ok: true, stock, show: stock[showId] });
+}
+
+/* ================= 音乐管理（KV: COUNTERS，key music_list） =================
+
+   歌单结构:
+     { version:1, updatedAt:ISO, tracks:[ {id,name,artist,src,type,lrc} ] }
+       type='repo'  → src 是站点内相对路径，例如 '13.mp3'（Cloudflare Pages 静态文件）
+       type='qiniu' → src 是七牛对象 key，例如 'music/1752_abcd.mp3'
+   站点读取: guntaodance 的 GET /api/music
+   新上传的音乐统一走七牛（不占仓库、不需要 git push 重新部署） */
+
+const MUSIC_KEY = 'music_list';
+const MAX_TRACKS = 300;
+const MUSIC_QINIU_PREFIX = 'music/';
+
+function normalizeTrack(t) {
+  if (!t || typeof t !== 'object') return null;
+  const src = String(t.src || '').trim();
+  if (!src || src.length > 300) return null;
+  if (src.indexOf('..') >= 0) return null;
+  return {
+    id: String(t.id || src).slice(0, 160),
+    name: String(t.name || '').trim().slice(0, 120),
+    artist: String(t.artist || '').trim().slice(0, 120),
+    src,
+    type: t.type === 'qiniu' ? 'qiniu' : 'repo',
+    lrc: String(t.lrc || '').trim().slice(0, 300),
+  };
+}
+
+async function getMusic(env) {
+  let raw = null;
+  try { raw = await env.COUNTERS.get(MUSIC_KEY, 'json'); } catch (e) { raw = null; }
+  const tracks = (raw && Array.isArray(raw.tracks))
+    ? raw.tracks.slice(0, MAX_TRACKS).map(normalizeTrack).filter(Boolean)
+    : [];
+  return json({
+    ok: true,
+    tracks,
+    updatedAt: (raw && raw.updatedAt) || null,
+    count: tracks.length,
+    max: MAX_TRACKS,
+  });
+}
+
+async function setMusic(env, body) {
+  if (!Array.isArray(body.tracks)) return json({ ok: false, error: '缺少 tracks 数组' }, 400);
+  if (body.tracks.length > MAX_TRACKS) return json({ ok: false, error: '曲目数量超过上限 ' + MAX_TRACKS }, 400);
+
+  const tracks = [];
+  for (const t of body.tracks) {
+    const n = normalizeTrack(t);
+    if (!n) return json({ ok: false, error: '存在非法的曲目数据（src 为空或路径非法）' }, 400);
+    tracks.push(n);
+  }
+
+  const updatedAt = new Date().toISOString();
+  await env.COUNTERS.put(MUSIC_KEY, JSON.stringify({ version: 1, updatedAt, tracks }));
+  return json({ ok: true, tracks, updatedAt, count: tracks.length });
+}
+
+/* 生成带固定对象 key 的上传凭证（scope = bucket:key），
+   这样后台可以精确控制文件落到 music/ 目录，前端上传完直接把 key 记进歌单 */
+async function musicToken(env, body) {
+  const { AK, SK, BUCKET } = qiniuEnv(env);
+  const name = String(body.name || '').replace(/[^A-Za-z0-9_.\-]/g, '_').slice(-80) || 'track.mp3';
+  const key = MUSIC_QINIU_PREFIX + Date.now() + '_' + Math.floor(Math.random() * 10000) + '_' + name;
+
+  const putPolicy = JSON.stringify({
+    scope: BUCKET + ':' + key,
+    deadline: Math.floor(Date.now() / 1000) + 3600,
+  });
+  const encodedPutPolicy = btoa(putPolicy).replace(/\+/g, '-').replace(/\//g, '_');
+
+  const k = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(SK),
+    { name: 'HMAC', hash: 'SHA-1' },
+    false,
+    ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(encodedPutPolicy));
+  const signatureBase64 = b64url(new Uint8Array(sig));
+
+  return json({
+    ok: true,
+    key,
+    token: AK + ':' + signatureBase64 + ':' + encodedPutPolicy,
+    uploadUrl: 'https://upload-z2.qiniup.com',
+  });
+}
+
+/* 删除七牛上的音乐对象（只允许删 music/ 前缀，避免误删投稿墙图片） */
+async function deleteMusic(env, body) {
+  const key = String(body.key || '').trim();
+  if (key.indexOf(MUSIC_QINIU_PREFIX) !== 0) {
+    return json({ ok: false, error: '只能删除 music/ 目录下的文件' }, 400);
+  }
+  if (!/^[A-Za-z0-9_.\-\/]{1,300}$/.test(key) || key.indexOf('..') >= 0) {
+    return json({ ok: false, error: '非法文件名' }, 400);
+  }
+  const { AK, SK, BUCKET } = qiniuEnv(env);
+  const path = '/delete/' + entry(BUCKET, key);
+  const auth = await qiniuAuth(AK, SK, 'POST', path, 'rs.qbox.me');
+  const resp = await fetch('https://rs.qbox.me' + path, {
+    method: 'POST',
+    headers: { Authorization: auth },
+  });
+  if (!resp.ok) {
+    let msg = 'HTTP ' + resp.status;
+    try { const d = await resp.json(); if (d && d.error) msg += ': ' + d.error; } catch (e) {}
+    // 七牛返回 612 表示文件不存在，对删除操作视为已达成目标
+    if (resp.status === 612) return json({ ok: true, missing: true });
+    return json({ ok: false, error: '删除七牛文件失败（' + msg + '）' }, 502);
+  }
+  return json({ ok: true });
 }
 
 /* ================= 投稿墙管理（七牛云 rs 接口） ================= */
