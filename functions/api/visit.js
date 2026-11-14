@@ -59,16 +59,32 @@ export async function onRequest(context) {
   try {
     await env.COUNTERS.put(key, JSON.stringify(visit));
 
-    // 超出上限时裁剪最旧的记录
-    const all = await env.COUNTERS.list({ prefix: 'visit:', limit: 3000 });
-    if (all.keys.length > MAX_VISITS) {
-      const sorted = all.keys.map(k => k.name).sort(); // 旧 → 新
-      const toDelete = sorted.slice(0, all.keys.length - MAX_VISITS);
-      await Promise.all(toDelete.map(n => env.COUNTERS.delete(n)));
-    }
+    // 超出上限时裁剪最旧的记录（KV list 单次上限 1000，需分页）
+    await trimVisits(env);
     return json({ ok: true });
   } catch (err) {
     return json({ ok: false, error: String(err && err.message || err) }, 500);
+  }
+}
+
+async function trimVisits(env) {
+  const prefix = 'visit:';
+  const names = [];
+  let cursor;
+  // 分页收集所有 visit: key（key 格式 visit:<ms>:<rand>，字典序即时间序）
+  do {
+    const page = await env.COUNTERS.list({ prefix, limit: 1000, cursor });
+    names.push(...page.keys.map(k => k.name));
+    if (page.list_complete) break;
+    cursor = page.cursor;
+  } while (cursor);
+
+  if (names.length <= MAX_VISITS) return;
+  names.sort(); // 旧 → 新
+  const toDelete = names.slice(0, names.length - MAX_VISITS);
+  // KV 无批量删除，分批并发删除（每批 500）
+  for (let i = 0; i < toDelete.length; i += 500) {
+    await Promise.all(toDelete.slice(i, i + 500).map(n => env.COUNTERS.delete(n)));
   }
 }
 
