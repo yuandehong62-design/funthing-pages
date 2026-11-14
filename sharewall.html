@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShareMore 公开投稿墙</title>
+<title>ShareMore 投稿墙</title>
 <style>
     :root { 
         --bg: #0a0e1a; 
@@ -18,6 +18,34 @@
     .topbar { text-align: center; margin-bottom: 24px; }
     .title { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #00d4ff, #7b2ffc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .subtitle { color:#aaa; font-size:0.8rem; margin-top:6px; }
+
+    /* 标签页切换 */
+    .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 22px; }
+    .tab { padding: 9px 22px; border-radius: 999px; border: 1px solid var(--border); background: rgba(20, 26, 42, 0.72); color: #9aa; cursor: pointer; font-size: 0.85rem; transition: 0.25s; }
+    .tab:hover { border-color: var(--accent); color: #fff; }
+    .tab.on { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+    .panel { display: none; }
+    .panel.on { display: block; }
+
+    /* 留言板 */
+    .msg-form { background: rgba(20, 26, 42, 0.72); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 26px; }
+    .msg-row { display: flex; gap: 10px; }
+    .msg-input { flex: 1; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: var(--text); font-size: 0.85rem; outline: none; transition: 0.25s; }
+    .msg-input:focus { border-color: var(--accent); }
+    .msg-input::placeholder { color: rgba(255,255,255,0.35); }
+    .msg-name-input { max-width: 180px; }
+    .msg-submit { padding: 11px 22px; border-radius: 12px; border: none; background: var(--accent); color: #000; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.25s; }
+    .msg-submit:hover { filter: brightness(1.1); }
+    .msg-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .msg-hint { margin-top: 10px; font-size: 0.7rem; color: #777; text-align: center; }
+
+    .msg-list { display: flex; flex-direction: column; gap: 12px; }
+    .msg-item { background: rgba(20, 26, 42, 0.72); border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; }
+    .msg-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .msg-name { font-size: 0.82rem; font-weight: 700; color: var(--accent); }
+    .msg-time { font-size: 0.68rem; color: #777; }
+    .msg-text { font-size: 0.88rem; color: var(--text); line-height: 1.7; word-break: break-word; white-space: pre-wrap; }
+    .msg-empty { text-align: center; color: #666; font-size: 0.88rem; padding: 28px 0; }
 
     /* 上传区 */
     .upload-box { 
@@ -64,26 +92,141 @@
 <div class="wrap">
     <div class="topbar">
         <div class="title">✦ ShareMore 投稿墙 ✦</div>
-        <p class="subtitle">支持照片、视频及普通文件（限 50MB）</p>
+        <p class="subtitle">匿名留言 · 分享照片、视频及普通文件（限 50MB）</p>
     </div>
 
-    <!-- 上传区域 -->
-    <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-        <div class="upload-icon">📤</div>
-        <div class="upload-text">点击这里选择文件上传</div>
-        <input type="file" id="fileInput" onchange="uploadFile(this.files)">
-        <div class="progress" id="progBox"><div class="bar" id="progBar"></div></div>
-        <div id="result" onclick="event.stopPropagation()"></div>
+    <!-- 标签页 -->
+    <div class="tabs">
+        <div class="tab on" id="tabMsg" onclick="switchTab('msg')">💬 匿名留言</div>
+        <div class="tab" id="tabFile" onclick="switchTab('file')">📤 文件投稿</div>
     </div>
 
-    <!-- 画廊展示区域 -->
-    <div class="gallery-title">📂 所有人的投稿</div>
-    <div class="grid" id="fileGrid"></div>
-    <div class="empty-tip" id="emptyTip">暂无记录，快去传个文件试试吧~</div>
+    <!-- 留言板 -->
+    <div class="panel on" id="panelMsg">
+        <div class="msg-form">
+            <div class="msg-row">
+                <input type="text" class="msg-input msg-name-input" id="msgName" maxlength="16" placeholder="昵称（可留空）">
+                <button class="msg-submit" id="msgSubmitBtn" onclick="submitMsg()">发布留言</button>
+            </div>
+            <textarea class="msg-input" id="msgText" maxlength="200" placeholder="想说点什么？无需记名，友善发言哦～" style="width:100%; margin-top:10px; resize:vertical;"></textarea>
+            <p class="msg-hint">留言全网公开可见 · 无需登录 · 内容友善文明</p>
+        </div>
+        <div class="msg-list" id="msgList"></div>
+    </div>
+
+    <!-- 文件投稿 -->
+    <div class="panel" id="panelFile">
+        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📤</div>
+            <div class="upload-text">点击这里选择文件上传</div>
+            <input type="file" id="fileInput" onchange="uploadFile(this.files)">
+            <div class="progress" id="progBox"><div class="bar" id="progBar"></div></div>
+            <div id="result" onclick="event.stopPropagation()"></div>
+        </div>
+
+        <div class="gallery-title">📂 所有人的投稿</div>
+        <div class="grid" id="fileGrid"></div>
+        <div class="empty-tip" id="emptyTip">暂无记录，快去传个文件试试吧~</div>
+    </div>
 </div>
 
 <script>
 const QINIU_UPLOAD_URL = 'https://upload-z2.qiniup.com'; // 华南区上传地址
+
+/* ============ 标签页切换 ============ */
+function switchTab(which) {
+    document.getElementById('tabMsg').classList.toggle('on', which === 'msg');
+    document.getElementById('tabFile').classList.toggle('on', which === 'file');
+    document.getElementById('panelMsg').classList.toggle('on', which === 'msg');
+    document.getElementById('panelFile').classList.toggle('on', which === 'file');
+    if (which === 'msg') fetchMessages();
+}
+
+/* ============ 匿名留言 ============ */
+let messages = [];
+let msgLoadState = 'idle'; // idle | loading | ok | fail
+
+function escapeHtml(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function fmtTime(t) {
+    if (!t) return '';
+    try { return new Date(t).toLocaleString('zh-CN', { hour12: false }); }
+    catch (e) { return String(t); }
+}
+
+function renderMessages() {
+    const list = document.getElementById('msgList');
+    if (!list) return;
+    if (msgLoadState === 'loading' && !messages.length) {
+        list.innerHTML = '<div class="msg-empty">⏳ 正在加载留言…</div>';
+        return;
+    }
+    if (msgLoadState === 'fail' && !messages.length) {
+        list.innerHTML = '<div class="msg-empty">⚠️ 留言加载失败，请检查网络后刷新页面重试</div>';
+        return;
+    }
+    if (!messages.length) {
+        list.innerHTML = '<div class="msg-empty">还没有留言，来抢沙发吧～</div>';
+        return;
+    }
+    list.innerHTML = messages.map(m =>
+        `<div class="msg-item">
+            <div class="msg-head"><span class="msg-name">${escapeHtml(m.name || '匿名')}</span><span class="msg-time">${escapeHtml(fmtTime(m.time))}</span></div>
+            <div class="msg-text">${escapeHtml(m.text)}</div>
+         </div>`
+    ).join('');
+}
+
+async function fetchMessages() {
+    msgLoadState = 'loading';
+    renderMessages();
+    try {
+        const res = await fetch('/api/messages?_=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (!data || !data.ok || !Array.isArray(data.messages)) throw new Error('bad payload');
+        messages = data.messages.slice().reverse(); // 服务器新→旧，转为旧→新
+        msgLoadState = 'ok';
+        renderMessages();
+    } catch (e) {
+        msgLoadState = 'fail';
+        renderMessages();
+    }
+}
+
+async function submitMsg() {
+    const nameEl = document.getElementById('msgName');
+    const textEl = document.getElementById('msgText');
+    const name = nameEl.value.trim() || '匿名';
+    const text = textEl.value.trim();
+    if (!text) { textEl.focus(); return; }
+
+    const btn = document.getElementById('msgSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = '发布中…';
+    try {
+        const res = await fetch('/api/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, text })
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        nameEl.value = '';
+        textEl.value = '';
+        await fetchMessages();
+    } catch (e) {
+        alert('留言发布失败，请稍后重试');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '发布留言';
+    }
+}
+
+/* ============ 文件投稿 ============ */
 
 // 文件下载/预览统一走同域代理 /api/sharewall-file?key=xxx
 // （服务端已配好七牛域名，避免 HTTP 测试域名在 HTTPS 页面被浏览器拦截）
@@ -131,7 +274,7 @@ async function renderGallery() {
             <div class="file-card">
                 <div class="preview-box">${preview}</div>
                 <div class="file-info">
-                    <div class="file-name" title="${item.key}">${item.key}</div>
+                    <div class="file-name" title="${escapeHtml(item.key)}">${escapeHtml(item.key)}</div>
                     <div class="file-meta">${formatSize(item.size)} · ${new Date(item.putTime / 10000).toLocaleString()}</div>
                     <a href="${fileUrl}" target="_blank" class="file-link">查看 / 下载</a>
                 </div>
@@ -228,8 +371,11 @@ async function uploadFile(files) {
     }
 }
 
-// 页面加载时，渲染一次画廊
-window.onload = renderGallery;
+// 页面加载时，渲染一次
+window.onload = function() {
+    fetchMessages();
+    renderGallery();
+};
 </script>
 </body>
 </html>
