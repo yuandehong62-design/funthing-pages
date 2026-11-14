@@ -22,6 +22,11 @@ const CORS_HEADERS = {
 const QINIU_DEFAULT_DOMAIN = 'tn3b3bcgf.hn-bkt.clouddn.com';
 const MSG_KEY_RE = /^msg:\d+:[a-z0-9]+$/;
 const FILE_KEY_RE = /^[A-Za-z0-9_.\-]{1,200}$/;
+const NAV_CARDS_KEY = 'nav_cards';
+const MAX_CARDS = 200;
+const CARD_QINIU_PREFIX = 'card/';
+const CARD_CATS = ['game', 'tool', 'site'];
+const CARD_COLORS = ['dance', 'trade', 'cloud', 'register', 'exam', 'login', 'ai'];
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -74,6 +79,9 @@ export async function onRequest(context) {
       case 'setMusic': return await setMusic(env, body);
       case 'musicToken': return await musicToken(env, body);
       case 'deleteMusic': return await deleteMusic(env, body);
+      case 'getCards': return await getCards(env);
+      case 'saveCards': return await saveCards(env, body);
+      case 'cardToken': return await cardToken(env, body);
       default: return json({ ok: false, error: '未知操作: ' + action }, 400);
     }
   } catch (err) {
@@ -394,4 +402,96 @@ async function renameFile(env, body) {
     throw new Error('改名失败（' + msg + '），注意新文件名不能与已有文件重名');
   }
   return json({ ok: true, newKey });
+}
+
+/* ================= 导航卡片管理（KV: COUNTERS，key nav_cards） =================
+
+   卡片结构:
+     { version:1, updatedAt:ISO, cards:[ {id,name,cat,color,icon,tag,href,mode} ] }
+       cat  ∈ game | tool | site
+       color∈ dance | trade | cloud | register | exam | login | ai
+       icon    — emoji 或图片 URL（http... 视为图标图片）
+       tag     — 卡片右下角小字（可空）
+       href    — 站内相对路径或完整 URL；mode='modal' 时是弹窗标识
+       mode    — 'link'（默认，<a>）| 'modal'（onclick 弹窗，仅内置几个）
+   站点读取: GET /api/nav（免密）返回 cards 数组 */
+
+function normalizeCard(c, i) {
+  if (!c || typeof c !== 'object') return null;
+  const name = String(c.name || '').trim().slice(0, 40);
+  if (!name) return null;
+  const cat = CARD_CATS.indexOf(c.cat) >= 0 ? c.cat : 'site';
+  const color = CARD_COLORS.indexOf(c.color) >= 0 ? c.color : 'dance';
+  const icon = String(c.icon || '🔗').slice(0, 200);
+  const tag = String(c.tag || '').trim().slice(0, 20);
+  const mode = c.mode === 'modal' ? 'modal' : 'link';
+  let href = String(c.href || '').trim().slice(0, 400);
+  if (!href) return null;
+  if (href.indexOf('..') >= 0 || /[\r\n]/.test(href)) return null;
+  return {
+    id: String(c.id || 'c' + (i + 1)).slice(0, 40),
+    name, cat, color, icon, tag, href, mode,
+  };
+}
+
+async function getCards(env) {
+  let raw = null;
+  try { raw = await env.COUNTERS.get(NAV_CARDS_KEY, 'json'); } catch (e) { raw = null; }
+  const cards = (raw && Array.isArray(raw.cards))
+    ? raw.cards.slice(0, MAX_CARDS).map(normalizeCard).filter(Boolean)
+    : [];
+  return json({
+    ok: true,
+    cards,
+    updatedAt: (raw && raw.updatedAt) || null,
+    count: cards.length,
+    max: MAX_CARDS,
+  });
+}
+
+async function saveCards(env, body) {
+  if (!Array.isArray(body.cards)) return json({ ok: false, error: '缺少 cards 数组' }, 400);
+  if (body.cards.length > MAX_CARDS) return json({ ok: false, error: '卡片数量超过上限 ' + MAX_CARDS }, 400);
+
+  const cards = [];
+  for (let i = 0; i < body.cards.length; i++) {
+    const n = normalizeCard(body.cards[i], i);
+    if (!n) return json({ ok: false, error: '第 ' + (i + 1) + ' 张卡片数据非法（缺少 name 或 href）' }, 400);
+    cards.push(n);
+  }
+
+  const updatedAt = new Date().toISOString();
+  await env.COUNTERS.put(NAV_CARDS_KEY, JSON.stringify({ version: 1, updatedAt, cards }));
+  return json({ ok: true, cards, updatedAt, count: cards.length });
+}
+
+/* 生成卡片图标上传凭证（七牛，前缀 card/，与音乐 musicToken 同法） */
+async function cardToken(env, body) {
+  const { AK, SK, BUCKET } = qiniuEnv(env);
+  const name = String(body.name || '').replace(/[^A-Za-z0-9_.\-]/g, '_').slice(-80) || 'icon.png';
+  const key = CARD_QINIU_PREFIX + Date.now() + '_' + Math.floor(Math.random() * 10000) + '_' + name;
+
+  const putPolicy = JSON.stringify({
+    scope: BUCKET + ':' + key,
+    deadline: Math.floor(Date.now() / 1000) + 3600,
+  });
+  const encodedPutPolicy = btoa(putPolicy).replace(/\+/g, '-').replace(/\//g, '_');
+
+  const k = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(SK),
+    { name: 'HMAC', hash: 'SHA-1' },
+    false,
+    ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(encodedPutPolicy));
+  const signatureBase64 = b64url(new Uint8Array(sig));
+
+  return json({
+    ok: true,
+    key,
+    url: 'https://' + qiniuEnv(env).DOMAIN + '/' + key,
+    token: AK + ':' + signatureBase64 + ':' + encodedPutPolicy,
+    uploadUrl: 'https://upload-z2.qiniup.com',
+  });
 }

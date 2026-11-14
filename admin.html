@@ -104,6 +104,26 @@
   .up-progress{flex:1;min-width:160px;height:6px;background:var(--card2);border-radius:3px;overflow:hidden}
   .up-progress i{display:block;height:100%;width:0;background:var(--acc);transition:width .2s}
   .up-text{font-size:12px;color:var(--sub);min-width:90px}
+
+  /* 卡片管理 */
+  .card-note{color:var(--sub);font-size:13px;margin-bottom:14px;line-height:1.7}
+  .card-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .card-tools .btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+  .navcard{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:8px;flex-wrap:wrap}
+  .navcard.dragging{opacity:.4}
+  .navcard.dragover{border-color:var(--acc);border-style:dashed}
+  .navcard .idx{width:34px;text-align:center;color:var(--acc);font-weight:600;font-size:14px;flex:none}
+  .navcard .handle{cursor:grab;color:var(--sub);font-size:16px;flex:none;user-select:none}
+  .navcard .handle:active{cursor:grabbing}
+  .navcard .icon{width:42px;height:42px;border-radius:10px;background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;flex:none}
+  .navcard .icon img{width:100%;height:100%;object-fit:cover}
+  .navcard .body{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px}
+  .navcard .cname{font-size:14px;word-break:break-word}
+  .navcard .cmeta{font-size:12px;color:var(--sub);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .navcard .cmeta .chref{font-size:11px;color:var(--sub);background:var(--card2);border:1px solid var(--line);border-radius:6px;padding:1px 7px;word-break:break-all}
+  .navcard .cmeta .badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--card2);color:var(--sub);border:1px solid var(--line)}
+  .navcard .ops{display:flex;gap:6px;flex-wrap:wrap}
+  .navcard .ops .btn{padding:5px 9px;font-size:12px}
 </style>
 </head>
 <body>
@@ -124,6 +144,7 @@
       <button class="tab" data-tab="file">🖼️ 投稿墙管理</button>
       <button class="tab" data-tab="stock">🎟️ 余票管理</button>
       <button class="tab" data-tab="music">🎵 音乐管理</button>
+      <button class="tab" data-tab="card">🃏 卡片管理</button>
     </div>
     <div class="spacer"></div>
     <button class="btn" id="refreshBtn">🔄 刷新</button>
@@ -135,6 +156,7 @@
     <div id="filePanel" class="hidden"></div>
     <div id="stockPanel" class="hidden"></div>
     <div id="musicPanel" class="hidden"></div>
+    <div id="cardPanel" class="hidden"></div>
   </main>
 </div>
 
@@ -227,6 +249,7 @@ document.querySelectorAll('.tab').forEach(btn => {
     $('#filePanel').classList.toggle('hidden', currentTab !== 'file');
     $('#stockPanel').classList.toggle('hidden', currentTab !== 'stock');
     $('#musicPanel').classList.toggle('hidden', currentTab !== 'music');
+    $('#cardPanel').classList.toggle('hidden', currentTab !== 'card');
     refresh();
   };
 });
@@ -239,6 +262,7 @@ async function refresh(){
   if (currentTab === 'msg') await loadMessages();
   else if (currentTab === 'file') await loadFiles();
   else if (currentTab === 'music') await loadMusic();
+  else if (currentTab === 'card') await loadCards();
   else await loadStock();
 }
 
@@ -730,6 +754,298 @@ async function saveMusic(){
     musicDirty = false;
     toast('歌单已保存到云端，全部访客立即生效', 'ok');
     renderMusic();
+  } catch(e){
+    toast('保存失败：' + e.message, 'err');
+  } finally {
+    if (save) { save.disabled = false; save.textContent = '💾 保存到云端'; }
+  }
+}
+
+/* ---- 卡片管理 ---- */
+let navCards = [];       // 当前编辑中的导航卡片（本地副本，改动后才推到云端）
+let navCardsUpdatedAt = null;
+let navCardsMax = 200;
+let navCardsDirty = false;
+
+const CARD_CAT_LABELS = { game:'🎮 游戏', tool:'🛠️ 工具', site:'🌐 站点' };
+const CARD_COLOR_LABELS = { dance:'青', trade:'紫', cloud:'黄', register:'红', exam:'绿', login:'粉', ai:'青' };
+
+/* 内置默认卡片（与 index.html 硬编码一致，云端没数据时当种子） */
+const BUILTIN_CARDS = [
+  { name:'棍涛舞团--成员show-蔡顺毅', cat:'site', color:'dance', icon:'🕺', tag:'✦ 律动 晕厥 兴奋✦', href:'https://guntaodance.cc.cd/', mode:'link' },
+  { name:'国际卤蛋贸易有限公司', cat:'site', color:'trade', icon:'🌐', tag:'✦ 全球 · 商道 ✦', href:'trade', mode:'modal' },
+  { name:'Ninety-One 网盘', cat:'tool', color:'cloud', icon:'☁️', tag:'✦ 5G时代 · 享受2G速度 ✦', href:'%e7%bd%91%e7%9b%98.html', mode:'link' },
+  { name:'来一场酣畅淋漓的注册吧', cat:'game', color:'register', icon:'🤯', tag:'倾尽全力打造反人类注册网站', href:'%e6%b3%a8%e5%86%8c.html', mode:'link' },
+  { name:'比上一个更刺激的登录全新升级震撼来袭', cat:'game', color:'login', icon:'🔥', tag:'✦ 逆天验证 · 猎奇体验 ✦', href:'%e7%8c%8e%e5%a5%87%e7%99%bb%e5%bd%952.0.html', mode:'link' },
+  { name:'预测你的中考成绩', cat:'tool', color:'exam', icon:'📊', tag:'✦ 金榜题名 · 一键查询 ✦', href:'%e4%b8%ad%e8%80%83%e6%88%90%e7%bb%a9%e6%9f%a5%e8%af%a2.html', mode:'link' },
+  { name:'从政模拟器', cat:'game', color:'dance', icon:'🏛️', tag:'✦ 权谋 · 升迁 ✦', href:'%e4%bb%8e%e6%94%bf%e6%a8%a1%e6%8b%9f%e5%99%a8/index.html', mode:'link' },
+  { name:'股市离线', cat:'game', color:'exam', icon:'📉', tag:'✦ 单机 · 操盘 ✦', href:'%e8%82%a1%e5%b8%82%e7%a6%bb%e7%ba%bf/index.html', mode:'link' },
+  { name:'扣帽子模拟器', cat:'game', color:'register', icon:'🧢', tag:'✦ 嘴炮 · 甩锅 ✦', href:'%e6%89%a3%e5%b8%bd%e5%ad%90/index.html', mode:'link' },
+  { name:'猎奇复杂登录', cat:'game', color:'login', icon:'🔐', tag:'✦ 反人类 · 验证 ✦', href:'%e7%8c%8e%e5%a5%87%e5%a4%8d%e6%9d%82%e7%99%bb%e5%bd%95/index.html', mode:'link' },
+  { name:'牛来模拟器', cat:'game', color:'trade', icon:'🌀', tag:'✦ 魔性 · 上头 ✦', href:'%e6%89%ad%e6%9d%a5/index.html', mode:'link' },
+  { name:'起早贪黑模拟器', cat:'game', color:'cloud', icon:'🌅', tag:'✦ 打工 · 人生 ✦', href:'%e8%b5%b7%e6%97%a9%e8%b4%aa%e9%bb%91/index.html', mode:'link' },
+  { name:'双人游戏', cat:'game', color:'ai', icon:'👥', tag:'✦ 对战 · 欢乐 ✦', href:'%e5%8f%8c%e4%ba%ba%e6%b8%b8%e6%88%8f/index.html', mode:'link' },
+  { name:'外卖员模拟器', cat:'game', color:'exam', icon:'🛵', tag:'✦ 五星 · 评测 ✦', href:'%e5%a4%96%e5%8d%96%e5%91%98/index.html', mode:'link' },
+  { name:'股市在线', cat:'game', color:'dance', icon:'📈', tag:'✦ 联网 · 博弈 ✦', href:'%e8%82%a1%e5%b8%82%e5%9c%a8%e7%ba%bf/index.html', mode:'link' },
+  { name:'伪愤怒的小鸟', cat:'game', color:'exam', icon:'🐦', tag:'✦ 弹弓 · 闯关 ✦', href:'%e4%bc%aa%e6%84%a4%e6%80%92%e7%9a%84%e5%b0%8f%e9%b8%9f/index.html', mode:'link' },
+  { name:'奶娃打球', cat:'game', color:'trade', icon:'🏀', tag:'✦ 投篮 · 热血 ✦', href:'%e5%a5%b6%e5%a8%83%e6%89%93%e7%90%83/index.html', mode:'link' },
+  { name:'植物大战僵尸', cat:'game', color:'cloud', icon:'🌻', tag:'✦ 塔防 · 大战 ✦', href:'%e6%a4%8d%e7%89%a9%e5%a4%a7%e6%88%98%e5%83%b5%e5%b0%b8/index.html', mode:'link' },
+  { name:'AI 智能助手', cat:'tool', color:'ai', icon:'🤖', tag:'✦ 对话 · 智能 ✦', href:'ai-chat.html', mode:'link' },
+  { name:'游戏合集', cat:'game', color:'exam', icon:'🎮', tag:'✦ 休闲 · 娱乐 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/index.html', mode:'link' },
+  { name:'下棋', cat:'game', color:'login', icon:'♟️', tag:'✦ 对弈 · 博弈 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e4%b8%8b%e6%a3%8b/index.html', mode:'link' },
+  { name:'奶娃斗地主', cat:'game', color:'trade', icon:'🃏', tag:'✦ 斗地主 · 欢乐 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e5%a5%b6%e5%a8%83%e6%96%97%e5%9c%b0%e4%b8%bb/index.html', mode:'link' },
+  { name:'奶蛙消消乐', cat:'game', color:'exam', icon:'🍬', tag:'✦ 消除 · 轻松 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e5%a5%b6%e8%9b%99%e6%b6%88%e6%b6%88%e4%b9%90/index.html', mode:'link' },
+  { name:'奶蛙象棋', cat:'game', color:'cloud', icon:'🐸', tag:'✦ 棋艺 · 策略 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e5%a5%b6%e8%9b%99%e8%b1%a1%e6%a3%8b/index.html', mode:'link' },
+  { name:'奶蛙软糖', cat:'game', color:'dance', icon:'🍭', tag:'✦ 软糖 · 甜心 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e5%a5%b6%e8%9b%99%e8%bd%af%e7%b3%96/index.html', mode:'link' },
+  { name:'密室逃脱', cat:'game', color:'register', icon:'🗝️', tag:'✦ 解谜 · 逃脱 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e5%af%86%e5%ae%a4%e9%80%83%e8%84%b1/index.html', mode:'link' },
+  { name:'画线救大狗', cat:'game', color:'login', icon:'✏️', tag:'✦ 画线 · 益智 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e7%94%bb%e7%ba%bf%e6%95%91%e5%a4%a7%e7%8b%97/index.html', mode:'link' },
+  { name:'百万负翁', cat:'game', color:'trade', icon:'💸', tag:'✦ 负翁 · 逆袭 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e7%99%be%e4%b8%87%e8%b4%9f%e7%bf%81/index.html', mode:'link' },
+  { name:'钓人', cat:'game', color:'cloud', icon:'🎣', tag:'✦ 钓鱼 · 魔性 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e9%92%93%e4%ba%ba/index.html', mode:'link' },
+  { name:'闪身步', cat:'game', color:'ai', icon:'💃', tag:'✦ 闪避 · 节奏 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e9%97%aa%e8%ba%ab%e6%ad%a5/index.html', mode:'link' },
+  { name:'驾考宝典', cat:'game', color:'exam', icon:'🚗', tag:'✦ 驾考 · 答题 ✦', href:'%e6%b8%b8%e6%88%8f%e5%90%88%e9%9b%86/%e9%a9%be%e8%80%83%e5%ae%9d%e5%85%b8/index.html', mode:'link' },
+  { name:'ShareMore 投稿墙', cat:'tool', color:'trade', icon:'💬', tag:'✦ 匿名留言 · 分享 ✦', href:'sharewall.html', mode:'link' },
+  { name:'一掷千金', cat:'game', color:'cloud', icon:'🎲', tag:'✦ 运气 · 抉择 ✦', href:'%e4%b8%80%e6%8e%b7%e5%8d%83%e9%87%91/index.html', mode:'link' }
+];
+
+function markCardsDirty(){ navCardsDirty = true; }
+
+async function loadCards(){
+  const p = $('#cardPanel');
+  p.innerHTML = '<div class="loading">加载中…</div>';
+  try {
+    const d = await api('getCards');
+    navCards = (d.cards || []).map(c => ({
+      id: c.id, name: c.name, cat: c.cat, color: c.color,
+      icon: c.icon, tag: c.tag || '', href: c.href, mode: c.mode || 'link'
+    }));
+    navCardsUpdatedAt = d.updatedAt || null;
+    navCardsMax = d.max || 200;
+    navCardsDirty = false;
+    if (!navCards.length) {
+      navCards = BUILTIN_CARDS.map((c, i) => Object.assign({ id: 'c' + (i + 1) }, c));
+    }
+    renderCards();
+  } catch(e){
+    p.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>';
+  }
+}
+
+function renderCards(){
+  const p = $('#cardPanel');
+  const total = navCards.length;
+  $('#countLine').textContent = '共 ' + total + ' 张卡片' + (navCardsDirty ? '（有未保存的改动）' : '');
+
+  let html = '<div class="card-note">'
+    + '这里管理导航页首页的卡片：可拖动排序、编辑、删除，或新增/上传图标。'
+    + '改动点「保存到云端」后立即对全部访客生效，无需重新部署。'
+    + (navCardsUpdatedAt ? '<br>上次保存：' + esc(fmtTime(navCardsUpdatedAt)) : '<br>云端还没有卡片数据，下面列出的是首页当前内置的卡片（直接改完保存即可接管）。')
+    + '</div>';
+
+  html += '<div class="card-tools">'
+    + '<button class="btn primary" id="cardSaveBtn">💾 保存到云端</button>'
+    + '<button class="btn" id="cardAddBtn">➕ 新增卡片</button>'
+    + '<button class="btn" id="cardResetBtn">↩️ 放弃改动</button>'
+    + '</div>';
+
+  if (!total) {
+    html += '<div class="empty">卡片为空。<br>点「新增卡片」添加一张，或点「放弃改动」重新载入默认卡片。</div>';
+    p.innerHTML = html;
+    bindCardTools();
+    return;
+  }
+
+  html += navCards.map((c, i) => {
+    const iconHtml = /^https?:\/\//.test(c.icon || '')
+      ? '<img src="' + esc(c.icon) + '" alt="">'
+      : esc(c.icon || '🔗');
+    return '<div class="navcard" draggable="true" data-i="' + i + '">'
+      + '<span class="handle" title="拖动排序">⠿</span>'
+      + '<div class="idx">' + String(i + 1).padStart(2, '0') + '</div>'
+      + '<div class="icon">' + iconHtml + '</div>'
+      + '<div class="body">'
+      + '<span class="cname">' + esc(c.name || '(未命名)') + '</span>'
+      + '<div class="cmeta">'
+      + '<span class="badge">' + (CARD_CAT_LABELS[c.cat] || c.cat) + '</span>'
+      + '<span class="badge">' + (CARD_COLOR_LABELS[c.color] || c.color) + '</span>'
+      + (c.mode === 'modal' ? '<span class="badge">弹窗</span>' : '')
+      + '<span class="chref">' + esc(c.href) + '</span>'
+      + '</div></div>'
+      + '<div class="ops">'
+      + '<button class="btn" data-cop="up" data-i="' + i + '"' + (i === 0 ? ' disabled' : '') + '>↑</button>'
+      + '<button class="btn" data-cop="down" data-i="' + i + '"' + (i === total - 1 ? ' disabled' : '') + '>↓</button>'
+      + '<button class="btn" data-cop="edit" data-i="' + i + '">✏️ 编辑</button>'
+      + '<button class="btn" data-cop="icon" data-i="' + i + '">🖼️ 图标</button>'
+      + '<button class="btn danger" data-cop="del" data-i="' + i + '">🗑️ 删除</button>'
+      + '</div></div>';
+  }).join('');
+
+  p.innerHTML = html;
+  bindCardTools();
+  bindCardDrag();
+}
+
+function bindCardTools(){
+  const save = $('#cardSaveBtn');
+  if (save) save.onclick = saveCards;
+  const add = $('#cardAddBtn');
+  if (add) add.onclick = addCardManual;
+  const rs = $('#cardResetBtn');
+  if (rs) rs.onclick = () => { if (!navCardsDirty) { toast('没有改动'); return; } if (confirm('放弃所有未保存的改动？')) loadCards(); };
+  document.querySelectorAll('#cardPanel [data-cop]').forEach(btn => {
+    btn.onclick = () => cardOp(btn.dataset.cop, parseInt(btn.dataset.i, 10), btn);
+  });
+}
+
+function bindCardDrag(){
+  const rows = document.querySelectorAll('#cardPanel .navcard');
+  let dragFrom = -1;
+  rows.forEach(row => {
+    row.addEventListener('dragstart', e => {
+      dragFrom = parseInt(row.dataset.i, 10);
+      row.classList.add('dragging');
+      try { e.dataTransfer.setData('text/plain', String(dragFrom)); } catch(_) {}
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', () => {
+      row.classList.remove('dragging');
+      document.querySelectorAll('#cardPanel .navcard').forEach(r => r.classList.remove('dragover'));
+    });
+    row.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      row.classList.add('dragover');
+    });
+    row.addEventListener('dragleave', () => row.classList.remove('dragover'));
+    row.addEventListener('drop', e => {
+      e.preventDefault();
+      row.classList.remove('dragover');
+      const to = parseInt(row.dataset.i, 10);
+      let from = dragFrom;
+      try { const s = e.dataTransfer.getData('text/plain'); if (s !== '' && !isNaN(parseInt(s,10))) from = parseInt(s,10); } catch(_) {}
+      if (isNaN(from) || from === to || from < 0) return;
+      moveCard(from, to);
+    });
+  });
+}
+
+function moveCard(from, to){
+  if (from === to || from < 0 || to < 0 || from >= navCards.length || to >= navCards.length) return;
+  const c = navCards.splice(from, 1)[0];
+  navCards.splice(to, 0, c);
+  markCardsDirty();
+  renderCards();
+}
+
+function cardOp(op, i, btn){
+  const c = navCards[i];
+  if (!c) return;
+  if (op === 'up') { moveCard(i, i - 1); return; }
+  if (op === 'down') { moveCard(i, i + 1); return; }
+  if (op === 'edit') { editCard(i); return; }
+  if (op === 'icon') { uploadCardIcon(i, btn); return; }
+  if (op === 'del') {
+    if (!confirm('确定删除「' + (c.name || '(未命名)') + '」吗？删除后需保存才生效。')) return;
+    navCards.splice(i, 1);
+    markCardsDirty();
+    renderCards();
+    return;
+  }
+}
+
+function editCard(i){
+  const c = navCards[i];
+  const name = prompt('卡片名称：', c.name || '');
+  if (name === null) return;
+  const href = prompt('链接地址（站内相对路径或完整 URL；弹窗卡片填 "trade"）：', c.href || '');
+  if (href === null) return;
+  const cat = prompt('分类 game(游戏) / tool(工具) / site(站点)：', c.cat || 'site');
+  if (cat === null) return;
+  const color = prompt('颜色 dance(青) / trade(紫) / cloud(黄) / register(红) / exam(绿) / login(粉) / ai(青)：', c.color || 'dance');
+  if (color === null) return;
+  const icon = prompt('图标（emoji，或图片 URL 如 https://...）：', c.icon || '');
+  if (icon === null) return;
+  const tag = prompt('标签小字（可留空）：', c.tag || '');
+  if (tag === null) return;
+  c.name = name.trim().slice(0, 40) || c.name;
+  c.href = href.trim().slice(0, 400) || c.href;
+  c.cat = ['game','tool','site'].indexOf(cat.trim()) >= 0 ? cat.trim() : 'site';
+  c.color = ['dance','trade','cloud','register','exam','login','ai'].indexOf(color.trim()) >= 0 ? color.trim() : 'dance';
+  c.icon = icon.trim().slice(0, 200) || c.icon;
+  c.tag = tag.trim().slice(0, 20);
+  c.mode = (c.href === 'trade' || c.href === 'cert' || c.href === 'log') ? 'modal' : 'link';
+  markCardsDirty();
+  renderCards();
+  toast('已编辑，记得点「保存到云端」', 'ok');
+}
+
+function addCardManual(){
+  const name = prompt('卡片名称：', '');
+  if (name === null) return;
+  const href = prompt('链接地址（站内相对路径或完整 URL）：', '');
+  if (href === null) return;
+  const icon = prompt('图标（emoji，或图片 URL）：', '🔗');
+  if (icon === null) return;
+  navCards.push({
+    id: 'c' + Date.now().toString(36),
+    name: name.trim().slice(0, 40) || '未命名',
+    href: href.trim().slice(0, 400),
+    cat: 'site',
+    color: 'dance',
+    icon: icon.trim().slice(0, 200) || '🔗',
+    tag: '',
+    mode: 'link'
+  });
+  markCardsDirty();
+  renderCards();
+  toast('已新增，记得点「保存到云端」', 'ok');
+}
+
+/* 上传卡片图标到七牛（前缀 card/），上传后把 URL 填入该卡片 icon */
+function uploadCardIcon(i, btn){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    try {
+      if (btn) { btn.disabled = true; btn.textContent = '上传中…'; }
+      const safeName = (file.name || 'icon.png').replace(/[^\w.\-]+/g, '_').slice(-60);
+      const tk = await api('cardToken', { name: safeName });
+      if (!tk || !tk.ok) throw new Error('取上传凭证失败');
+      await putToQiniu(tk, file);
+      navCards[i].icon = tk.url;
+      markCardsDirty();
+      renderCards();
+      toast('图标已上传，记得点「保存到云端」', 'ok');
+    } catch(e){
+      toast('图标上传失败：' + e.message, 'err');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '🖼️ 图标'; }
+    }
+  };
+  input.click();
+}
+
+async function saveCards(){
+  const save = $('#cardSaveBtn');
+  if (save) { save.disabled = true; save.textContent = '保存中…'; }
+  try {
+    const payload = navCards.map((c, i) => ({
+      id: c.id || ('c' + i),
+      name: c.name || ('卡片' + (i + 1)),
+      cat: c.cat || 'site',
+      color: c.color || 'dance',
+      icon: c.icon || '🔗',
+      tag: c.tag || '',
+      href: c.href || '',
+      mode: c.mode || 'link'
+    }));
+    const d = await api('saveCards', { cards: payload });
+    navCardsUpdatedAt = (d && d.updatedAt) || new Date().toISOString();
+    navCardsDirty = false;
+    toast('卡片已保存到云端，全部访客立即生效', 'ok');
+    renderCards();
   } catch(e){
     toast('保存失败：' + e.message, 'err');
   } finally {
