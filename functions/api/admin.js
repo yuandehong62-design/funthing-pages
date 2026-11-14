@@ -501,26 +501,41 @@ async function cardToken(env, body) {
 /* ================= 访问统计（KV: COUNTERS，key 前缀 visit:） ================= */
 
 async function listVisits(env) {
-  let list;
-  try { list = await env.COUNTERS.list({ prefix: 'visit:', limit: 3000 }); }
+  let names = [];
+  try { names = await listVisitKeys(env); }
   catch (e) { return json({ ok: true, visits: [], count: 0 }); }
 
-  const keys = list.keys.map(k => k.name).sort().reverse(); // 新 → 旧（key 含毫秒时间戳）
+  names.sort().reverse(); // 新 → 旧（key 含毫秒时间戳）
   const visits = [];
-  for (const name of keys.slice(0, 500)) {
+  for (const name of names.slice(0, 500)) {
     let item = null;
     try { item = await env.COUNTERS.get(name, 'json'); } catch (e) { item = null; }
     if (item && typeof item === 'object' && (item.site || item.ip || item.device)) {
       visits.push({ key: name, ...item });
     }
   }
-  return json({ ok: true, visits, count: visits.length, total: keys.length });
+  return json({ ok: true, visits, count: visits.length, total: names.length });
 }
 
 async function clearVisits(env) {
-  let list;
-  try { list = await env.COUNTERS.list({ prefix: 'visit:', limit: 3000 }); }
-  catch (e) { list = { keys: [] }; }
-  await Promise.all(list.keys.map(k => env.COUNTERS.delete(k.name)));
-  return json({ ok: true, deleted: list.keys.length });
+  let names = [];
+  try { names = await listVisitKeys(env); } catch (e) { names = []; }
+  // 分批并发删除（每批 500）
+  for (let i = 0; i < names.length; i += 500) {
+    await Promise.all(names.slice(i, i + 500).map(n => env.COUNTERS.delete(n)));
+  }
+  return json({ ok: true, deleted: names.length });
+}
+
+// 分页收集所有 visit:* key（KV list 单次上限 1000）
+async function listVisitKeys(env) {
+  const names = [];
+  let cursor;
+  do {
+    const page = await env.COUNTERS.list({ prefix: 'visit:', limit: 1000, cursor });
+    names.push(...page.keys.map(k => k.name));
+    if (page.list_complete) break;
+    cursor = page.cursor;
+  } while (cursor);
+  return names;
 }
