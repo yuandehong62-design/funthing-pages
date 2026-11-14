@@ -82,6 +82,8 @@ export async function onRequest(context) {
       case 'getCards': return await getCards(env);
       case 'saveCards': return await saveCards(env, body);
       case 'cardToken': return await cardToken(env, body);
+      case 'listVisits': return await listVisits(env);
+      case 'clearVisits': return await clearVisits(env);
       default: return json({ ok: false, error: '未知操作: ' + action }, 400);
     }
   } catch (err) {
@@ -494,4 +496,31 @@ async function cardToken(env, body) {
     token: AK + ':' + signatureBase64 + ':' + encodedPutPolicy,
     uploadUrl: 'https://upload-z2.qiniup.com',
   });
+}
+
+/* ================= 访问统计（KV: COUNTERS，key 前缀 visit:） ================= */
+
+async function listVisits(env) {
+  let list;
+  try { list = await env.COUNTERS.list({ prefix: 'visit:', limit: 3000 }); }
+  catch (e) { return json({ ok: true, visits: [], count: 0 }); }
+
+  const keys = list.keys.map(k => k.name).sort().reverse(); // 新 → 旧（key 含毫秒时间戳）
+  const visits = [];
+  for (const name of keys.slice(0, 500)) {
+    let item = null;
+    try { item = await env.COUNTERS.get(name, 'json'); } catch (e) { item = null; }
+    if (item && typeof item === 'object' && (item.site || item.ip || item.device)) {
+      visits.push({ key: name, ...item });
+    }
+  }
+  return json({ ok: true, visits, count: visits.length, total: keys.length });
+}
+
+async function clearVisits(env) {
+  let list;
+  try { list = await env.COUNTERS.list({ prefix: 'visit:', limit: 3000 }); }
+  catch (e) { list = { keys: [] }; }
+  await Promise.all(list.keys.map(k => env.COUNTERS.delete(k.name)));
+  return json({ ok: true, deleted: list.keys.length });
 }

@@ -124,6 +124,24 @@
   .navcard .cmeta .badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--card2);color:var(--sub);border:1px solid var(--line)}
   .navcard .ops{display:flex;gap:6px;flex-wrap:wrap}
   .navcard .ops .btn{padding:5px 9px;font-size:12px}
+
+  /* 访问统计 */
+  .visit-note{color:var(--sub);font-size:13px;margin-bottom:14px;line-height:1.7}
+  .visit-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .visit-tools .btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+  .visit-table{width:100%;border-collapse:collapse;font-size:13px}
+  .visit-table th,.visit-table td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  .visit-table th{color:var(--sub);font-weight:600;font-size:12px;white-space:nowrap}
+  .visit-table td{word-break:break-all}
+  .visit-table tr:hover td{background:var(--card2)}
+  .vsite{font-weight:600;color:var(--txt)}
+  .vsite.funthing{color:var(--acc2)}
+  .vsite.guntaodance{color:#c4b5fd}
+  .vsite.zhfld{color:var(--warn)}
+  .vip{font-family:Consolas,monospace;color:var(--acc2)}
+  .vdev{color:var(--sub)}
+  .vpath{color:var(--sub);font-size:11px}
+
 </style>
 </head>
 <body>
@@ -145,6 +163,7 @@
       <button class="tab" data-tab="stock">🎟️ 余票管理</button>
       <button class="tab" data-tab="music">🎵 音乐管理</button>
       <button class="tab" data-tab="card">🃏 卡片管理</button>
+      <button class="tab" data-tab="visit">📊 访问统计</button>
     </div>
     <div class="spacer"></div>
     <button class="btn" id="refreshBtn">🔄 刷新</button>
@@ -157,6 +176,7 @@
     <div id="stockPanel" class="hidden"></div>
     <div id="musicPanel" class="hidden"></div>
     <div id="cardPanel" class="hidden"></div>
+    <div id="visitPanel" class="hidden"></div>
   </main>
 </div>
 
@@ -250,6 +270,7 @@ document.querySelectorAll('.tab').forEach(btn => {
     $('#stockPanel').classList.toggle('hidden', currentTab !== 'stock');
     $('#musicPanel').classList.toggle('hidden', currentTab !== 'music');
     $('#cardPanel').classList.toggle('hidden', currentTab !== 'card');
+    $('#visitPanel').classList.toggle('hidden', currentTab !== 'visit');
     refresh();
   };
 });
@@ -263,6 +284,7 @@ async function refresh(){
   else if (currentTab === 'file') await loadFiles();
   else if (currentTab === 'music') await loadMusic();
   else if (currentTab === 'card') await loadCards();
+  else if (currentTab === 'visit') await loadVisits();
   else await loadStock();
 }
 
@@ -1052,6 +1074,80 @@ async function saveCards(){
     if (save) { save.disabled = false; save.textContent = '💾 保存到云端'; }
   }
 }
+/* ---- 访问统计 ---- */
+const VISIT_SITE_LABELS = {
+  'funthing.me': '🧭 导航页',
+  'guntaodance.cc.cd': '🕺 棍涛舞团',
+  'zhfld.dpdns.org': '🥚 国际卤蛋',
+};
+
+async function loadVisits(){
+  const p = $('#visitPanel');
+  p.innerHTML = '<div class="loading">加载中…</div>';
+  try {
+    const d = await api('listVisits');
+    const visits = d.visits || [];
+    $('#countLine').textContent = '共 ' + visits.length + ' 条访问记录' + (d.total > visits.length ? '（已截取最近 ' + visits.length + ' 条）' : '');
+
+    let html = '<div class="visit-note">'
+      + '这里展示三个网站（导航页 / 棍涛舞团 / 国际卤蛋）的每次访问记录，'
+      + '包含访问时间、来源网站、IP、设备型号、访问路径。最多保留 2000 条。'
+      + '</div>';
+
+    html += '<div class="visit-tools">'
+      + '<button class="btn primary" id="visitRefreshBtn">🔄 刷新</button>'
+      + '<button class="btn danger" id="visitClearBtn">🗑️ 清空全部</button>'
+      + '</div>';
+
+    if (!visits.length) {
+      html += '<div class="empty">暂无访问记录。<br>访客打开那三个网站后，记录会出现在这里。</div>';
+      p.innerHTML = html;
+      bindVisitTools();
+      return;
+    }
+
+    html += '<table class="visit-table"><thead><tr>'
+      + '<th>时间</th><th>来源网站</th><th>IP</th><th>设备型号</th><th>访问路径</th>'
+      + '</tr></thead><tbody>';
+
+    html += visits.map(v => {
+      const siteCls = v.site === 'funthing.me' ? 'funthing'
+        : v.site === 'guntaodance.cc.cd' ? 'guntaodance'
+        : v.site === 'zhfld.dpdns.org' ? 'zhfld' : '';
+      const siteLabel = VISIT_SITE_LABELS[v.site] || (v.site || '未知');
+      return '<tr>'
+        + '<td>' + esc(fmtTime(v.time)) + '</td>'
+        + '<td class="vsite ' + siteCls + '">' + esc(siteLabel) + '</td>'
+        + '<td class="vip">' + esc(v.ip || '—') + '</td>'
+        + '<td class="vdev">' + esc(v.device || '未知') + '</td>'
+        + '<td class="vpath">' + esc(v.path || '/') + '</td>'
+        + '</tr>';
+    }).join('');
+
+    html += '</tbody></table>';
+    p.innerHTML = html;
+    bindVisitTools();
+  } catch(e){
+    p.innerHTML = '<div class="empty">加载失败：' + esc(e.message) + '</div>';
+  }
+}
+
+function bindVisitTools(){
+  const r = $('#visitRefreshBtn');
+  if (r) r.onclick = loadVisits;
+  const c = $('#visitClearBtn');
+  if (c) c.onclick = async () => {
+    if (!confirm('确定清空全部访问记录吗？此操作不可恢复。')) return;
+    try {
+      const d = await api('clearVisits');
+      toast('已清空 ' + (d.deleted || 0) + ' 条记录', 'ok');
+      loadVisits();
+    } catch(e){
+      toast('清空失败：' + e.message, 'err');
+    }
+  };
+}
+
 /* ---- 启动 ---- */
 if (pwd) {
   api('ping').then(() => {
